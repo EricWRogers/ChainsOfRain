@@ -18,7 +18,7 @@ namespace KinematicCharacterControler
     }
     public class PlayerMovement : MovementEngine
     {
-        public PlayerMovement instance;
+        public static PlayerMovement instance;
         [Header("Current State")]
         public Stance currentStance = Stance.Standing;
         public Stance prevStance = Stance.Standing;
@@ -71,9 +71,9 @@ namespace KinematicCharacterControler
         public float jumpForce = 5.0f;
         public float maxJumpAngle = 80f;
         public float jumpCooldown = 0.25f;
-        public bool canDoubleJump = false;
-        public int maxJumpCount = 2;
-        public int jumpCount = 2;
+        public bool canDoubleJump = true;
+        public int maxJumpCount = 1;
+        public int jumpCount = 1;
         public float jumpInputElapsed = Mathf.Infinity;
         private float m_timeSinceLastJump = 0.0f;
         private bool m_jumpInputPressed = false;
