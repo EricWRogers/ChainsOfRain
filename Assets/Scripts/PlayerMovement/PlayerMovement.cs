@@ -37,8 +37,10 @@ namespace KinematicCharacterControler
         public GameObject player;
         public GameObject camPoint;
         public CinemachineCamera ciniCamera;
+        public float zoomSpeed = 5;
         private Transform m_orientation;
         public Transform cam;
+
 
         [Header("Wall Ride Settings")]
         public float wallRideSpeed = 8f;
@@ -54,7 +56,7 @@ namespace KinematicCharacterControler
         private float wallRideTimer;
 
         [Header("Dashing")]
-        public float dashForce = 20f;
+        public float dashForce = 0f;
         public float dashDuration = 0.2f;
         public float dashCoolDown = 2f;
         public bool canDash = true;
@@ -128,6 +130,10 @@ namespace KinematicCharacterControler
         public bool grindInputHeld;
         public float m_railDir = 1f;
         [SerializeField] private Transform m_railDetectionPoint;
+
+        private Vector3 kbDir;
+        private float kbStrength;
+        private bool isTakingKB = false;
 
         void Awake()
         {
@@ -224,7 +230,7 @@ namespace KinematicCharacterControler
                 m_requestedCrouch = false;
             }
 
-            if (Input.GetKeyDown(dashKey) && m_dashCooldownTimer <= 0f && !m_isDashing)
+            if (Input.GetKeyDown(dashKey) && m_dashCooldownTimer <= 0f && !m_isDashing && dashForce > 0f)
             {
                 Vector3 inputDir = transform.TransformDirection(new Vector3(mouseInput.x, 0, mouseInput.y));
                 if (inputDir.magnitude < 0.1f)
@@ -241,6 +247,11 @@ namespace KinematicCharacterControler
         }
         void HandleRegularMovement()
         {
+            if (isTakingKB)
+            {
+                HandleKnockBack();
+                return;
+            }
             HandleCrouch();
             if (m_isDashing)
             {
@@ -257,7 +268,7 @@ namespace KinematicCharacterControler
 
             if (!isWallRiding && CheckForWall(transform.position, wallCheckDistance, out RaycastHit _wallHit))
             {
-                if (m_jumpInputPressed)
+                if (m_jumpInputPressed && canWallRide)
                 {
                     StartWallRide(_wallHit);
                 }
@@ -310,7 +321,7 @@ namespace KinematicCharacterControler
             if (Input.GetKey(sprintKey))
             {
                 finalDir = inputDir * runSpeed;
-                ciniCamera.Lens.FieldOfView = sprintFOV;
+                ciniCamera.Lens.FieldOfView = Mathf.Lerp(sprintFOV, walkFOV, Time.deltaTime * zoomSpeed);
             }
             else if (isCrouching)
             {
@@ -320,7 +331,7 @@ namespace KinematicCharacterControler
             else
             {
                 finalDir = inputDir * speed;
-                ciniCamera.Lens.FieldOfView = walkFOV;
+                ciniCamera.Lens.FieldOfView = Mathf.Lerp(walkFOV, sprintFOV, Time.deltaTime * zoomSpeed);
             }
             
             m_velocity += finalDir; 
@@ -337,6 +348,24 @@ namespace KinematicCharacterControler
 
             if (onGround && !attemptingJump)
                     SnapPlayerDown();
+        }
+
+        public void KnockBack(Vector3 _dir, float _strenght)
+        {
+            kbDir = _dir.normalized;
+            kbStrength = _strenght;
+            isTakingKB = true;
+        }
+
+        void HandleKnockBack()
+        {
+            transform.position = MovePlayer(kbStrength * Time.deltaTime * kbDir);
+            kbStrength *= 0.8f;
+
+            if (kbStrength <= 0.01)
+            {
+                isTakingKB = false;
+            }
         }
 
         void StartWallRide(RaycastHit _wallHit)
@@ -376,7 +405,7 @@ namespace KinematicCharacterControler
             Vector3 vertical = new Vector3(0, m_velocity.y, 0);
 
             m_velocity = horizontal + vertical;
-            m_velocity.y = wallRideGravity; // weaker gravity
+            m_velocity.y += wallRideGravity * Time.deltaTime; 
 
             transform.position = MovePlayer(m_velocity * Time.deltaTime);
 
@@ -415,7 +444,7 @@ namespace KinematicCharacterControler
             if (dashTime <= 0f)
             {
                 m_isDashing = false;
-                ciniCamera.Lens.FieldOfView = walkFOV;
+                ciniCamera.Lens.FieldOfView = Mathf.Lerp(dashFOV, walkFOV, _delta * zoomSpeed);
             }
             
         }   
