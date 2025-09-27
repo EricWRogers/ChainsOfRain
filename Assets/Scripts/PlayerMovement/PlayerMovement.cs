@@ -162,6 +162,10 @@ namespace KinematicCharacterControler
             {
                 m_requestedCrouch = true;
             }
+            else
+            {
+                m_requestedCrouch = false;
+            }
 
             mouseInput = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
         }
@@ -209,6 +213,10 @@ namespace KinematicCharacterControler
             {
                 finalDir = inputDir * runSpeed;
             }
+            else if (isCrouching)
+            {
+                finalDir = inputDir * crouchSpeed;
+            }
             else
             {
                 finalDir = inputDir * speed;
@@ -227,11 +235,15 @@ namespace KinematicCharacterControler
 
         void HandleCrouch()
         {
+            Debug.Log(m_requestedCrouch);
+            Debug.Log(currentStance == Stance.Standing);
             if (m_requestedCrouch && currentStance == Stance.Standing)
             {
                 currentStance = Stance.Crouching;
                 capsule.height = crouchHeight;
+                capsule.center = new Vector3(0, 0.25f, 0);
                 isCrouching = true;
+                return;
 
             }
             
@@ -239,6 +251,7 @@ namespace KinematicCharacterControler
             {
                 currentStance = Stance.Standing;
                 capsule.height = capsuleHeight;
+                capsule.center = Vector3.zero;
                 isCrouching = false;
             }
         }

@@ -816,6 +816,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   capsule: {fileID: 5125394202073873866}
+  capsuleHeight: 0
+  capsuleRadius: 0
   collisionLayers:
     serializedVersion: 2
     m_Bits: 55
@@ -826,6 +828,8 @@ MonoBehaviour:
   defaultGroundedDistance: 0.05
   snapDownDistance: 0.45
   shouldSnapDown: 1
+  currentStance: 0
+  prevStance: 0
   speed: 5
   runSpeed: 10
   sprintKey: 304
@@ -833,6 +837,10 @@ MonoBehaviour:
   maxWalkAngle: 60
   player: {fileID: 0}
   cam: {fileID: 6412032419476865578}
+  crouchKey: 306
+  isCrouching: 0
+  crouchSpeed: 4
+  crouchHeight: 1.5
   gravity: {x: 0, y: -9, z: 0}
   lockCursor: 1
   jumpForce: 5
@@ -840,6 +848,11 @@ MonoBehaviour:
   jumpCooldown: 0.25
   jumpInputElapsed: Infinity
   canJump: 1
+  slideKey: 306
+  isSliding: 0
+  canSlide: 0
+  startSlideSpeed: 25
+  endSlideSpeed: 15
   railLayer:
     serializedVersion: 2
     m_Bits: 0
