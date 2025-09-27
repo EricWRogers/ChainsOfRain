@@ -39,7 +39,6 @@ namespace KinematicCharacterControler
 
         public Vector3 MovePlayer(Vector3 movement)
         {
-        
             Vector3 position = transform.position;
             Quaternion rotation = transform.rotation;
 
@@ -112,8 +111,7 @@ namespace KinematicCharacterControler
              
             return position;
         }
-
-        
+    
 
         public bool CheckIfGrounded(out RaycastHit _hit)
         {

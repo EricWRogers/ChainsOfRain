@@ -33,8 +33,9 @@ namespace KinematicCharacterControler
         public float jumpCooldown = 0.25f;
         public float jumpInputElapsed = Mathf.Infinity;
         private float m_timeSinceLastJump = 0.0f;
-        public bool m_jumpInputPressed = false;
+        private bool m_jumpInputPressed = false;
         private float m_jumpBufferTime = 0.25f;
+        public bool canJump = true;
 
         [Header("Rail Grinding")]
         public LayerMask railLayer;
@@ -135,7 +136,7 @@ namespace KinematicCharacterControler
             }
 
             // Handle jumping
-            bool canJump = onGround && groundedState.angle <= maxJumpAngle && m_timeSinceLastJump >= jumpCooldown;
+            canJump = onGround && groundedState.angle <= maxJumpAngle && m_timeSinceLastJump >= jumpCooldown;
             bool attemptingJump = jumpInputElapsed <= m_jumpBufferTime;
 
             if (canJump && attemptingJump)
