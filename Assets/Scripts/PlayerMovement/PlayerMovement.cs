@@ -2,6 +2,8 @@ using System.ComponentModel.Design.Serialization;
 using System.Net.Mail;
 using JetBrains.Annotations;
 using NUnit.Framework;
+using TMPro;
+using Unity.Cinemachine;
 using Unity.VisualScripting;
 using UnityEditor.PackageManager;
 using UnityEngine;
@@ -26,15 +28,29 @@ namespace KinematicCharacterControler
         [Header("Movement")]
         public float speed = 5f;
         public float runSpeed = 10f;
+        public float sprintFOV = 70f;
+        public float walkFOV = 60f;
         public bool canSprint = true;
         public KeyCode sprintKey = KeyCode.LeftShift;
         public float rotationSpeed = 5f;
         public float maxWalkAngle = 60f;
         public GameObject player;
         public GameObject camPoint;
+        public CinemachineCamera ciniCamera;
 
         private Transform m_orientation;
         public Transform cam;
+        [Header("Wall Ride Settings")]
+        public float wallRideSpeed = 8f;
+        public float wallRideGravity = -1f;      
+        public float wallCheckDistance = 1f;
+        public float wallStickForce = 5f;
+        public float maxWallRideTime = 2f;
+        public bool canWallRide = true;
+
+        private bool isWallRiding = false;
+        private Vector3 wallNormal;
+        private float wallRideTimer;
 
         [Header("Dashing")]
         public float dashForce = 20f;
@@ -42,6 +58,7 @@ namespace KinematicCharacterControler
         public float dashCoolDown = 2f;
         public bool canDash = true;
         public KeyCode dashKey = KeyCode.Tab;
+        public float dashFOV = 80f;
 
         private bool m_isDashing = false;
         private float dashTime = 0f;
@@ -206,7 +223,7 @@ namespace KinematicCharacterControler
                 m_requestedCrouch = false;
             }
 
-            if (Input.GetKeyDown(dashKey))
+            if (Input.GetKeyDown(dashKey) && m_dashCooldownTimer <= 0f && !m_isDashing)
             {
                 Vector3 inputDir = transform.TransformDirection(new Vector3(mouseInput.x, 0, mouseInput.y));
                 if (inputDir.magnitude < 0.1f)
@@ -215,7 +232,9 @@ namespace KinematicCharacterControler
                 m_dashDirecton = inputDir.normalized;
                 m_isDashing = true;
                 dashTime = dashDuration;
+
                 m_dashCooldownTimer = dashCoolDown;
+                ciniCamera.Lens.FieldOfView = dashFOV;
             }
 
         }
@@ -227,6 +246,8 @@ namespace KinematicCharacterControler
                 HandleDashing(Time.deltaTime);
                 return;
             }
+
+
 
             Vector3 inputDir = transform.TransformDirection(new Vector3(mouseInput.x, 0, mouseInput.y));
 
@@ -273,14 +294,17 @@ namespace KinematicCharacterControler
             if (Input.GetKey(sprintKey))
             {
                 finalDir = inputDir * runSpeed;
+                ciniCamera.Lens.FieldOfView = sprintFOV;
             }
             else if (isCrouching)
             {
                 finalDir = inputDir * crouchSpeed;
+                ciniCamera.Lens.FieldOfView = walkFOV;
             }
             else
             {
                 finalDir = inputDir * speed;
+                ciniCamera.Lens.FieldOfView = walkFOV;
             }
             
             m_velocity += finalDir; 
@@ -290,8 +314,13 @@ namespace KinematicCharacterControler
             transform.rotation = new Quaternion(transform.rotation.x, cam.transform.rotation.y, transform.rotation.z, transform.rotation.w);
             m_velocity = new Vector3(0, m_velocity.y, 0);
 
+            if (m_dashCooldownTimer > 0)
+            {
+                m_dashCooldownTimer -= Time.deltaTime;
+            }
+
             if (onGround && !attemptingJump)
-                SnapPlayerDown();
+                    SnapPlayerDown();
         }
         void HandleDashing(float _delta)
         {
@@ -304,7 +333,9 @@ namespace KinematicCharacterControler
             if (dashTime <= 0f)
             {
                 m_isDashing = false;
+                ciniCamera.Lens.FieldOfView = walkFOV;
             }
+            
         }   
         void HandleCrouch()
         {
@@ -388,7 +419,6 @@ namespace KinematicCharacterControler
         if (onGround)
             SnapPlayerDown();
     }
-
 
         // RAIL GRINDING SYSTEM
         void TryStartGrinding()
