@@ -44,18 +44,20 @@ public abstract class Gunbase : MonoBehaviour
 
     public UnityEvent onJettison;
 
-    private void Start()
+    public void Start()
     {
         ammo = magazineAmmo;
         if (rightHanded)
         {
             rightUI = WeaponManager.instance.rightArm.transform.parent.GetComponentInChildren<RectTransform>();
+            Debug.Log(rightUI.gameObject.name);
             GameObject uI = Instantiate(uIPrefab, rightUI);
-            uI.GetComponent<AmmoUI>().Weapon = this;
+            uI.GetComponent<GunUI>().weapon = this;
         }
         if (leftHanded)
         {
             leftUI = WeaponManager.instance.leftArm.transform.parent.GetComponentInChildren<RectTransform>();
+            Debug.Log(leftUI.gameObject.name);
             GameObject uI = Instantiate(uIPrefab, leftUI);
             uI.GetComponent<GunUI>().weapon = this;
 
@@ -64,7 +66,7 @@ public abstract class Gunbase : MonoBehaviour
     }
 
 
-    private void Update()
+    public void Update()
     {
 
         switch (inputMode)
