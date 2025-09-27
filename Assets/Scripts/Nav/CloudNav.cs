@@ -1,4 +1,6 @@
 using UnityEngine;
+using System.Collections.Generic;
+
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -137,6 +139,27 @@ public class CloudNav : MonoBehaviour
                     if (downBack > -1) aStar.ConnectPoints(id, downBack);
                     if (downBackLeft > -1) aStar.ConnectPoints(id, downBackLeft);
                     if (downBackRight > -1) aStar.ConnectPoints(id, downBackRight);
+                }
+            }
+        }
+
+        Debug.Log("Cloud Nav: Validate Points");
+        int originId = aStar.GetPointByPosition(Vector3.zero);
+        List<Vector3> path = new List<Vector3>();
+        for (int x = -halfXCount; x < halfXCount; x++)
+        {
+            for (int y = -halfYCount; y < halfYCount; y++)
+            {
+                for (int z = -halfZCount; z < halfZCount; z++)
+                {
+                    Vector3 targetPosition = new Vector3(x, y, z);
+
+                    if (targetPosition == Vector3.zero)
+                        continue;
+
+                    int startId = aStar.GetPointByPosition(targetPosition);
+
+                    path = aStar.GetPath(startId, originId);
                 }
             }
         }
