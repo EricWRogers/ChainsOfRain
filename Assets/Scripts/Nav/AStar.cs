@@ -9,6 +9,10 @@ public class AStar
     [SerializeField]
     private List<AStarNode> m_graph;
     private Dictionary<Vector3, int> m_umap = new Dictionary<Vector3, int>();
+
+    // cache
+    private List<int> searchingSet = new List<int>();
+    private List<int> hasSearchedSet = new List<int>();
     public void ResetGraph()
     {
         m_graph.Clear();
@@ -60,8 +64,8 @@ public class AStar
             }
         }
 
-        List<int> searchingSet = new List<int>();
-        List<int> hasSearchedSet = new List<int>();
+        searchingSet.Clear();
+        hasSearchedSet.Clear();
         int graphNodeIndex;
 
         searchingSet.Add(_idFrom);
