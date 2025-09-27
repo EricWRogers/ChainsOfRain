@@ -1,5 +1,6 @@
 using SuperPupSystems.Helper;
 using UnityEngine;
+using UnityEngine.Events;
 
 public abstract class Gunbase : MonoBehaviour
 {
@@ -22,6 +23,10 @@ public abstract class Gunbase : MonoBehaviour
     private KeyCode activeHand => leftHanded ? KeyCode.Mouse0 : KeyCode.Mouse1;
 
     private InputType inputMode => semi ? InputType.GetKeyDown : InputType.GetKey;
+
+
+
+    public UnityEvent onJettison;
     private void Update()
     {
         switch (inputMode)
