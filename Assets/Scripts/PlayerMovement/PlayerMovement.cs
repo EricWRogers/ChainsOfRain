@@ -41,6 +41,7 @@ namespace KinematicCharacterControler
         public float crouchSpeed;
         private bool m_requestedCrouch = false;
         public float crouchHeight = 1.5f;
+        public bool canCrouch = true;
 
 
         [Header("Physics")]
@@ -216,8 +217,11 @@ namespace KinematicCharacterControler
             }
 
             // Handle jumping
-            bool shouldJump = (onGround || (canDoubleJump && jumpCount > 0)) && canJump && groundedState.angle <= maxJumpAngle && m_timeSinceLastJump >= jumpCooldown;
+            bool shouldJump = ((onGround && groundedState.angle <= maxJumpAngle) || (canDoubleJump && jumpCount > 0))
+                                && canJump && m_timeSinceLastJump >= jumpCooldown;
+
             bool attemptingJump = jumpInputElapsed <= m_jumpBufferTime;
+            Logger.instance.Log(attemptingJump.ToString(), Logger.LogType.Player);
 
             if (shouldJump && attemptingJump)
             {
@@ -225,6 +229,7 @@ namespace KinematicCharacterControler
                 m_velocity = Vector3.up * jumpForce;
                 m_timeSinceLastJump = 0.0f;
                 jumpInputElapsed = Mathf.Infinity;
+                Logger.instance.Log("jumping", Logger.LogType.Player);
             }
             else
             {
@@ -245,7 +250,6 @@ namespace KinematicCharacterControler
             {
                 finalDir = inputDir * speed;
             }
-
             
             m_velocity += finalDir; 
             // Apply movement
