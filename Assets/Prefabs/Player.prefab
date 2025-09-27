@@ -1068,23 +1068,32 @@ MonoBehaviour:
   defaultGroundedDistance: 0.05
   snapDownDistance: 0.45
   shouldSnapDown: 1
-  instance: {fileID: 0}
   currentStance: 0
   prevStance: 0
   speed: 5
   runSpeed: 10
+  sprintFOV: 70
+  walkFOV: 60
   canSprint: 1
   sprintKey: 304
   rotationSpeed: 5
   maxWalkAngle: 60
   player: {fileID: 0}
-  camPoint: {fileID: 0}
+  camPoint: {fileID: 4617371025200445090}
+  ciniCamera: {fileID: 7605957584052849053}
   cam: {fileID: 6412032419476865578}
+  wallRideSpeed: 8
+  wallRideGravity: -1
+  wallCheckDistance: 1
+  wallStickForce: 5
+  maxWallRideTime: 2
+  canWallRide: 1
   dashForce: 20
   dashDuration: 0.2
   dashCoolDown: 2
   canDash: 1
   dashKey: 9
+  dashFOV: 80
   crouchKey: 306
   isCrouching: 0
   crouchSpeed: 4
@@ -1096,7 +1105,7 @@ MonoBehaviour:
   jumpForce: 5
   maxJumpAngle: 80
   jumpCooldown: 0.25
-  canDoubleJump: 0
+  canDoubleJump: 1
   maxJumpCount: 2
   jumpCount: 2
   jumpInputElapsed: Infinity
