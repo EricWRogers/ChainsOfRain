@@ -194,7 +194,7 @@ MonoBehaviour:
   bulletPrefab: {fileID: 0}
   jettisonPrefab: {fileID: 8373668522671082776, guid: 906ffcd1e7d00c3468c4631350af38a0, type: 3}
   jettisonForce: 10
-  maxAmmo: 5
+  maxAmmo: 1000
   magazineAmmo: 10
   ammo: 0
   damage: 1
@@ -205,14 +205,16 @@ MonoBehaviour:
   onReload:
     m_PersistentCalls:
       m_Calls: []
-  uIPrefab: {fileID: 0}
+  uIPrefab: {fileID: 2637129973832654472, guid: 8c57ec6689f8e7a4fa354e8c639847c5, type: 3}
   rightUI: {fileID: 0}
   leftUI: {fileID: 0}
   onJettison:
     m_PersistentCalls:
       m_Calls: []
-  overChargeWarning: 5
+  overChargeWarning: 750
   burnedOut: 0
+  chargeRate: 2
+  firing: 0
 --- !u!1 &5589227517856237709
 GameObject:
   m_ObjectHideFlags: 0
