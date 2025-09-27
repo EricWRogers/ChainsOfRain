@@ -57,11 +57,13 @@ public abstract class Gunbase : MonoBehaviour
         {
             leftUI = WeaponManager.instance.leftArm.transform.parent.GetComponentInChildren<RectTransform>();
             GameObject uI = Instantiate(uIPrefab, leftUI);
-            uI.GetComponent<AmmoUI>().Weapon = this;
+            uI.GetComponent<GunUI>().weapon = this;
+
+
         }
     }
 
-    
+
     private void Update()
     {
 

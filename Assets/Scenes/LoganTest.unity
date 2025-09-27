@@ -222,7 +222,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   logPlayer: 0
   logAi: 0
-  logGun: 0
+  logGun: 1
 --- !u!1 &255904661
 GameObject:
   m_ObjectHideFlags: 0
