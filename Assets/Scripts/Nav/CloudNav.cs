@@ -27,6 +27,8 @@ public class CloudNav : MonoBehaviour
     public GameObject cloudPointPrefab;
     public AStar aStar;
 
+    public List<BoxCollider> spawnAreas;
+
     public int xCount = 50;
     public int yCount = 10;
     public int zCount = 50;
@@ -61,16 +63,21 @@ public class CloudNav : MonoBehaviour
             {
                 for (int z = -halfZCount; z < halfZCount; z++)
                 {
-                    GameObject pointObject = Instantiate(
-                        cloudPointPrefab,
-                        new Vector3(x, y, z),
-                        Quaternion.identity,
-                        transform);
+                    Vector3 targetPoint = new Vector3(x, y, z);
 
-                    aStar.AddPoint(pointObject.transform.position);
+                    bool safe = false;
+
+                    for (int i = 0; i < spawnAreas.Count; i++)
+                        if (spawnAreas[i].ClosestPoint(targetPoint) == targetPoint)
+                            safe = true;
+
+                    if (safe)
+                        aStar.AddPoint(targetPoint);
                 }
             }
         }
+
+        aStar.RefreshCashe();
 
         Debug.Log("Cloud Nav: Connect New Points");
         for (int x = -halfXCount; x < halfXCount; x++)
@@ -143,8 +150,8 @@ public class CloudNav : MonoBehaviour
             }
         }
 
-        Debug.Log("Cloud Nav: Validate Points");
-        int originId = aStar.GetPointByPosition(Vector3.zero);
+        /*Debug.Log("Cloud Nav: Validate Points");
+
         List<Vector3> path = new List<Vector3>();
         for (int x = -halfXCount; x < halfXCount; x++)
         {
@@ -157,42 +164,55 @@ public class CloudNav : MonoBehaviour
                     if (targetPosition == Vector3.zero)
                         continue;
 
-                    int startId = aStar.GetPointByPosition(targetPosition);
+                    int startId = aStar.GetClosestPoint(targetPosition);
+                    int originId = aStar.GetClosestPoint(Vector3.zero);
 
                     if (startId == -1)
                         continue;
 
+                    //Debug.Log("count " + aStar.Count + " id " + startId + " origin " + originId);
+
                     path = aStar.GetPath(startId, originId);
 
+
+                    bool redo = false;
+
                     if (path.Count == 0)
-                        continue;
-
-                    bool hit = false;
-
-                    for (int i = 0; i < path.Count - 1; i++)
                     {
-                        if (Physics.Linecast(path[i], path[i + 1]))
-                        {
-                            hit = true;
-                            break;
-                        }
-                    }
-
-                    if (hit)
-                    {
-                        Debug.Log("HIT");
                         aStar.RemovePoint(startId);
-                        for (int c = 0; c < transform.childCount; c++)
+                    }
+                    else
+                    {
+                        path.Insert(0, targetPosition);
+
+                        for (int i = 0; i < path.Count - 1; i++)
                         {
-                            if (transform.GetChild(c).position == targetPosition)
+                            if (Physics.Linecast(path[i], path[i + 1]))
                             {
-                                DestroyImmediate(transform.GetChild(c).gameObject);
+                                redo = true;
+                                aStar.DisconnectPoints(aStar.GetPointByPosition(path[i]), aStar.GetPointByPosition(path[i + 1]));
                                 break;
                             }
                         }
                     }
+
+                    if (redo)
+                    {
+                        z--;
+                    }
                 }
             }
+        }*/
+
+        aStar.RefreshCashe();
+
+        for (int g = 0; g < aStar.Count; g++)
+        {
+            GameObject pointObject = Instantiate(
+                        cloudPointPrefab,
+                        aStar.graph[g].position,
+                        Quaternion.identity,
+                        transform);
         }
     }
 }

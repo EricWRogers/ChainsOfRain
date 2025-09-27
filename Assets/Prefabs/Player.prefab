@@ -1060,7 +1060,7 @@ MonoBehaviour:
   capsuleRadius: 0
   collisionLayers:
     serializedVersion: 2
-    m_Bits: 55
+    m_Bits: 63
   skinWidth: 0.015
   maxBounces: 5
   maxSlopeAngle: 55
