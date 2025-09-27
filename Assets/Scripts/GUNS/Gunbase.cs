@@ -8,26 +8,33 @@ public abstract class Gunbase : MonoBehaviour
 
     public bool rightHanded = false;
 
+    public bool infiniteAmmo;
 
-    public bool semi = false;
-    public bool auto = false;
+    public bool press = false;
+    public bool hold = false;
 
     public GameObject bulletPrefab;
 
     public GameObject jettisonPrefab;
 
     public float jettisonForce;
-    public int limitedAmmo = 10;
-    public int ammo = 10;
+    public int maxAmmo = 100;
+    public int magazineAmmo = 10;
+    [HideInInspector]
+    public int ammo;
 
     public int damage = 1;
 
     public Transform firingPoint;
     private KeyCode activeHand => leftHanded ? KeyCode.Mouse0 : KeyCode.Mouse1;
 
-    private InputType inputMode => semi ? InputType.GetKeyDown : InputType.GetKey;
+    private InputType inputMode => press ? InputType.GetKeyDown : InputType.GetKey;
 
 
+    public void Start()
+    {
+        ammo = magazineAmmo;
+    }
 
     public UnityEvent onJettison;
     private void Update()
@@ -50,9 +57,9 @@ public abstract class Gunbase : MonoBehaviour
                 break;
         }
 
-        if(Input.GetKeyDown(KeyCode.R))
+        if(Input.GetKeyDown(KeyCode.R) && (infiniteAmmo || maxAmmo > 0)) //For now ill be lazy. Please set your max ammo to be divisible by your magazine ammo.
         {
-            ammo = limitedAmmo;
+            ammo = magazineAmmo;
         }
     }
 
