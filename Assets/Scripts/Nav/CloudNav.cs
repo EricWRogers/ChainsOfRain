@@ -159,7 +159,38 @@ public class CloudNav : MonoBehaviour
 
                     int startId = aStar.GetPointByPosition(targetPosition);
 
+                    if (startId == -1)
+                        continue;
+
                     path = aStar.GetPath(startId, originId);
+
+                    if (path.Count == 0)
+                        continue;
+
+                    bool hit = false;
+
+                    for (int i = 0; i < path.Count - 1; i++)
+                    {
+                        if (Physics.Linecast(path[i], path[i + 1]))
+                        {
+                            hit = true;
+                            break;
+                        }
+                    }
+
+                    if (hit)
+                    {
+                        Debug.Log("HIT");
+                        aStar.RemovePoint(startId);
+                        for (int c = 0; c < transform.childCount; c++)
+                        {
+                            if (transform.GetChild(c).position == targetPosition)
+                            {
+                                DestroyImmediate(transform.GetChild(c).gameObject);
+                                break;
+                            }
+                        }
+                    }
                 }
             }
         }
