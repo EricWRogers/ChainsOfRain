@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 295632308365755457}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Player
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -42,7 +42,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5391497949038232587}
-  m_Layer: 3
+  m_Layer: 6
   m_Name: railDetection
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -73,7 +73,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2361069768061591144}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Camera
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -106,7 +106,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1215217230513652781}
-  m_Layer: 3
+  m_Layer: 6
   m_Name: Eyes
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -141,7 +141,7 @@ GameObject:
   - component: {fileID: 5786856632833947494}
   - component: {fileID: 717419853106044236}
   - component: {fileID: 256238725932307923}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: CinemachineCamera
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -311,7 +311,7 @@ GameObject:
   - component: {fileID: 2440819419363870841}
   - component: {fileID: 5125394202073873866}
   - component: {fileID: 5887622225555984311}
-  m_Layer: 3
+  m_Layer: 6
   m_Name: Character
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -435,6 +435,8 @@ MonoBehaviour:
   snapDownDistance: 0.45
   shouldSnapDown: 1
   speed: 5
+  runSpeed: 10
+  sprintKey: 304
   rotationSpeed: 5
   maxWalkAngle: 60
   player: {fileID: 0}
@@ -474,7 +476,7 @@ GameObject:
   - component: {fileID: 6223906595391717025}
   - component: {fileID: 628600321023410798}
   - component: {fileID: 8118604911273754917}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Main Camera
   m_TagString: MainCamera
   m_Icon: {fileID: 0}
