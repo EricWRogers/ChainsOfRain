@@ -64,14 +64,21 @@ public class LegManager : MonoBehaviour
 
     }
 
-        public void AttatchLeg(GameObject _leg)
+    public bool AttatchLeg(GameObject _leg)
     {
         GameObject leg = OpenLegCheck();
+
+        if (leg == null)
+        {
+            return false;
+        }
 
         GameObject new_leg = Instantiate(_leg, leg.transform.parent.parent.GetChild(0).position, leg.transform.parent.parent.GetChild(0).rotation, leg.transform);
 
         new_leg.GetComponent<Gunbase>().leftHanded = leg.name == "LeftLeg";
         new_leg.GetComponent<Gunbase>().rightHanded = leg.name == "RightLEg";
+
+        return true;
 
     }
 
