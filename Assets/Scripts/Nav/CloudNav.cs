@@ -23,10 +23,21 @@ public class CloudNavEditor : Editor
 public class CloudNav : MonoBehaviour
 {
     public GameObject cloudPointPrefab;
+    public AStar aStar;
 
     public int xCount = 50;
     public int yCount = 10;
     public int zCount = 50;
+
+    void Awake()
+    {
+        aStar.RefreshCashe();
+    }
+
+    void Start()
+    {
+        Debug.Log("AStar graph Count: " + aStar.Count);
+    }
 
     public void SpawnCloud()
     {
@@ -49,6 +60,8 @@ public class CloudNav : MonoBehaviour
                         new Vector3(x, y, z),
                         Quaternion.identity,
                         transform);
+
+                    aStar.AddPoint(pointObject.transform.position);
                 }
             }
         }

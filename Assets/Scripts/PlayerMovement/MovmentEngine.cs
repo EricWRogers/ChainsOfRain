@@ -12,6 +12,8 @@ namespace KinematicCharacterControler
     public class MovementEngine : MonoBehaviour
     {
           public CapsuleCollider capsule;
+        public float capsuleHeight;
+        public float capsuleRadius;
         public LayerMask collisionLayers;
 
         [Header("Collision & Slope")]
@@ -34,7 +36,8 @@ namespace KinematicCharacterControler
 
         void Awake()
         {
-            
+            capsuleHeight = capsule.height;
+            capsuleRadius = capsule.radius;
         }
 
         public Vector3 MovePlayer(Vector3 movement)
