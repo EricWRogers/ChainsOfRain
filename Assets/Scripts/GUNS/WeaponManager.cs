@@ -54,7 +54,7 @@ public class WeaponManager : MonoBehaviour
     {
         GameObject arm = OpenArmCheck();
 
-       GameObject gun = Instantiate(_gun, arm.transform, arm.transform.parent.parent.GetChild(0));
+       GameObject gun = Instantiate(_gun, arm.transform.parent.parent.GetChild(0).position, arm.transform.parent.parent.GetChild(0).rotation, arm.transform);
 
         gun.GetComponent<Gunbase>().leftHanded = arm.name == "LeftArm";
         gun.GetComponent<Gunbase>().rightHanded = arm.name == "RightArm";

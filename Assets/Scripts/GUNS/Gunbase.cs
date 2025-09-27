@@ -8,6 +8,9 @@ public abstract class Gunbase : MonoBehaviour
     public bool rightHanded = false;
 
 
+    public bool semi = false;
+    public bool auto = false;
+
     public GameObject bulletPrefab;
 
     public int limitedAmmo = 10;
@@ -18,16 +21,28 @@ public abstract class Gunbase : MonoBehaviour
     public Transform firingPoint;
     private KeyCode activeHand => leftHanded ? KeyCode.Mouse0 : KeyCode.Mouse1;
 
-    
+    private InputType inputMode => semi ? InputType.GetKeyDown : InputType.GetKey;
     private void Update()
     {
-        if(Input.GetKeyDown(activeHand))
+        switch (inputMode)
         {
-            Debug.Log("Firing!");
-            Fire(firingPoint, bulletPrefab);
+            case InputType.GetKeyDown:
+                if (Input.GetKeyDown(activeHand))
+                {
+                    Debug.Log("Firing!");
+                    Fire(firingPoint, bulletPrefab);
+                }
+                break;
+            case InputType.GetKey:
+                if (Input.GetKey(activeHand))
+                {
+                    Debug.Log("Firing (holding)!");
+                    Fire(firingPoint, bulletPrefab);
+                }
+                break;
         }
 
-        if (Input.GetKeyDown(KeyCode.R))
+        if(Input.GetKeyDown(KeyCode.R))
         {
             ammo = limitedAmmo;
         }
@@ -40,4 +55,11 @@ public abstract class Gunbase : MonoBehaviour
     {
         _bullet.GetComponent<Bullet>().damage = _value;
     }
+
+    private enum InputType
+    {
+        GetKey,
+        GetKeyDown
+    }
+
 }
