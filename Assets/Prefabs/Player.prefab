@@ -942,6 +942,7 @@ GameObject:
   - component: {fileID: 5125394202073873866}
   - component: {fileID: 5887622225555984311}
   - component: {fileID: 5473672953631655455}
+  - component: {fileID: 9159069216754533260}
   m_Layer: 6
   m_Name: Character
   m_TagString: Player
@@ -1060,7 +1061,7 @@ MonoBehaviour:
   capsuleRadius: 0
   collisionLayers:
     serializedVersion: 2
-    m_Bits: 55
+    m_Bits: 63
   skinWidth: 0.015
   maxBounces: 5
   maxSlopeAngle: 55
@@ -1088,6 +1089,9 @@ MonoBehaviour:
   wallStickForce: 5
   maxWallRideTime: 2
   canWallRide: 1
+  wallLayer:
+    serializedVersion: 2
+    m_Bits: 0
   dashForce: 20
   dashDuration: 0.2
   dashCoolDown: 2
@@ -1158,6 +1162,33 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &9159069216754533260
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7015981434507550311}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 604dfbbf654f92618bc36972daaa4968, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  healthChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  healed:
+    m_PersistentCalls:
+      m_Calls: []
+  hurt:
+    m_PersistentCalls:
+      m_Calls: []
+  outOfHealth:
+    m_PersistentCalls:
+      m_Calls: []
+  maxHealth: 100
+  currentHealth: 0
+  defaultToMaxHealth: 1
 --- !u!1 &7076850638139298963
 GameObject:
   m_ObjectHideFlags: 0

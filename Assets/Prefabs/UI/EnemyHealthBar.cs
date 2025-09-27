@@ -10,6 +10,8 @@ public class EnemyHealthBar : MonoBehaviour
 
     void Start()
     {
+        healthBar = GetComponentInChildren<Slider>();
+        enemyHealth = transform.parent.GetComponent<Health>();
         healthBar.maxValue = enemyHealth.maxHealth;
         m_player = GameObject.FindGameObjectWithTag("Player").transform;
     }
