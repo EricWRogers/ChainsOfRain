@@ -3,6 +3,7 @@ using System.Net.Mail;
 using JetBrains.Annotations;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Rendering.Universal.Internal;
 
 namespace KinematicCharacterControler
 {
@@ -10,6 +11,8 @@ namespace KinematicCharacterControler
     {
         [Header("Movement")]
         public float speed = 5f;
+        public float runSpeed = 10f;
+        public KeyCode sprintKey = KeyCode.LeftShift;
         public float rotationSpeed = 5f;
         public float maxWalkAngle = 60f;
         public GameObject player;
@@ -146,8 +149,20 @@ namespace KinematicCharacterControler
                 m_timeSinceLastJump += Time.deltaTime;
             }
 
+            Vector3  finalDir;
+
+            if (Input.GetKey(sprintKey))
+            {
+                finalDir = inputDir * runSpeed;
+            }
+            else
+            {
+                finalDir = inputDir * speed;
+            }
+
+
             // Apply movement
-            transform.position = MovePlayer(inputDir * speed * Time.deltaTime);
+            transform.position = MovePlayer(finalDir * Time.deltaTime);
             transform.position = MovePlayer(m_velocity * Time.deltaTime);
             transform.rotation = new Quaternion(transform.rotation.x, cam.transform.rotation.y, transform.rotation.z, transform.rotation.w);
 
