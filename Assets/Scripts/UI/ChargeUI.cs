@@ -2,9 +2,9 @@ using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class ChargeUI : MonoBehaviour
+public class ChargeUI : GunUI
 {
-    public GameObject Weapon;
+    
     public Slider chargeSlider;
     public Image fillImage;
     public float flashSpeed;
@@ -14,14 +14,14 @@ public class ChargeUI : MonoBehaviour
 
     void Start()
     {
-        chargeSlider.maxValue = Weapon.GetComponent<GTWeaponScript>().maxCharge;
+        chargeSlider.maxValue = weapon.maxAmmo;
         baseColor = fillImage.color;
     }
 
     void Update()
     {
-        chargeSlider.value = Weapon.GetComponent<GTWeaponScript>().curCharge;
-        if (chargeSlider.value >= overHeatPercent / (chargeSlider.maxValue * 100) * 100)
+        chargeSlider.value = weapon.ammo;
+        if (chargeSlider.value >= weapon.GetComponent<LaserGun>().overChargeWarning)//  / (chargeSlider.maxValue * 100) * 100)
         {
             
             float pongTime = Mathf.PingPong(Time.time * flashSpeed, 1f);
