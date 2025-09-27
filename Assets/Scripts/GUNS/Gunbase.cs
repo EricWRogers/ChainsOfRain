@@ -20,7 +20,8 @@ public abstract class Gunbase : MonoBehaviour
     public float jettisonForce;
     public int maxAmmo = 100;
     public int magazineAmmo = 10;
-    private int ammo;
+    [HideInInspector]
+    public int ammo;
 
     public int damage = 1;
 
