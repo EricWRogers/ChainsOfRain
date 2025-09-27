@@ -206,7 +206,7 @@ namespace KinematicCharacterControler
                 m_requestedCrouch = false;
             }
 
-            if (Input.GetKey(dashKey))
+            if (Input.GetKeyDown(dashKey))
             {
                 Vector3 inputDir = transform.TransformDirection(new Vector3(mouseInput.x, 0, mouseInput.y));
                 if (inputDir.magnitude < 0.1f)
