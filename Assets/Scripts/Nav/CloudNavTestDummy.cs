@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class CloudNavTestDummy : MonoBehaviour
 {
@@ -9,18 +10,56 @@ public class CloudNavTestDummy : MonoBehaviour
     public GameObject end;
     public int startId;
     public int endId;
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    public int targetIndex;
+    public float speed = 100.0f;
+
     void Start()
     {
-        startId = cloudNav.aStar.GetPointByPosition(start.transform.position);
-        endId = cloudNav.aStar.GetPointByPosition(end.transform.position);
-
-        path = cloudNav.aStar.GetPath(startId, endId);
+        GetNewPath();
     }
 
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
-        
+        if (path.Count == 0)
+            return;
+
+        if (transform.position == path[targetIndex])
+        {
+            targetIndex++;
+
+            if (targetIndex >= path.Count)
+            {
+                GetNewPath();
+            }
+        }
+
+        Vector3 direction = (path[targetIndex] - transform.position).normalized;
+        Vector3 movePosition = transform.position + (direction * speed * Time.fixedDeltaTime);
+
+        if (Vector3.Distance(transform.position, path[targetIndex]) < Vector3.Distance(transform.position, movePosition))
+        {
+            transform.position = path[targetIndex];
+            return;
+        }
+
+        transform.position = movePosition;
+    }
+
+    void GetNewPath()
+    {
+        path.Clear();
+
+        targetIndex = 0;
+
+        startId = cloudNav.aStar.GetClosestPoint(transform.position);
+        endId = cloudNav.aStar.GetClosestPoint(new Vector3(
+            Random.Range(cloudNav.xCount/-2.0f, cloudNav.xCount/2.0f),
+            Random.Range(cloudNav.yCount/-2.0f, cloudNav.yCount/2.0f),
+            Random.Range(cloudNav.zCount/-2.0f, cloudNav.zCount/2.0f)
+            ));
+
+        path = cloudNav.aStar.GetPath(startId, endId);
+
     }
 }
