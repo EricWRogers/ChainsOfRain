@@ -22,16 +22,31 @@ public class WeaponManager : MonoBehaviour
     }
 
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-        
-    }
-
     // Update is called once per frame
     void Update()
     {
-        
+        if (Input.GetKeyDown(KeyCode.Q))
+        {
+            if(leftArm.transform.childCount != 0)
+            {
+                
+
+                GameObject gun = leftArm.transform.GetChild(0).gameObject;
+                gun.GetComponent<Gunbase>().Jettison();
+                Destroy(gun);
+            }
+        }
+
+        if (Input.GetKeyDown(KeyCode.E))
+        {
+            if (rightArm.transform.childCount != 0)
+            {
+
+                GameObject gun = rightArm.transform.GetChild(0).gameObject;
+                gun.GetComponent<Gunbase>().Jettison();
+                Destroy(gun);
+            }
+        }
     }
 
     public GameObject OpenArmCheck()
@@ -50,14 +65,20 @@ public class WeaponManager : MonoBehaviour
         }
     }
 
-    public void AttatchGun(GameObject _gun)
+    public bool AttatchGun(GameObject _gun)
     {
         GameObject arm = OpenArmCheck();
 
-       GameObject gun = Instantiate(_gun, arm.transform, arm.transform.parent.parent.GetChild(0));
+        if(arm == null)
+        {
+            return false;
+        }
+       GameObject gun = Instantiate(_gun, arm.transform.parent.parent.GetChild(0).position, arm.transform.parent.parent.GetChild(0).rotation, arm.transform);
 
         gun.GetComponent<Gunbase>().leftHanded = arm.name == "LeftArm";
         gun.GetComponent<Gunbase>().rightHanded = arm.name == "RightArm";
+
+        return true;
 
     }
 }

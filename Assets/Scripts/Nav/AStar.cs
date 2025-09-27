@@ -9,10 +9,19 @@ public class AStar
     [SerializeField]
     private List<AStarNode> m_graph;
     private Dictionary<Vector3, int> m_umap = new Dictionary<Vector3, int>();
+
+    // cache
+    private List<int> searchingSet = new List<int>();
+    private List<int> hasSearchedSet = new List<int>();
+    public void ResetGraph()
+    {
+        m_graph.Clear();
+        m_umap.Clear();
+    }
     public void RefreshCashe()
     {
         m_umap.Clear();
-        
+
         for (int i = 0; i < m_graph.Count; i++)
         {
             m_umap.Add(m_graph[i].position, i);
@@ -23,6 +32,7 @@ public class AStar
         int id = m_graph.Count;
         m_graph.Add(new AStarNode());
         m_graph[id].position = _position;
+        m_umap.Add(_position, id);
         return id;
     }
     public List<Vector3> GetPath(int _idFrom, int _idTo)
@@ -54,8 +64,8 @@ public class AStar
             }
         }
 
-        List<int> searchingSet = new List<int>();
-        List<int> hasSearchedSet = new List<int>();
+        searchingSet.Clear();
+        hasSearchedSet.Clear();
         int graphNodeIndex;
 
         searchingSet.Add(_idFrom);
@@ -144,7 +154,7 @@ public class AStar
         {
             distance = Vector3.Distance(_position, m_graph[i].position);
 
-            if (minDistance < distance)
+            if (minDistance > distance)
             {
                 id = i;
                 minDistance = distance;
@@ -169,6 +179,13 @@ public class AStar
         }
 
         Vector3 position = m_graph[_id].position;
+
+        // unconnect
+        for (int i = 0; i < m_graph[_id].adjacentPointIDs.Count; i++)
+        {
+            int adjacentPointID = m_graph[_id].adjacentPointIDs[i];
+            m_graph[adjacentPointID].adjacentPointIDs.Remove(_id);
+        }
 
         m_graph.RemoveAt(_id);
         m_umap.Remove(position);

@@ -9,8 +9,11 @@ public class PickupGun : MonoBehaviour
     {
         if(other.CompareTag("Player"))
         {
-            WeaponManager.instance.AttatchGun(gunPrefab);
-            Destroy(gameObject);
+           bool didwork = WeaponManager.instance.AttatchGun(gunPrefab);
+            if (didwork)
+            {
+                Destroy(gameObject);
+            }
         }
     }
 }

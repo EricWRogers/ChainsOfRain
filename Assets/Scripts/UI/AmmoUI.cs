@@ -3,11 +3,11 @@ using UnityEngine;
 
 public class AmmoUI : MonoBehaviour
 {
-    public GameObject Weapon;
+    public Gunbase Weapon;
     public TextMeshProUGUI ammoCounterText;
 
     void Update()
     {
-        ammoCounterText.text = (Weapon.GetComponent<GTWeaponScript>().curAmmo + "/" + Weapon.GetComponent<GTWeaponScript>().maxAmmo);
+        ammoCounterText.text = (Weapon.ammo + "/" + Weapon.maxAmmo);
     }
 }
