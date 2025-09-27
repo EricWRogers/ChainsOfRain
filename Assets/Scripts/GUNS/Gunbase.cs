@@ -9,14 +9,14 @@ public abstract class Gunbase : MonoBehaviour
     public bool rightHanded = false;
 
     public bool infiniteAmmo;
-
+    public bool reloadable = true;
     public bool press = false;
     public bool hold = false;
 
     public GameObject bulletPrefab;
 
     public GameObject jettisonPrefab;
-    
+
 
     public float jettisonForce;
     public int maxAmmo = 100;
@@ -28,6 +28,11 @@ public abstract class Gunbase : MonoBehaviour
 
     public Transform firingPoint;
 
+    public UnityEvent onFire;
+
+    public UnityEvent onReload;
+
+
     [Header("UI")]
     public GameObject uIPrefab;
     public RectTransform rightUI;
@@ -37,8 +42,9 @@ public abstract class Gunbase : MonoBehaviour
 
     private InputType inputMode => press ? InputType.GetKeyDown : InputType.GetKey;
 
+    public UnityEvent onJettison;
 
-    public void Start()
+    private void Start()
     {
         ammo = magazineAmmo;
         if (rightHanded)
@@ -51,33 +57,37 @@ public abstract class Gunbase : MonoBehaviour
         {
             leftUI = WeaponManager.instance.leftArm.transform.parent.GetComponentInChildren<RectTransform>();
             GameObject uI = Instantiate(uIPrefab, leftUI);
-            uI.GetComponent<AmmoUI>().Weapon = this;
+            uI.GetComponent<GunUI>().weapon = this;
+
+
         }
     }
 
-    public UnityEvent onJettison;
+
     private void Update()
     {
+
         switch (inputMode)
         {
             case InputType.GetKeyDown:
                 if (Input.GetKeyDown(activeHand))
                 {
-                    Debug.Log("Firing!");
+                    Logger.instance.Log("Firing!", Logger.LogType.Gun);
                     Fire(firingPoint, bulletPrefab);
                 }
                 break;
             case InputType.GetKey:
                 if (Input.GetKey(activeHand))
                 {
-                    Debug.Log("Firing (holding)!");
+                    Logger.instance.Log("Firing! (holding)", Logger.LogType.Gun);
                     Fire(firingPoint, bulletPrefab);
                 }
                 break;
         }
 
-        if(Input.GetKeyDown(KeyCode.R) && (infiniteAmmo || maxAmmo > 0)) //For now ill be lazy. Please set your max ammo to be divisible by your magazine ammo.
+        if (reloadable && Input.GetKeyDown(KeyCode.R) && (infiniteAmmo || maxAmmo > 0)) //For now ill be lazy. Please set your max ammo to be divisible by your magazine ammo.
         {
+            onReload.Invoke();
             ammo = magazineAmmo;
         }
     }
@@ -95,7 +105,7 @@ public abstract class Gunbase : MonoBehaviour
     {
         onJettison.Invoke();
 
-       GameObject temp = Instantiate(jettisonPrefab, gameObject.transform.position, gameObject.transform.rotation);
+        GameObject temp = Instantiate(jettisonPrefab, gameObject.transform.position, gameObject.transform.rotation);
 
         temp.GetComponent<Rigidbody>().AddForce(gameObject.transform.forward * jettisonForce, ForceMode.Impulse);
     }

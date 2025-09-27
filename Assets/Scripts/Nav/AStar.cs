@@ -5,9 +5,9 @@ using UnityEngine;
 [System.Serializable]
 public class AStar
 {
-    public int Count => m_graph.Count;
+    public int Count => graph.Count;
     [SerializeField]
-    private List<AStarNode> m_graph;
+    public List<AStarNode> graph;
     private Dictionary<Vector3, int> m_umap = new Dictionary<Vector3, int>();
 
     // cache
@@ -15,23 +15,23 @@ public class AStar
     private List<int> hasSearchedSet = new List<int>();
     public void ResetGraph()
     {
-        m_graph.Clear();
+        graph.Clear();
         m_umap.Clear();
     }
     public void RefreshCashe()
     {
         m_umap.Clear();
 
-        for (int i = 0; i < m_graph.Count; i++)
+        for (int i = 0; i < graph.Count; i++)
         {
-            m_umap.Add(m_graph[i].position, i);
+            m_umap.Add(graph[i].position, i);
         }
     }
     public int AddPoint(Vector3 _position)
     {
-        int id = m_graph.Count;
-        m_graph.Add(new AStarNode());
-        m_graph[id].position = _position;
+        int id = graph.Count;
+        graph.Add(new AStarNode());
+        graph[id].position = _position;
         m_umap.Add(_position, id);
         return id;
     }
@@ -39,24 +39,24 @@ public class AStar
     {
         List<Vector3> path = new List<Vector3>();
 
-        if (m_graph.Count <= _idFrom || _idFrom < 0)
+        if (graph.Count <= _idFrom || _idFrom < 0)
         {
-            Debug.LogError("AStar::GetPath _idFrom has not been added to the graph.");
+            Debug.LogError("AStar::GetPath _idFrom " + _idFrom + "has not been added to the graph.");
             return path;
         }
 
-        if (m_graph.Count <= _idTo || _idTo < 0)
+        if (graph.Count <= _idTo || _idTo < 0)
         {
             Debug.LogError("AStar::GetPath _idTo has not been added to the graph.");
             return path;
         }
 
         {
-            int graphSize = m_graph.Count;
+            int graphSize = graph.Count;
             AStarNode node;
             for (int i = 0; i < graphSize; i++)
             {
-                node = m_graph[i];
+                node = graph[i];
                 node.f = 0.0f;
                 node.g = 0.0f;
                 node.h = 0.0f;
@@ -76,13 +76,13 @@ public class AStar
 
             for (int i = 0; i < searchingSet.Count; i++)
             {
-                if (m_graph[searchingSet[lowestPath]].f > m_graph[searchingSet[i]].f)
+                if (graph[searchingSet[lowestPath]].f > graph[searchingSet[i]].f)
                 {
                     lowestPath = i;
                 }
             }
 
-            AStarNode node = m_graph[searchingSet[lowestPath]];
+            AStarNode node = graph[searchingSet[lowestPath]];
             graphNodeIndex = searchingSet[lowestPath];
 
             if (_idTo == searchingSet[lowestPath])
@@ -98,7 +98,10 @@ public class AStar
 
             for (int i = 0; i < neighborIDs.Count; i++)
             {
-                AStarNode neighborNode = m_graph[neighborIDs[i]];
+                //if (graph.Count <= neighborIDs[i])
+                //    continue;
+                
+                AStarNode neighborNode = graph[neighborIDs[i]];
 
                 if (hasSearchedSet.Contains(neighborIDs[i]) == false)
                 {
@@ -128,7 +131,7 @@ public class AStar
 
                     if (isNewPath)
                     {
-                        neighborNode.h = Vector3.Distance(neighborNode.position, m_graph[_idTo].position);
+                        neighborNode.h = Vector3.Distance(neighborNode.position, graph[_idTo].position);
                         neighborNode.f = neighborNode.g + neighborNode.h;
                         neighborNode.predecessorID = graphNodeIndex;
                     }
@@ -140,7 +143,7 @@ public class AStar
     }
     public int GetClosestPoint(Vector3 _position)
     {
-        if (m_graph.Count == 0)
+        if (graph.Count == 0)
         {
             Debug.LogError("AStar::GetClosetPoint was called before a point was added to the graph.");
             return -1;
@@ -150,9 +153,9 @@ public class AStar
         float distance;
         float minDistance = float.MaxValue;
 
-        for (int i = 1; i < m_graph.Count; i++)
+        for (int i = 1; i < graph.Count; i++)
         {
-            distance = Vector3.Distance(_position, m_graph[i].position);
+            distance = Vector3.Distance(_position, graph[i].position);
 
             if (minDistance > distance)
             {
@@ -172,33 +175,44 @@ public class AStar
     }
     public void RemovePoint(int _id)
     {
-        if (m_graph.Count <= _id && _id < 0)
+        if (graph.Count <= _id && _id < 0)
         {
             Debug.LogError("AStar::RemovePoint id has not been added to the graph.");
             return;
         }
 
-        Vector3 position = m_graph[_id].position;
+        Vector3 position = graph[_id].position;
 
         // unconnect
-        for (int i = 0; i < m_graph[_id].adjacentPointIDs.Count; i++)
+        for (int i = 0; i < graph[_id].adjacentPointIDs.Count; i++)
         {
-            int adjacentPointID = m_graph[_id].adjacentPointIDs[i];
-            m_graph[adjacentPointID].adjacentPointIDs.Remove(_id);
+            int adjacentPointID = graph[_id].adjacentPointIDs[i];
+            graph[adjacentPointID].adjacentPointIDs.Remove(_id);
         }
 
-        m_graph.RemoveAt(_id);
-        m_umap.Remove(position);
+        graph.RemoveAt(_id);
+        //RefreshCashe();
+
+        //m_umap.Remove(position);
+
+        for (int n = 0; n < graph.Count; n++)
+        {
+            for (int a = 0; a < graph[n].adjacentPointIDs.Count; a++)
+            {
+                if (graph[n].adjacentPointIDs[a] > _id)
+                    graph[n].adjacentPointIDs[a]--;
+            }
+        }
     }
     public void ConnectPoints(int _idFrom, int _idTo)
     {
-        if (m_graph.Count <= _idFrom || _idFrom < 0)
+        if (graph.Count <= _idFrom || _idFrom < 0)
         {
             Debug.LogError("AStar::ConnectPoints _idFrom has not been added to the graph.");
             return;
         }
 
-        if (m_graph.Count <= _idTo || _idTo < 0)
+        if (graph.Count <= _idTo || _idTo < 0)
         {
             Debug.LogError("AStar::ConnectPoints _idTo has not been added to the graph.");
             return;
@@ -210,29 +224,52 @@ public class AStar
             return;
         }
 
-        if (m_graph[_idFrom].adjacentPointIDs.Contains(_idTo) == false)
-            m_graph[_idFrom].adjacentPointIDs.Add(_idTo);
+        if (graph[_idFrom].adjacentPointIDs.Contains(_idTo) == false)
+            graph[_idFrom].adjacentPointIDs.Add(_idTo);
 
-        if (m_graph[_idTo].adjacentPointIDs.Contains(_idFrom) == false)
-            m_graph[_idTo].adjacentPointIDs.Add(_idFrom);
+        if (graph[_idTo].adjacentPointIDs.Contains(_idFrom) == false)
+            graph[_idTo].adjacentPointIDs.Add(_idFrom);
+    }
+    public void DisconnectPoints(int _idFrom, int _idTo)
+    {
+        if (graph.Count <= _idFrom || _idFrom < 0)
+        {
+            Debug.LogError("AStar::DisconnectPoints _idFrom has not been added to the graph.");
+            return;
+        }
+
+        if (graph.Count <= _idTo || _idTo < 0)
+        {
+            Debug.LogError("AStar::DisconnectPoints _idTo has not been added to the graph.");
+            return;
+        }
+
+        if (_idFrom == _idTo)
+        {
+            Debug.LogError("AStar::DisconnectPoints _idFrom is _idTo.");
+            return;
+        }
+
+        graph[_idFrom].adjacentPointIDs.Remove(_idTo);
+        graph[_idTo].adjacentPointIDs.Remove(_idFrom);
     }
     public bool ArePointsConnected(int _idFrom, int _idTo)
     {
-        if (m_graph.Count <= _idFrom || _idFrom < 0)
+        if (graph.Count <= _idFrom || _idFrom < 0)
         {
             Debug.LogError("AStar::ArePointsConnected _idFrom has not been added to the graph.");
             return false;
         }
 
-        if (m_graph.Count <= _idTo || _idTo < 0)
+        if (graph.Count <= _idTo || _idTo < 0)
         {
             Debug.LogError("AStar::ArePointsConnected _idTo has not been added to the graph.");
             return false;
         }
 
-        for (int i = 0; i < m_graph[_idFrom].adjacentPointIDs.Count; i++)
+        for (int i = 0; i < graph[_idFrom].adjacentPointIDs.Count; i++)
         {
-            if (m_graph[_idFrom].adjacentPointIDs[i] == _idTo)
+            if (graph[_idFrom].adjacentPointIDs[i] == _idTo)
             {
                 return true;
             }
@@ -253,7 +290,7 @@ public class AStar
         while (currentNode.predecessorID != -1)
         {
             path.Insert(0, currentNode.position);
-            currentNode = m_graph[currentNode.predecessorID];
+            currentNode = graph[currentNode.predecessorID];
         }
 
         return path;

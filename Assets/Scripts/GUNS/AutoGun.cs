@@ -11,7 +11,8 @@ public class AutoGun : Gunbase
     {
         if(Time.time >= nextFireTime && ammo != 0)
         {
-            GameObject temp = Instantiate(_bulletPrefab, _firingPoint);
+            onFire.Invoke();
+            GameObject temp = Instantiate(_bulletPrefab, _firingPoint.position, _firingPoint.rotation);
 
             UpdateDamage(damage, temp); //Just to keep things in line.
 
