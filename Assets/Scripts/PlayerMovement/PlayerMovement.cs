@@ -1,6 +1,7 @@
 using System.ComponentModel.Design.Serialization;
 using System.Net.Mail;
 using JetBrains.Annotations;
+using Unity.VisualScripting;
 using UnityEngine;
 
 namespace KinematicCharacterControler
@@ -110,21 +111,10 @@ namespace KinematicCharacterControler
         {
             float horizontal = Input.GetAxisRaw("Horizontal");
             float vertical = Input.GetAxisRaw("Vertical");
-    
-
-            Vector3 viewDir = transform.position - new Vector3(cam.position.x, transform.position.y, cam.position.z);
-            m_orientation.forward = viewDir.normalized;
-
-            Vector3 inputDir = m_orientation.forward * vertical + m_orientation.right * horizontal;
 
 
-            // Rotate player
-            if (inputDir != Vector3.zero )
-            {
-                player.transform.forward = Vector3.Slerp(player.transform.forward, inputDir.normalized, Time.deltaTime * rotationSpeed);
-                m_velocity.x = 0f;
-                m_velocity.z = 0f;
-            }
+            Vector3 inputDir = transform.TransformDirection(new Vector3(horizontal, 0, vertical));
+
 
             bool onGround = CheckIfGrounded(out RaycastHit groundHit) && m_velocity.y <= 0.0f;
             bool falling = !(onGround && maxWalkAngle >= Vector3.Angle(Vector3.up, groundHit.normal));
@@ -159,6 +149,7 @@ namespace KinematicCharacterControler
             // Apply movement
             transform.position = MovePlayer(inputDir * speed * Time.deltaTime);
             transform.position = MovePlayer(m_velocity * Time.deltaTime);
+            transform.rotation = new Quaternion(transform.rotation.x, cam.transform.rotation.y, transform.rotation.z, transform.rotation.w);
 
             if (onGround && !attemptingJump)
                 SnapPlayerDown();
