@@ -20,7 +20,10 @@ public class CloudNavTestDummy : MonoBehaviour
     void FixedUpdate()
     {
         if (path.Count == 0)
+        {
+            GetNewPath();
             return;
+        }
 
         if (transform.position == path[targetIndex])
         {
@@ -29,6 +32,7 @@ public class CloudNavTestDummy : MonoBehaviour
             if (targetIndex >= path.Count)
             {
                 GetNewPath();
+                return;
             }
         }
 
