@@ -360,7 +360,7 @@ namespace KinematicCharacterControler
         void HandleKnockBack()
         {
             transform.position = MovePlayer(kbStrength * Time.deltaTime * kbDir);
-            kbStrength *= 0.8f;
+            kbStrength *= 0.99f;
 
             if (kbStrength <= 0.01)
             {
