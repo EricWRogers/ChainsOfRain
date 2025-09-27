@@ -154,7 +154,7 @@ public class AStar
         {
             distance = Vector3.Distance(_position, m_graph[i].position);
 
-            if (minDistance < distance)
+            if (minDistance > distance)
             {
                 id = i;
                 minDistance = distance;
