@@ -8,6 +8,10 @@ public class AmmoUI : MonoBehaviour
 
     void Update()
     {
-        ammoCounterText.text = (Weapon.ammo + "/" + Weapon.maxAmmo);
+        ammoCounterText.text = Weapon.ammo + "\n―\n" + Weapon.maxAmmo;
+        if (Weapon.leftHanded)
+        {
+            ammoCounterText.rectTransform.localScale = new Vector3(-1, 1, 1);
+        }
     }
 }
