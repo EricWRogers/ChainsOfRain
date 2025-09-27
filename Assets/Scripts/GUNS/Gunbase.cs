@@ -10,6 +10,9 @@ public abstract class Gunbase : MonoBehaviour
 
     public GameObject bulletPrefab;
 
+    public int limitedAmmo = 10;
+    public int ammo = 10;
+
     public int damage = 1;
 
     public Transform firingPoint;
@@ -22,6 +25,11 @@ public abstract class Gunbase : MonoBehaviour
         {
             Debug.Log("Firing!");
             Fire(firingPoint, bulletPrefab);
+        }
+
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            ammo = limitedAmmo;
         }
     }
 

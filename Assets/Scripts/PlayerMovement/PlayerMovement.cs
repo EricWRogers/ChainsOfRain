@@ -1,14 +1,26 @@
 using System.ComponentModel.Design.Serialization;
 using System.Net.Mail;
 using JetBrains.Annotations;
+using NUnit.Framework;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Rendering.Universal.Internal;
 
 namespace KinematicCharacterControler
 {
+    public enum Stance
+    {
+        Standing,
+        Crouching,
+        Sliding,
+        Grinding
+    }
     public class PlayerMovement : MovementEngine
     {
+        [Header("Current State")]
+        public Stance currentStance = Stance.Standing;
+        public Stance prevStance = Stance.Standing;
+
         [Header("Movement")]
         public float speed = 5f;
         public float runSpeed = 10f;
@@ -19,13 +31,21 @@ namespace KinematicCharacterControler
 
         private Transform m_orientation;
         public Transform cam;
-        
+
+        [Header("Crouch")]
+        public KeyCode crouchKey = KeyCode.LeftControl;
+        public bool isCrouching;
+        public float crouchSpeed;
+        private bool m_requestedCrouch = false;
+        public float crouchHeight;
+
 
         [Header("Physics")]
         public Vector3 gravity = new Vector3(0, -9, 0);
         private float m_elapsedFalling;
         private Vector3 m_velocity;
         public bool lockCursor = true;
+        private Vector2 mouseInput;
 
         [Header("Jump Settings")]
         public float jumpForce = 5.0f;
@@ -37,16 +57,23 @@ namespace KinematicCharacterControler
         private float m_jumpBufferTime = 0.25f;
         public bool canJump = true;
 
+        [Header("Sliding")]
+        public KeyCode slideKey = KeyCode.LeftControl;
+        public bool isSliding = false;
+        public bool canSlide = false;
+        public float startSlideSpeed = 25;
+        public float endSlideSpeed = 15;
+
         [Header("Rail Grinding")]
         public LayerMask railLayer;
         public float railDetectionRadius = 1.5f;
         public float railSnapDistance = 2f;
         public float minGrindSpeed = 3f;
         public float grindExitForce = 8f;
-        
+
         [Header("Grinding Input")]
         public KeyCode grindKey = KeyCode.LeftControl;
-        
+
         // Grinding state
         public bool isGrinding { get; private set; }
         public Rail currentRail;
@@ -62,12 +89,33 @@ namespace KinematicCharacterControler
             m_orientation = cam;
         }
 
+        public void ChangeState(Stance newState)
+        {
+            if (currentStance == newState) return;
+
+            prevStance = currentStance;
+
+            switch (newState)
+            {
+                case Stance.Standing:
+                    currentStance = newState;
+                    break;
+                case Stance.Sliding:
+                    currentStance = newState;
+                    break;
+                case Stance.Grinding:
+                    currentStance = newState;
+                    break;
+                
+            }
+        }
+
         void Update()
         {
             HandleCursor();
             UpdateGrindInput();
             HandleInput();
-            
+
             if (!isGrinding)
             {
                 HandleRegularMovement();
@@ -109,15 +157,24 @@ namespace KinematicCharacterControler
                 jumpInputElapsed = 0.0f;
             else
                 jumpInputElapsed += Time.deltaTime;
+
+            if (Input.GetKeyDown(crouchKey))
+            {
+                m_requestedCrouch = true;
+            }
+            else
+            {
+                m_requestedCrouch = false;
+            }
+
+            mouseInput = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
         }
 
         void HandleRegularMovement()
         {
-            float horizontal = Input.GetAxisRaw("Horizontal");
-            float vertical = Input.GetAxisRaw("Vertical");
+            HandleCrouch();
 
-
-            Vector3 inputDir = transform.TransformDirection(new Vector3(horizontal, 0, vertical));
+            Vector3 inputDir = transform.TransformDirection(new Vector3(mouseInput.x, 0, mouseInput.y));
 
 
             bool onGround = CheckIfGrounded(out RaycastHit groundHit) && m_velocity.y <= 0.0f;
@@ -129,7 +186,7 @@ namespace KinematicCharacterControler
                 m_velocity += gravity * Time.deltaTime;
                 m_elapsedFalling += Time.deltaTime;
             }
-            else if(onGround)
+            else if (onGround)
             {
                 m_velocity = Vector3.zero;
                 m_elapsedFalling = 0;
@@ -150,11 +207,15 @@ namespace KinematicCharacterControler
                 m_timeSinceLastJump += Time.deltaTime;
             }
 
-            Vector3  finalDir;
+            Vector3 finalDir;
 
             if (Input.GetKey(sprintKey))
             {
                 finalDir = inputDir * runSpeed;
+            }
+            else if (isCrouching)
+            {
+                finalDir = inputDir * crouchSpeed;
             }
             else
             {
@@ -172,28 +233,52 @@ namespace KinematicCharacterControler
         }
 
 
+        void HandleCrouch()
+        {
+            Debug.Log(m_requestedCrouch);
+            Debug.Log(currentStance == Stance.Standing);
+            if (m_requestedCrouch && currentStance == Stance.Standing)
+            {
+                currentStance = Stance.Crouching;
+                capsule.height = crouchHeight;
+                capsule.center = new Vector3(0, 0.25f, 0);
+                isCrouching = true;
+                return;
+
+            }
+            
+            if (m_requestedCrouch && currentStance == Stance.Crouching)
+            {
+                currentStance = Stance.Standing;
+                capsule.height = capsuleHeight;
+                capsule.center = Vector3.zero;
+                isCrouching = false;
+            }
+        }
+
+
         // RAIL GRINDING SYSTEM
         void TryStartGrinding()
         {
 
-            
+
             // Check for nearby rails
             Collider[] railColliders = Physics.OverlapSphere(m_railDetectionPoint.position, railDetectionRadius, railLayer);
-            
+
             Rail closestRail = null;
             float closestDistance = float.MaxValue;
             float bestProgress = 0f;
-            
+
             foreach (var collider in railColliders)
             {
                 Rail rail = collider.GetComponent<Rail>();
                 if (rail == null) continue;
-                
+
                 // Find closest point on this rail
                 float progress;
                 Vector3 closestPoint = GetClosestPointOnRail(rail, transform.position, out progress);
                 float distance = Vector3.Distance(transform.position, closestPoint);
-                
+
                 if (distance < closestDistance && distance <= railSnapDistance)
                 {
                     closestDistance = distance;
@@ -201,58 +286,58 @@ namespace KinematicCharacterControler
                     bestProgress = progress;
                 }
             }
-            
+
             if (closestRail != null)
             {
                 StartGrinding(closestRail, bestProgress);
             }
         }
-        
+
         Vector3 GetClosestPointOnRail(Rail rail, Vector3 position, out float progress)
         {
             progress = 0f;
             if (rail.railPoints == null || rail.railPoints.Length < 2) return Vector3.zero;
-            
+
             Vector3 closestPoint = rail.railPoints[0].position;
             float closestDistance = Vector3.Distance(position, closestPoint);
-            
+
             for (int i = 0; i < rail.railPoints.Length - 1; i++)
             {
                 Vector3 lineStart = rail.railPoints[i].position;
                 Vector3 lineEnd = rail.railPoints[i + 1].position;
-                
+
                 Vector3 pointOnLine = GetClosestPointOnLine(lineStart, lineEnd, position);
                 float distance = Vector3.Distance(position, pointOnLine);
-                
+
                 if (distance < closestDistance)
                 {
                     closestDistance = distance;
                     closestPoint = pointOnLine;
-                    
+
                     float segmentLength = Vector3.Distance(lineStart, lineEnd);
                     float distanceAlongSegment = Vector3.Distance(lineStart, pointOnLine);
                     float localProgress = segmentLength > 0 ? distanceAlongSegment / segmentLength : 0f;
-                    
+
                     progress = (i + localProgress) / (rail.railPoints.Length - 1);
                 }
             }
-            
+
             return closestPoint;
         }
-        
+
         Vector3 GetClosestPointOnLine(Vector3 lineStart, Vector3 lineEnd, Vector3 point)
         {
             Vector3 lineDirection = lineEnd - lineStart;
             float lineLength = lineDirection.magnitude;
             lineDirection.Normalize();
-            
+
             Vector3 toPoint = point - lineStart;
             float projectedDistance = Vector3.Dot(toPoint, lineDirection);
             projectedDistance = Mathf.Clamp(projectedDistance, 0f, lineLength);
-            
+
             return lineStart + lineDirection * projectedDistance;
         }
-        
+
         void StartGrinding(Rail rail, float progress)
         {
             isGrinding = true;
@@ -265,22 +350,22 @@ namespace KinematicCharacterControler
             float horizontal = Input.GetAxisRaw("Horizontal");
             float vertical = Input.GetAxisRaw("Vertical");
             Vector3 inputDir = m_orientation.forward * vertical + m_orientation.right * horizontal;
-            
+
             // Get rail direction at this point
             Vector3 railDir = rail.GetDirectionOnRail(progress);
-            
+
             // Determine which direction along the rail matches player's movement better
             float forwardDot = Vector3.Dot(transform.forward, railDir);
             float backwardDot = Vector3.Dot(transform.forward, -railDir);
-            
-             m_railDir = forwardDot > backwardDot ? 1f : -1f;
-            
+
+            m_railDir = forwardDot > backwardDot ? 1f : -1f;
+
             Vector3 railPosition = rail.GetPointOnRail(progress);
             transform.position = railPosition;
-            
+
             m_velocity = Vector3.zero;
         }
-        
+
         void ContinueGrinding()
         {
             if (currentRail == null)
@@ -294,7 +379,7 @@ namespace KinematicCharacterControler
                 ExitGrinding();
                 return;
             }
-            
+
             if (!currentRail.isLoop)
             {
                 // Exit if at end of rail
@@ -303,35 +388,35 @@ namespace KinematicCharacterControler
                     ExitGrinding();
                     return;
                 }
-            }    
-            
+            }
+
             // Calculate movement along rail
-                Vector3 railDirection = currentRail.GetDirectionOnRail(railProgress) * m_railDir;
-            
-            
+            Vector3 railDirection = currentRail.GetDirectionOnRail(railProgress) * m_railDir;
+
+
             Vector3 railMovement = railDirection * grindSpeed * Time.deltaTime;
-            
+
 
             Vector3 currentPos = transform.position;
             Vector3 newPosition = MovePlayer(railMovement);
             transform.position = newPosition;
-            
+
             // Update rail progress based on actual movement achieved along rail direction
             Vector3 actualMovement = transform.position - currentPos;
             float actualDistance = Vector3.Dot(actualMovement, railDirection);
-            
+
             float railLength = currentRail.GetRailLength();
             if (railLength > 0)
             {
                 float progressDelta = (actualDistance / railLength) * m_railDir;
                 railProgress += progressDelta;
             }
-            
-            
+
+
 
             Vector3 idealRailPosition = currentRail.GetPointOnRail(railProgress);
             Vector3 currentRailPosition = transform.position;
-            
+
             // Only correct position if we've drifted too far from the rail
             float driftDistance = Vector3.Distance(currentRailPosition, idealRailPosition);
             if (driftDistance > 0.5f) // Allow some tolerance
@@ -341,26 +426,26 @@ namespace KinematicCharacterControler
                 Vector3 correction = correctionDirection * Mathf.Min(driftDistance, 2f * Time.deltaTime);
                 transform.position += correction;
             }
-            
+
             // Store grind velocity for potential exit
             grindVelocity = railDirection * grindSpeed;
         }
-        
+
         void ExitGrinding()
         {
             if (!isGrinding) return;
-            
+
             isGrinding = false;
-            
+
             // Give player exit velocity
             if (currentRail != null)
             {
                 Vector3 railDirection = currentRail.GetDirectionOnRail(railProgress) * m_railDir;
                 m_velocity = railDirection * grindSpeed;
-                
+
                 m_velocity.y = grindExitForce;
             }
-            
+
             currentRail = null;
             railProgress = 0f;
             grindSpeed = 0f;
@@ -382,7 +467,7 @@ namespace KinematicCharacterControler
             Gizmos.color = Color.blue;
 
             Gizmos.DrawWireSphere(m_railDetectionPoint.position, railDetectionRadius);
-            
+
         }
     }
 }
