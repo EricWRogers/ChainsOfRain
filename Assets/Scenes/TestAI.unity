@@ -116572,6 +116572,8 @@ MonoBehaviour:
   end: {fileID: 1219145018}
   startId: 0
   endId: 0
+  targetIndex: 0
+  speed: 20
 --- !u!65 &2011223481
 BoxCollider:
   m_ObjectHideFlags: 0

@@ -68,7 +68,6 @@ public class AStar
 
         while (searchingSet.Count > 0)
         {
-            Debug.Log("search");
             int lowestPath = 0;
 
             for (int i = 0; i < searchingSet.Count; i++)
@@ -93,11 +92,8 @@ public class AStar
 
             List<int> neighborIDs = node.adjacentPointIDs;
 
-            Debug.Log("NC: " + node.adjacentPointIDs.Count);
-
             for (int i = 0; i < neighborIDs.Count; i++)
             {
-                Debug.Log("n");
                 AStarNode neighborNode = m_graph[neighborIDs[i]];
 
                 if (hasSearchedSet.Contains(neighborIDs[i]) == false)
@@ -246,7 +242,6 @@ public class AStar
     }
     private List<Vector3> BuildPath(AStarNode _node)
     {
-        Debug.Log("Build Path");
         List<Vector3> path = new List<Vector3>();
 
         AStarNode currentNode = _node;
