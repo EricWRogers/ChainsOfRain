@@ -16,6 +16,7 @@ public abstract class Gunbase : MonoBehaviour
     public GameObject bulletPrefab;
 
     public GameObject jettisonPrefab;
+    
 
     public float jettisonForce;
     public int maxAmmo = 100;
@@ -26,6 +27,12 @@ public abstract class Gunbase : MonoBehaviour
     public int damage = 1;
 
     public Transform firingPoint;
+
+    [Header("UI")]
+    public GameObject uIPrefab;
+    public RectTransform rightUI;
+    public RectTransform leftUI;
+
     private KeyCode activeHand => leftHanded ? KeyCode.Mouse0 : KeyCode.Mouse1;
 
     private InputType inputMode => press ? InputType.GetKeyDown : InputType.GetKey;
@@ -34,6 +41,18 @@ public abstract class Gunbase : MonoBehaviour
     public void Start()
     {
         ammo = magazineAmmo;
+        if (rightHanded)
+        {
+            rightUI = WeaponManager.instance.rightArm.transform.parent.GetComponentInChildren<RectTransform>();
+            GameObject uI = Instantiate(uIPrefab, rightUI);
+            uI.GetComponent<AmmoUI>().Weapon = this;
+        }
+        if (leftHanded)
+        {
+            leftUI = WeaponManager.instance.leftArm.transform.parent.GetComponentInChildren<RectTransform>();
+            GameObject uI = Instantiate(uIPrefab, leftUI);
+            uI.GetComponent<AmmoUI>().Weapon = this;
+        }
     }
 
     public UnityEvent onJettison;
