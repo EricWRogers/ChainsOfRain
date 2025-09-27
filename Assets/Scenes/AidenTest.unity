@@ -500,15 +500,15 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1371807114325550448, guid: dab13d227d091494ebf18be6e289c594, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 159.52
+      value: 15.6
       objectReference: {fileID: 0}
     - target: {fileID: 1371807114325550448, guid: dab13d227d091494ebf18be6e289c594, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 27.989
+      value: 13.54
       objectReference: {fileID: 0}
     - target: {fileID: 1371807114325550448, guid: dab13d227d091494ebf18be6e289c594, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 182.08
+      value: 143.17
       objectReference: {fileID: 0}
     - target: {fileID: 1371807114325550448, guid: dab13d227d091494ebf18be6e289c594, type: 3}
       propertyPath: m_LocalRotation.w
@@ -541,6 +541,14 @@ PrefabInstance:
     - target: {fileID: 2255076907071157150, guid: dab13d227d091494ebf18be6e289c594, type: 3}
       propertyPath: m_Name
       value: FirstPlayableWhiteBox
+      objectReference: {fileID: 0}
+    - target: {fileID: 8744084676777724030, guid: dab13d227d091494ebf18be6e289c594, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -15.71
+      objectReference: {fileID: 0}
+    - target: {fileID: 8744084676777724030, guid: dab13d227d091494ebf18be6e289c594, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 36.64
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
