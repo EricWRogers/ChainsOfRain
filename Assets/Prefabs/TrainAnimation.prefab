@@ -533,7 +533,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   amountOfDamage: 25
-  knockBackStrength: 20
+  knockBackStrength: 150
   train: {fileID: 8507765646827721453}
 --- !u!114 &4359930191251001871
 MonoBehaviour:

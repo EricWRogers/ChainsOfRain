@@ -11,8 +11,9 @@ public class ChargeUI : GunUI
     public Color baseColor;
     public Color warningColor;
 
-    void Start()
+    new void Start()
     {
+        base.Start();
         chargeSlider.maxValue = weapon.maxAmmo;
         baseColor = fillImage.color;
     }
