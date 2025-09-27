@@ -17,6 +17,7 @@ namespace KinematicCharacterControler
     }
     public class PlayerMovement : MovementEngine
     {
+        public PlayerMovement instance;
         [Header("Current State")]
         public Stance currentStance = Stance.Standing;
         public Stance prevStance = Stance.Standing;
@@ -24,10 +25,12 @@ namespace KinematicCharacterControler
         [Header("Movement")]
         public float speed = 5f;
         public float runSpeed = 10f;
+        public bool canSprint = true;
         public KeyCode sprintKey = KeyCode.LeftShift;
         public float rotationSpeed = 5f;
         public float maxWalkAngle = 60f;
         public GameObject player;
+        public GameObject camPoint;
 
         private Transform m_orientation;
         public Transform cam;
@@ -37,7 +40,7 @@ namespace KinematicCharacterControler
         public bool isCrouching;
         public float crouchSpeed;
         private bool m_requestedCrouch = false;
-        public float crouchHeight;
+        public float crouchHeight = 1.5f;
 
 
         [Header("Physics")]
@@ -48,14 +51,18 @@ namespace KinematicCharacterControler
         private Vector2 mouseInput;
 
         [Header("Jump Settings")]
+        public bool canJump = true;
         public float jumpForce = 5.0f;
         public float maxJumpAngle = 80f;
         public float jumpCooldown = 0.25f;
+        public bool canDoubleJump = false;
+        public int maxJumpCount = 2;
+        public int jumpCount = 2;
         public float jumpInputElapsed = Mathf.Infinity;
         private float m_timeSinceLastJump = 0.0f;
         private bool m_jumpInputPressed = false;
         private float m_jumpBufferTime = 0.25f;
-        public bool canJump = true;
+        
 
         [Header("Sliding")]
         public KeyCode slideKey = KeyCode.LeftControl;
@@ -63,6 +70,10 @@ namespace KinematicCharacterControler
         public bool canSlide = false;
         public float startSlideSpeed = 25;
         public float endSlideSpeed = 15;
+        private Vector3 m_slideDirection;
+        public float maxSlideAngle = 70;
+        public float slideForce;
+        private float m_slideSpeed;
 
         [Header("Rail Grinding")]
         public LayerMask railLayer;
@@ -83,6 +94,19 @@ namespace KinematicCharacterControler
         public bool grindInputHeld;
         public float m_railDir = 1f;
         [SerializeField] private Transform m_railDetectionPoint;
+
+        void Awake()
+        {
+            if (instance == null)
+            {
+                instance = this;
+            }
+            else
+            {
+                Destroy(this);
+                return;
+            }
+        }
         void Start()
         {
             player = GameObject.Find("Player");
@@ -109,7 +133,6 @@ namespace KinematicCharacterControler
                 
             }
         }
-
         void Update()
         {
             HandleCursor();
@@ -126,7 +149,6 @@ namespace KinematicCharacterControler
                 ContinueGrinding();
             }
         }
-
         void HandleCursor()
         {
             if (lockCursor)
@@ -169,7 +191,6 @@ namespace KinematicCharacterControler
 
             mouseInput = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
         }
-
         void HandleRegularMovement()
         {
             HandleCrouch();
@@ -186,18 +207,21 @@ namespace KinematicCharacterControler
                 m_velocity += gravity * Time.deltaTime;
                 m_elapsedFalling += Time.deltaTime;
             }
-            else if (onGround)
+            else if (onGround && !isSliding)
             {
                 m_velocity = Vector3.zero;
                 m_elapsedFalling = 0;
+                jumpCount = maxJumpCount;
+                
             }
 
             // Handle jumping
-            canJump = onGround && groundedState.angle <= maxJumpAngle && m_timeSinceLastJump >= jumpCooldown;
+            bool shouldJump = (onGround || (canDoubleJump && jumpCount > 0)) && canJump && groundedState.angle <= maxJumpAngle && m_timeSinceLastJump >= jumpCooldown;
             bool attemptingJump = jumpInputElapsed <= m_jumpBufferTime;
 
-            if (canJump && attemptingJump)
+            if (shouldJump && attemptingJump)
             {
+                jumpCount -= 1;
                 m_velocity = Vector3.up * jumpForce;
                 m_timeSinceLastJump = 0.0f;
                 jumpInputElapsed = Mathf.Infinity;
@@ -222,39 +246,99 @@ namespace KinematicCharacterControler
                 finalDir = inputDir * speed;
             }
 
-
+            
+            m_velocity += finalDir; 
             // Apply movement
-            transform.position = MovePlayer(finalDir * Time.deltaTime);
+            //transform.position = MovePlayer(finalDir * Time.deltaTime);
             transform.position = MovePlayer(m_velocity * Time.deltaTime);
             transform.rotation = new Quaternion(transform.rotation.x, cam.transform.rotation.y, transform.rotation.z, transform.rotation.w);
+            m_velocity = new Vector3(0, m_velocity.y, 0);
 
             if (onGround && !attemptingJump)
                 SnapPlayerDown();
         }
-
-
         void HandleCrouch()
         {
-            Debug.Log(m_requestedCrouch);
-            Debug.Log(currentStance == Stance.Standing);
             if (m_requestedCrouch && currentStance == Stance.Standing)
             {
                 currentStance = Stance.Crouching;
                 capsule.height = crouchHeight;
-                capsule.center = new Vector3(0, 0.25f, 0);
+                capsule.center = new Vector3(0, -0.25f, 0);
                 isCrouching = true;
+                camPoint.transform.position -= new Vector3(0, capsuleHeight - crouchHeight, 0);
                 return;
 
             }
             
-            if (m_requestedCrouch && currentStance == Stance.Crouching)
+            if ((m_requestedCrouch || m_jumpInputPressed) && currentStance == Stance.Crouching)
             {
                 currentStance = Stance.Standing;
                 capsule.height = capsuleHeight;
                 capsule.center = Vector3.zero;
                 isCrouching = false;
+                camPoint.transform.position -= new Vector3(0, crouchHeight - capsuleHeight, 0);
             }
         }
+
+       void HandleSliding()
+        {
+            if (!isSliding)
+            {
+                // Start sliding
+                isSliding = true;
+                isCrouching = false; // Exit crouch when starting slide
+        
+        
+
+               Vector3 inputDir = transform.TransformDirection(new Vector3(mouseInput.x, 0, mouseInput.y));
+
+        
+                if (m_velocity.magnitude > 0.1f)
+                {
+                    m_slideDirection = new Vector3(m_velocity.x, 0, m_velocity.z).normalized;
+                
+                }
+                else
+                {
+                    m_slideDirection = inputDir.magnitude > 0 ? inputDir.normalized : transform.forward;
+                    
+                }
+        
+                m_velocity = m_slideDirection * slideForce;
+            }
+    
+             bool onGround = CheckIfGrounded(out RaycastHit groundHit);
+    
+    
+ 
+    
+            if (onGround)
+            {
+                Vector3 slopeDirection = Vector3.ProjectOnPlane(m_slideDirection, groundHit.normal).normalized;
+               float slopeAngle = Vector3.Angle(Vector3.up, groundHit.normal);
+        
+            if (slopeAngle > 5f && slopeAngle <= maxSlideAngle)
+            {
+                Vector3 slopeInfluence = Vector3.Project(Physics.gravity, slopeDirection);
+                m_slideSpeed += slopeInfluence.magnitude * Time.deltaTime;
+                 m_slideSpeed = Mathf.Clamp(m_slideSpeed, endSlideSpeed, slideForce * 2f);
+            }
+        
+            m_slideDirection = slopeDirection;
+            m_velocity = new Vector3(slopeDirection.x * m_slideSpeed, m_velocity.y, slopeDirection.z * m_slideSpeed);
+        
+            m_velocity.y = 0;
+        }
+        else
+        {
+            m_velocity += gravity * Time.deltaTime;
+        }
+    
+        transform.position = MovePlayer(m_velocity * Time.deltaTime);
+    
+        if (onGround)
+            SnapPlayerDown();
+    }
 
 
         // RAIL GRINDING SYSTEM
