@@ -32,7 +32,7 @@ public class WeaponManager : MonoBehaviour
                 
 
                 GameObject gun = leftArm.transform.GetChild(0).gameObject;
-                gun.GetComponent<Gunbase>().onJettison.Invoke();
+                gun.GetComponent<Gunbase>().Jettison();
                 Destroy(gun);
             }
         }
@@ -43,7 +43,7 @@ public class WeaponManager : MonoBehaviour
             {
 
                 GameObject gun = rightArm.transform.GetChild(0).gameObject;
-                gun.GetComponent<Gunbase>().onJettison.Invoke();
+                gun.GetComponent<Gunbase>().Jettison();
                 Destroy(gun);
             }
         }

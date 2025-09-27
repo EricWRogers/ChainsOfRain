@@ -14,6 +14,9 @@ public abstract class Gunbase : MonoBehaviour
 
     public GameObject bulletPrefab;
 
+    public GameObject jettisonPrefab;
+
+    public float jettisonForce;
     public int limitedAmmo = 10;
     public int ammo = 10;
 
@@ -61,6 +64,15 @@ public abstract class Gunbase : MonoBehaviour
         _bullet.GetComponent<Bullet>().damage = _value;
     }
 
+
+    public void Jettison()
+    {
+        onJettison.Invoke();
+
+       GameObject temp = Instantiate(jettisonPrefab, gameObject.transform.position, gameObject.transform.rotation);
+
+        temp.GetComponent<Rigidbody>().AddForce(gameObject.transform.forward * jettisonForce, ForceMode.Impulse);
+    }
     private enum InputType
     {
         GetKey,
