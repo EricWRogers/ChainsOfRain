@@ -1082,6 +1082,7 @@ MonoBehaviour:
   player: {fileID: 0}
   camPoint: {fileID: 4617371025200445090}
   ciniCamera: {fileID: 7605957584052849053}
+  zoomSpeed: 5
   cam: {fileID: 6412032419476865578}
   wallRideSpeed: 8
   wallRideGravity: -1
@@ -1092,8 +1093,8 @@ MonoBehaviour:
   wallLayer:
     serializedVersion: 2
     m_Bits: 0
-  dashForce: 20
-  dashDuration: 0.2
+  dashForce: 0
+  dashDuration: 0
   dashCoolDown: 2
   canDash: 1
   dashKey: 9
