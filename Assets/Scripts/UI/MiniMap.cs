@@ -9,7 +9,7 @@ public class MiniMap : MonoBehaviour
     public RectTransform playerOnMap;
     public float scale;
     public GameObject blip;
-
+    public bool relativeDirection;
     private List<Transform> enemies = new();
     private List<RectTransform> enemiesOnMap = new();
 
@@ -42,9 +42,10 @@ public class MiniMap : MonoBehaviour
         if (enemy != null && indicator != null)
         {
             Vector3 relativePos;
-            
-            relativePos = playerOnScene.InverseTransformPoint(enemy.position);
-
+            if (relativeDirection)
+                relativePos = playerOnScene.InverseTransformPoint(enemy.position);
+            else
+                relativePos = enemy.position - playerOnScene.position;
             indicator.anchoredPosition = new Vector2(relativePos.x, relativePos.z) * scale;
         }
     }

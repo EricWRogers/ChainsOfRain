@@ -48,15 +48,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   leftHanded: 0
   rightHanded: 0
-  semi: 0
-  auto: 1
+  infiniteAmmo: 0
+  press: 0
+  hold: 0
   bulletPrefab: {fileID: 3973066098135447003, guid: e163f073a848f554cb3c781da9c2c9da, type: 3}
   jettisonPrefab: {fileID: 959586578758656293, guid: df4398ecdbdb43e46b3ad728bbafcb1e, type: 3}
   jettisonForce: 10
-  limitedAmmo: 100
+  maxAmmo: 100
+  magazineAmmo: 10
   ammo: 100
   damage: 1
   firingPoint: {fileID: 4245702726828332810}
+  uIPrefab: {fileID: 7799965945971305153, guid: a62cf4994c51d0140a7549572b99c8f9, type: 3}
+  rightUI: {fileID: 0}
+  leftUI: {fileID: 0}
   onJettison:
     m_PersistentCalls:
       m_Calls: []
