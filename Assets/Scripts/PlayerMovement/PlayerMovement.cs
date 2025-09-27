@@ -302,7 +302,7 @@ namespace KinematicCharacterControler
                                 && canJump && m_timeSinceLastJump >= jumpCooldown;
 
             bool attemptingJump = jumpInputElapsed <= m_jumpBufferTime;
-            Logger.instance.Log(attemptingJump.ToString(), Logger.LogType.Player);
+
 
             if (shouldJump && attemptingJump)
             {
@@ -310,7 +310,6 @@ namespace KinematicCharacterControler
                 m_velocity = Vector3.up * jumpForce;
                 m_timeSinceLastJump = 0.0f;
                 jumpInputElapsed = Mathf.Infinity;
-                Logger.instance.Log("jumping", Logger.LogType.Player);
             }
             else
             {
@@ -364,9 +363,9 @@ namespace KinematicCharacterControler
         void HandleKnockBack()
         {
             transform.position = MovePlayer(kbStrength * Time.deltaTime * kbDir);
-            kbStrength *= 0.99f;
+            kbStrength *= 0.9f;
 
-            if (kbStrength <= 0.01)
+            if (kbStrength <= 0.5f)
             {
                 isTakingKB = false;
             }
