@@ -12,6 +12,8 @@ namespace KinematicCharacterControler
     public class MovementEngine : MonoBehaviour
     {
           public CapsuleCollider capsule;
+        public float capsuleHeight;
+        public float capsuleRadius;
         public LayerMask collisionLayers;
 
         [Header("Collision & Slope")]
@@ -34,12 +36,12 @@ namespace KinematicCharacterControler
 
         void Awake()
         {
-            
+            capsuleHeight = capsule.height;
+            capsuleRadius = capsule.radius;
         }
 
         public Vector3 MovePlayer(Vector3 movement)
         {
-        
             Vector3 position = transform.position;
             Quaternion rotation = transform.rotation;
 
@@ -112,8 +114,7 @@ namespace KinematicCharacterControler
              
             return position;
         }
-
-        
+    
 
         public bool CheckIfGrounded(out RaycastHit _hit)
         {
