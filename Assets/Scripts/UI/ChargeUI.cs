@@ -8,7 +8,6 @@ public class ChargeUI : GunUI
     public Slider chargeSlider;
     public Image fillImage;
     public float flashSpeed;
-    public float overHeatPercent;
     public Color baseColor;
     public Color warningColor;
 
@@ -21,7 +20,7 @@ public class ChargeUI : GunUI
     void Update()
     {
         chargeSlider.value = weapon.ammo;
-        if (chargeSlider.value >= weapon.GetComponent<LaserGun>().overChargeWarning)//  / (chargeSlider.maxValue * 100) * 100)
+        if (chargeSlider.value >= weapon.GetComponent<LaserGun>().overChargeWarning)//   (chargeSlider.maxValue * 100) * 100)
         {
             
             float pongTime = Mathf.PingPong(Time.time * flashSpeed, 1f);

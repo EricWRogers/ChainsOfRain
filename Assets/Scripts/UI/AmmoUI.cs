@@ -1,19 +1,18 @@
 using TMPro;
 using UnityEngine;
 
-public class AmmoUI : MonoBehaviour
+public class AmmoUI : GunUI
 {
-    public Gunbase Weapon;
     public TextMeshProUGUI ammoCounterText;
 
     void Start()
     {
-        Weapon.onJettison.AddListener(DestroyUI);
+        weapon.onJettison.AddListener(DestroyUI);
     }
     void Update()
     {
-        ammoCounterText.text = Weapon.ammo + "\n―\n" + Weapon.maxAmmo;
-        if (Weapon.leftHanded)
+        ammoCounterText.text = weapon.ammo + "\n―\n" + weapon.maxAmmo;
+        if (weapon.leftHanded)
         {
             ammoCounterText.rectTransform.localScale = new Vector3(-1, 1, 1);
         }
