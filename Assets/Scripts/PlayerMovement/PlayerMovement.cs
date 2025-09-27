@@ -2,7 +2,10 @@ using System.ComponentModel.Design.Serialization;
 using System.Net.Mail;
 using JetBrains.Annotations;
 using NUnit.Framework;
+using TMPro;
+using Unity.Cinemachine;
 using Unity.VisualScripting;
+using UnityEditor.PackageManager;
 using UnityEngine;
 using UnityEngine.Rendering.Universal.Internal;
 
@@ -17,7 +20,7 @@ namespace KinematicCharacterControler
     }
     public class PlayerMovement : MovementEngine
     {
-        public PlayerMovement instance;
+        public static PlayerMovement instance;
         [Header("Current State")]
         public Stance currentStance = Stance.Standing;
         public Stance prevStance = Stance.Standing;
@@ -25,15 +28,45 @@ namespace KinematicCharacterControler
         [Header("Movement")]
         public float speed = 5f;
         public float runSpeed = 10f;
+        public float sprintFOV = 70f;
+        public float walkFOV = 60f;
         public bool canSprint = true;
         public KeyCode sprintKey = KeyCode.LeftShift;
         public float rotationSpeed = 5f;
         public float maxWalkAngle = 60f;
         public GameObject player;
         public GameObject camPoint;
-
+        public CinemachineCamera ciniCamera;
         private Transform m_orientation;
         public Transform cam;
+
+        [Header("Wall Ride Settings")]
+        public float wallRideSpeed = 8f;
+        public float wallRideGravity = -1f;      
+        public float wallCheckDistance = 1f;
+        public float wallStickForce = 5f;
+        public float maxWallRideTime = 2f;
+        public bool canWallRide = true;
+        public LayerMask wallLayer;
+
+        private bool isWallRiding = false;
+        private Vector3 wallNormal;
+        private float wallRideTimer;
+
+        [Header("Dashing")]
+        public float dashForce = 20f;
+        public float dashDuration = 0.2f;
+        public float dashCoolDown = 2f;
+        public bool canDash = true;
+        public KeyCode dashKey = KeyCode.Tab;
+        public float dashFOV = 80f;
+
+        private bool m_isDashing = false;
+        private float dashTime = 0f;
+        private float m_dashCooldownTimer = 0f;
+        private Vector3 m_dashDirecton;
+        
+
 
         [Header("Crouch")]
         public KeyCode crouchKey = KeyCode.LeftControl;
@@ -41,6 +74,7 @@ namespace KinematicCharacterControler
         public float crouchSpeed;
         private bool m_requestedCrouch = false;
         public float crouchHeight = 1.5f;
+        public bool canCrouch = true;
 
 
         [Header("Physics")]
@@ -55,9 +89,9 @@ namespace KinematicCharacterControler
         public float jumpForce = 5.0f;
         public float maxJumpAngle = 80f;
         public float jumpCooldown = 0.25f;
-        public bool canDoubleJump = false;
-        public int maxJumpCount = 2;
-        public int jumpCount = 2;
+        public bool canDoubleJump = true;
+        public int maxJumpCount = 1;
+        public int jumpCount = 1;
         public float jumpInputElapsed = Mathf.Infinity;
         private float m_timeSinceLastJump = 0.0f;
         private bool m_jumpInputPressed = false;
@@ -170,6 +204,7 @@ namespace KinematicCharacterControler
 
         void HandleInput()
         {
+            mouseInput = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
             if (Input.GetKey(KeyCode.Space))
                 m_jumpInputPressed = true;
             else
@@ -189,11 +224,46 @@ namespace KinematicCharacterControler
                 m_requestedCrouch = false;
             }
 
-            mouseInput = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
+            if (Input.GetKeyDown(dashKey) && m_dashCooldownTimer <= 0f && !m_isDashing)
+            {
+                Vector3 inputDir = transform.TransformDirection(new Vector3(mouseInput.x, 0, mouseInput.y));
+                if (inputDir.magnitude < 0.1f)
+                    inputDir = transform.forward; // default forward dash
+
+                m_dashDirecton = inputDir.normalized;
+                m_isDashing = true;
+                dashTime = dashDuration;
+
+                m_dashCooldownTimer = dashCoolDown;
+                ciniCamera.Lens.FieldOfView = dashFOV;
+            }
+
         }
         void HandleRegularMovement()
         {
             HandleCrouch();
+            if (m_isDashing)
+            {
+                HandleDashing(Time.deltaTime);
+                return;
+            }
+            else if (isWallRiding)
+            {
+                HandleWallRide();
+                return;
+            }
+            ciniCamera.Lens.Dutch = 0f;
+
+
+            if (!isWallRiding && CheckForWall(transform.position, wallCheckDistance, out RaycastHit _wallHit))
+            {
+                if (m_jumpInputPressed)
+                {
+                    StartWallRide(_wallHit);
+                }
+            }
+
+
 
             Vector3 inputDir = transform.TransformDirection(new Vector3(mouseInput.x, 0, mouseInput.y));
 
@@ -216,8 +286,11 @@ namespace KinematicCharacterControler
             }
 
             // Handle jumping
-            bool shouldJump = (onGround || (canDoubleJump && jumpCount > 0)) && canJump && groundedState.angle <= maxJumpAngle && m_timeSinceLastJump >= jumpCooldown;
+            bool shouldJump = ((onGround && groundedState.angle <= maxJumpAngle) || (canDoubleJump && jumpCount > 0))
+                                && canJump && m_timeSinceLastJump >= jumpCooldown;
+
             bool attemptingJump = jumpInputElapsed <= m_jumpBufferTime;
+            Logger.instance.Log(attemptingJump.ToString(), Logger.LogType.Player);
 
             if (shouldJump && attemptingJump)
             {
@@ -225,6 +298,7 @@ namespace KinematicCharacterControler
                 m_velocity = Vector3.up * jumpForce;
                 m_timeSinceLastJump = 0.0f;
                 jumpInputElapsed = Mathf.Infinity;
+                Logger.instance.Log("jumping", Logger.LogType.Player);
             }
             else
             {
@@ -236,27 +310,115 @@ namespace KinematicCharacterControler
             if (Input.GetKey(sprintKey))
             {
                 finalDir = inputDir * runSpeed;
+                ciniCamera.Lens.FieldOfView = sprintFOV;
             }
             else if (isCrouching)
             {
                 finalDir = inputDir * crouchSpeed;
+                ciniCamera.Lens.FieldOfView = walkFOV;
             }
             else
             {
                 finalDir = inputDir * speed;
+                ciniCamera.Lens.FieldOfView = walkFOV;
             }
-
             
             m_velocity += finalDir; 
             // Apply movement
             //transform.position = MovePlayer(finalDir * Time.deltaTime);
             transform.position = MovePlayer(m_velocity * Time.deltaTime);
-            transform.rotation = new Quaternion(transform.rotation.x, cam.transform.rotation.y, transform.rotation.z, transform.rotation.w);
+            transform.rotation = new Quaternion(transform.rotation.x, cam.transform.rotation.y, transform.rotation.z, cam.rotation.w);
             m_velocity = new Vector3(0, m_velocity.y, 0);
 
+            if (m_dashCooldownTimer > 0)
+            {
+                m_dashCooldownTimer -= Time.deltaTime;
+            }
+
             if (onGround && !attemptingJump)
-                SnapPlayerDown();
+                    SnapPlayerDown();
         }
+
+        void StartWallRide(RaycastHit _wallHit)
+        {
+            isWallRiding = true;
+            wallNormal = _wallHit.normal;
+            wallRideTimer = maxWallRideTime;
+            m_velocity.y = 0; 
+        }
+
+        void HandleWallRide()
+        {
+            if (CheckForWall(transform.position, wallCheckDistance, out RaycastHit hit))
+            {
+                wallNormal = hit.normal;
+            }
+            else
+            {
+                ExitWallRide();
+            }
+
+            if (Physics.Raycast(transform.position, transform.right, out _, wallCheckDistance, wallLayer))
+            {
+                ciniCamera.Lens.Dutch = 10;
+            }
+            else
+            {
+                ciniCamera.Lens.Dutch = -10;
+            }
+
+            Vector3 wallDirection = Vector3.Cross(wallNormal, Vector3.up).normalized;
+
+            if (Vector3.Dot(wallDirection, transform.forward) < 0)
+                wallDirection *= -1;
+
+            Vector3 horizontal = wallDirection * wallRideSpeed;
+            Vector3 vertical = new Vector3(0, m_velocity.y, 0);
+
+            m_velocity = horizontal + vertical;
+            m_velocity.y = wallRideGravity; // weaker gravity
+
+            transform.position = MovePlayer(m_velocity * Time.deltaTime);
+
+            wallRideTimer -= Time.deltaTime;
+            if (wallRideTimer <= 0f || CheckIfGrounded(out _))
+            {
+                ExitWallRide();
+            }
+        }
+
+        void ExitWallRide()
+        {
+            isWallRiding = false;
+            ciniCamera.Lens.Dutch = 0;
+
+        }
+        
+
+        bool CheckForWall(Vector3 _pos, float _dist, out RaycastHit _hit)
+        {
+            if (Physics.Raycast(_pos, transform.right, out _hit, wallCheckDistance, wallLayer))
+                return true;
+            if (Physics.Raycast(_pos, -transform.right, out _hit, wallCheckDistance, wallLayer))
+                return true;
+
+            return false;
+        }
+        void HandleDashing(float _delta)
+        {
+            Vector3 vertical = new Vector3(0, m_velocity.y, 0); // keep jump/gravity
+            Vector3 finalVelocity = m_dashDirecton * dashForce + vertical;
+
+            transform.position = MovePlayer(finalVelocity * _delta);
+
+            dashTime -= _delta;
+            if (dashTime <= 0f)
+            {
+                m_isDashing = false;
+                ciniCamera.Lens.FieldOfView = walkFOV;
+            }
+            
+        }   
         void HandleCrouch()
         {
             if (m_requestedCrouch && currentStance == Stance.Standing)
@@ -339,7 +501,6 @@ namespace KinematicCharacterControler
         if (onGround)
             SnapPlayerDown();
     }
-
 
         // RAIL GRINDING SYSTEM
         void TryStartGrinding()

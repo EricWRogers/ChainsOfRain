@@ -1,15 +1,14 @@
 using UnityEngine;
 
-public class PickupGun : MonoBehaviour
+public class LegPickup : MonoBehaviour
 {
-
-    public GameObject gunPrefab;
+    public GameObject legPrefab;
 
     private void OnTriggerEnter(Collider other)
     {
-        if(other.CompareTag("Player"))
+        if (other.CompareTag("Player"))
         {
-           bool didwork = WeaponManager.instance.AttatchGun(gunPrefab);
+           bool didwork = LegManager.instance.AttatchLeg(legPrefab);
             if (didwork)
             {
                 Destroy(gameObject);
