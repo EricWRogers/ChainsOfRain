@@ -338,7 +338,7 @@ namespace KinematicCharacterControler
             // Apply movement
             //transform.position = MovePlayer(finalDir * Time.deltaTime);
             transform.position = MovePlayer(m_velocity * Time.deltaTime);
-            transform.rotation = new Quaternion(transform.rotation.x, cam.transform.rotation.y, transform.rotation.z, cam.rotation.w);
+            transform.rotation = new Quaternion(transform.rotation.x, cam.transform.rotation.y, transform.rotation.z, transform.rotation.w);
             m_velocity = new Vector3(0, m_velocity.y, 0);
 
             if (m_dashCooldownTimer > 0)
@@ -360,7 +360,7 @@ namespace KinematicCharacterControler
         void HandleKnockBack()
         {
             transform.position = MovePlayer(kbStrength * Time.deltaTime * kbDir);
-            kbStrength *= 0.8f;
+            kbStrength *= 0.99f;
 
             if (kbStrength <= 0.01)
             {
