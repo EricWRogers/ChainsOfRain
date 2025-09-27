@@ -8,8 +8,11 @@ public class LegPickup : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            LegManager.instance.AttatchLeg(legPrefab);
-            Destroy(gameObject);
+           bool didwork = LegManager.instance.AttatchLeg(legPrefab);
+            if (didwork)
+            {
+                Destroy(gameObject);
+            }
         }
     }
 }
