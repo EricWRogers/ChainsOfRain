@@ -22,6 +22,11 @@ public class FlyGun : MonoBehaviour
     public float speed = 100.0f;
     public bool stopped = false;
 
+    Vector3 ZeroY(Vector3 _vector)
+    {
+        return new Vector3(_vector.x, 0.0f, _vector.z);
+    }
+
     void Start()
     {
         m_player = PlayerMovement.instance.gameObject;
@@ -37,7 +42,7 @@ public class FlyGun : MonoBehaviour
             return;
         }
 
-        float distance = Vector3.Distance(transform.position, m_player.transform.position);
+        float distance = Vector3.Distance(ZeroY(transform.position), ZeroY(m_player.transform.position));
 
         if (distance <= minStopDistance)
         {
@@ -51,6 +56,7 @@ public class FlyGun : MonoBehaviour
         }
         else
         {
+            stopped = false;
             if (transform.position == path[targetIndex])
             {
                 targetIndex++;
@@ -81,7 +87,9 @@ public class FlyGun : MonoBehaviour
 
     public void Shoot()
     {
-        firePoint.LookAt(m_player.transform);
+        if (m_curFireTime > fireRate * 0.5f)
+            transform.LookAt(m_player.transform);
+        
         m_curFireTime -= Time.fixedDeltaTime;
         if (m_curFireTime <= 0)
         {

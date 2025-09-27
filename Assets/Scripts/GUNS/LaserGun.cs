@@ -8,7 +8,8 @@ public class LaserGun : Gunbase
     public float overChargeWarning; //The number at which we warn the player we're approaching burnout.
     public bool burnedOut = false;
     public float chargeRate;
-    private float chargeAccumulator = 0f;
+    
+
     public bool firing = false;
     public override void Fire(Transform _firingPoint, GameObject _bulletPrefab)
     {
@@ -37,13 +38,7 @@ public class LaserGun : Gunbase
             {
                 if (firing)
                 {
-                    chargeAccumulator += chargeRate * Time.deltaTime;
-                    if (chargeAccumulator >= 1f)
-                    {
-                        int applyCharge = Mathf.FloorToInt(chargeAccumulator);
-                        ammo += applyCharge;
-                        chargeAccumulator -= applyCharge;
-                    }
+                    ammo++;
                     
                 }
             }
@@ -53,7 +48,7 @@ public class LaserGun : Gunbase
                 //Play warning effect
 
             }
-            else if (ammo >= maxAmmo)
+            if (ammo >= maxAmmo)
             {
                 burnedOut = true;
             }
@@ -65,5 +60,10 @@ public class LaserGun : Gunbase
 
 
         }
+    }
+
+    public override void ReleaseFiring()
+    {
+        firing = false;
     }
 }

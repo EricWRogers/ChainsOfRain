@@ -50,14 +50,14 @@ public abstract class Gunbase : MonoBehaviour
         if (rightHanded)
         {
             rightUI = WeaponManager.instance.rightArm.transform.parent.GetComponentInChildren<RectTransform>();
-            Debug.Log(rightUI.gameObject.name);
+            
             GameObject uI = Instantiate(uIPrefab, rightUI);
             uI.GetComponent<GunUI>().weapon = this;
         }
         if (leftHanded)
         {
             leftUI = WeaponManager.instance.leftArm.transform.parent.GetComponentInChildren<RectTransform>();
-            Debug.Log(leftUI.gameObject.name);
+           
             GameObject uI = Instantiate(uIPrefab, leftUI);
             uI.GetComponent<GunUI>().weapon = this;
 
@@ -68,6 +68,16 @@ public abstract class Gunbase : MonoBehaviour
 
     public void Update()
     {
+
+
+        if(Input.GetKeyUp(KeyCode.Mouse0))
+        {
+            ReleaseFiring();
+        }
+        if (Input.GetKeyUp(KeyCode.Mouse1))
+        {
+            ReleaseFiring();
+        }
 
         switch (inputMode)
         {
@@ -95,6 +105,8 @@ public abstract class Gunbase : MonoBehaviour
     }
 
     public abstract void Fire(Transform _firingPoint, GameObject _bulletPrefab);
+
+    public abstract void ReleaseFiring();
 
 
     public void UpdateDamage(int _value, GameObject _bullet)
