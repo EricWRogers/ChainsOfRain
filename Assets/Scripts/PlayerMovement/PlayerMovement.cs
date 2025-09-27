@@ -30,6 +30,7 @@ namespace KinematicCharacterControler
         public float runSpeed = 10f;
         public float sprintFOV = 70f;
         public float walkFOV = 60f;
+        private float prevFOV = 60f;
         public bool canSprint = true;
         public KeyCode sprintKey = KeyCode.LeftShift;
         public float rotationSpeed = 5f;
@@ -241,7 +242,8 @@ namespace KinematicCharacterControler
                 dashTime = dashDuration;
 
                 m_dashCooldownTimer = dashCoolDown;
-                ciniCamera.Lens.FieldOfView = dashFOV;
+                ciniCamera.Lens.FieldOfView = Mathf.Lerp(dashFOV, prevFOV, Time.deltaTime * zoomSpeed);
+                prevFOV = dashFOV;
             }
 
         }
@@ -293,7 +295,6 @@ namespace KinematicCharacterControler
                 m_velocity = Vector3.zero;
                 m_elapsedFalling = 0;
                 jumpCount = maxJumpCount;
-                
             }
 
             // Handle jumping
@@ -321,17 +322,20 @@ namespace KinematicCharacterControler
             if (Input.GetKey(sprintKey))
             {
                 finalDir = inputDir * runSpeed;
-                ciniCamera.Lens.FieldOfView = Mathf.Lerp(sprintFOV, walkFOV, Time.deltaTime * zoomSpeed);
+                ciniCamera.Lens.FieldOfView = Mathf.Lerp(sprintFOV, prevFOV, Time.deltaTime * zoomSpeed);
+                prevFOV = sprintFOV;
             }
             else if (isCrouching)
             {
                 finalDir = inputDir * crouchSpeed;
                 ciniCamera.Lens.FieldOfView = walkFOV;
+                prevFOV = walkFOV;
             }
             else
             {
                 finalDir = inputDir * speed;
-                ciniCamera.Lens.FieldOfView = Mathf.Lerp(walkFOV, sprintFOV, Time.deltaTime * zoomSpeed);
+                ciniCamera.Lens.FieldOfView = Mathf.Lerp(walkFOV, prevFOV, Time.deltaTime * zoomSpeed);
+                prevFOV = walkFOV;
             }
             
             m_velocity += finalDir; 
