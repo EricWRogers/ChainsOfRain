@@ -471,6 +471,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Weapon: {fileID: 243183545}
   chargeSlider: {fileID: 957551898}
+  fillImage: {fileID: 1128794158}
+  flashSpeed: 2.5
+  overHeatPercent: 80
+  baseColor: {r: 0, g: 0.7019608, b: 1, a: 0.50980395}
+  warningColor: {r: 1, g: 0.11663852, b: 0, a: 0.50980395}
 --- !u!1 &371133254
 GameObject:
   m_ObjectHideFlags: 0
