@@ -13,6 +13,7 @@ public class SemiAuto : Gunbase
     {
         if(Time.time >= nextFireTime && ammo !=0)
         {
+            onFire.Invoke();
             GameObject temp = Instantiate(_bulletPrefab, _firingPoint);
 
             UpdateDamage(damage, temp); //Just to keep things in line.

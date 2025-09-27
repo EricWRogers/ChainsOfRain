@@ -38,7 +38,6 @@ public class Logger : MonoBehaviour
         }
     }
 
-
     public enum LogType
     {
         Player,
