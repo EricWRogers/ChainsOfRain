@@ -3,6 +3,7 @@ using System.Net.Mail;
 using JetBrains.Annotations;
 using NUnit.Framework;
 using Unity.VisualScripting;
+using UnityEditor.PackageManager;
 using UnityEngine;
 using UnityEngine.Rendering.Universal.Internal;
 
@@ -34,6 +35,20 @@ namespace KinematicCharacterControler
 
         private Transform m_orientation;
         public Transform cam;
+
+        [Header("Dashing")]
+        public float dashForce = 20f;
+        public float dashDuration = 0.2f;
+        public float dashCoolDown = 2f;
+        public bool canDash = true;
+        public KeyCode dashKey = KeyCode.Tab;
+
+        private bool m_isDashing = false;
+        private float dashTime = 0f;
+        private float m_dashCooldownTimer = 0f;
+        private Vector3 m_dashDirecton;
+        
+
 
         [Header("Crouch")]
         public KeyCode crouchKey = KeyCode.LeftControl;
@@ -171,6 +186,7 @@ namespace KinematicCharacterControler
 
         void HandleInput()
         {
+            mouseInput = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
             if (Input.GetKey(KeyCode.Space))
                 m_jumpInputPressed = true;
             else
@@ -190,11 +206,27 @@ namespace KinematicCharacterControler
                 m_requestedCrouch = false;
             }
 
-            mouseInput = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
+            if (Input.GetKey(dashKey))
+            {
+                Vector3 inputDir = transform.TransformDirection(new Vector3(mouseInput.x, 0, mouseInput.y));
+                if (inputDir.magnitude < 0.1f)
+                    inputDir = transform.forward; // default forward dash
+
+                m_dashDirecton = inputDir.normalized;
+                m_isDashing = true;
+                dashTime = dashDuration;
+                m_dashCooldownTimer = dashCoolDown;
+            }
+
         }
         void HandleRegularMovement()
         {
             HandleCrouch();
+            if (m_isDashing)
+            {
+                HandleDashing(Time.deltaTime);
+                return;
+            }
 
             Vector3 inputDir = transform.TransformDirection(new Vector3(mouseInput.x, 0, mouseInput.y));
 
@@ -261,6 +293,19 @@ namespace KinematicCharacterControler
             if (onGround && !attemptingJump)
                 SnapPlayerDown();
         }
+        void HandleDashing(float _delta)
+        {
+            Vector3 vertical = new Vector3(0, m_velocity.y, 0); // keep jump/gravity
+            Vector3 finalVelocity = m_dashDirecton * dashForce + vertical;
+
+            transform.position = MovePlayer(finalVelocity * _delta);
+
+            dashTime -= _delta;
+            if (dashTime <= 0f)
+            {
+                m_isDashing = false;
+            }
+        }   
         void HandleCrouch()
         {
             if (m_requestedCrouch && currentStance == Stance.Standing)
