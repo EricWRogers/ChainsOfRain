@@ -459,7 +459,7 @@ namespace KinematicCharacterControler
                 capsule.height = crouchHeight;
                 capsule.center = new Vector3(0, -0.25f, 0);
                 isCrouching = true;
-                camPoint.transform.position -= new Vector3(0, capsuleHeight - crouchHeight, 0);
+                camPoint.transform.position -= new Vector3(0,  0.5f, 0);
                 return;
 
             }
@@ -470,7 +470,7 @@ namespace KinematicCharacterControler
                 capsule.height = capsuleHeight;
                 capsule.center = Vector3.zero;
                 isCrouching = false;
-                camPoint.transform.position -= new Vector3(0, crouchHeight - capsuleHeight, 0);
+                camPoint.transform.position += new Vector3(0, 0.5f, 0);
             }
         }
 
