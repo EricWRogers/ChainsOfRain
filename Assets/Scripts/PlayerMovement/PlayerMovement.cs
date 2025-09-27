@@ -17,6 +17,7 @@ namespace KinematicCharacterControler
     }
     public class PlayerMovement : MovementEngine
     {
+        public PlayerMovement instance;
         [Header("Current State")]
         public Stance currentStance = Stance.Standing;
         public Stance prevStance = Stance.Standing;
@@ -24,10 +25,12 @@ namespace KinematicCharacterControler
         [Header("Movement")]
         public float speed = 5f;
         public float runSpeed = 10f;
+        public bool canSprint = true;
         public KeyCode sprintKey = KeyCode.LeftShift;
         public float rotationSpeed = 5f;
         public float maxWalkAngle = 60f;
         public GameObject player;
+        public GameObject camPoint;
 
         private Transform m_orientation;
         public Transform cam;
@@ -37,7 +40,7 @@ namespace KinematicCharacterControler
         public bool isCrouching;
         public float crouchSpeed;
         private bool m_requestedCrouch = false;
-        public float crouchHeight;
+        public float crouchHeight = 1.5f;
 
 
         [Header("Physics")]
@@ -48,6 +51,7 @@ namespace KinematicCharacterControler
         private Vector2 mouseInput;
 
         [Header("Jump Settings")]
+        public bool canJump = true;
         public float jumpForce = 5.0f;
         public float maxJumpAngle = 80f;
         public float jumpCooldown = 0.25f;
@@ -59,7 +63,6 @@ namespace KinematicCharacterControler
         private bool m_jumpInputPressed = false;
         private float m_jumpBufferTime = 0.25f;
         
-        public bool canJump = true;
 
         [Header("Sliding")]
         public KeyCode slideKey = KeyCode.LeftControl;
@@ -91,6 +94,19 @@ namespace KinematicCharacterControler
         public bool grindInputHeld;
         public float m_railDir = 1f;
         [SerializeField] private Transform m_railDetectionPoint;
+
+        void Awake()
+        {
+            if (instance == null)
+            {
+                instance = this;
+            }
+            else
+            {
+                Destroy(this);
+                return;
+            }
+        }
         void Start()
         {
             player = GameObject.Find("Player");
@@ -117,7 +133,6 @@ namespace KinematicCharacterControler
                 
             }
         }
-
         void Update()
         {
             HandleCursor();
@@ -134,7 +149,6 @@ namespace KinematicCharacterControler
                 ContinueGrinding();
             }
         }
-
         void HandleCursor()
         {
             if (lockCursor)
@@ -177,7 +191,6 @@ namespace KinematicCharacterControler
 
             mouseInput = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
         }
-
         void HandleRegularMovement()
         {
             HandleCrouch();
@@ -203,10 +216,10 @@ namespace KinematicCharacterControler
             }
 
             // Handle jumping
-            canJump = (onGround || (canDoubleJump && jumpCount > 0)) && groundedState.angle <= maxJumpAngle && m_timeSinceLastJump >= jumpCooldown;
+            bool shouldJump = (onGround || (canDoubleJump && jumpCount > 0)) && canJump && groundedState.angle <= maxJumpAngle && m_timeSinceLastJump >= jumpCooldown;
             bool attemptingJump = jumpInputElapsed <= m_jumpBufferTime;
 
-            if (canJump && attemptingJump)
+            if (shouldJump && attemptingJump)
             {
                 jumpCount -= 1;
                 m_velocity = Vector3.up * jumpForce;
@@ -244,28 +257,26 @@ namespace KinematicCharacterControler
             if (onGround && !attemptingJump)
                 SnapPlayerDown();
         }
-
-
         void HandleCrouch()
         {
             if (m_requestedCrouch && currentStance == Stance.Standing)
             {
                 currentStance = Stance.Crouching;
                 capsule.height = crouchHeight;
-                capsule.center = new Vector3(0, 0.25f, 0);
+                capsule.center = new Vector3(0, -0.25f, 0);
                 isCrouching = true;
-                transform.position -= new Vector3(0, capsuleHeight - crouchHeight, 0);
+                camPoint.transform.position -= new Vector3(0, capsuleHeight - crouchHeight, 0);
                 return;
 
             }
             
-            if (m_requestedCrouch && currentStance == Stance.Crouching)
+            if ((m_requestedCrouch || m_jumpInputPressed) && currentStance == Stance.Crouching)
             {
                 currentStance = Stance.Standing;
                 capsule.height = capsuleHeight;
                 capsule.center = Vector3.zero;
-                transform.position += new Vector3(0, capsuleHeight - crouchHeight, 0);
                 isCrouching = false;
+                camPoint.transform.position -= new Vector3(0, crouchHeight - capsuleHeight, 0);
             }
         }
 
