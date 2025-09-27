@@ -50,7 +50,7 @@ MonoBehaviour:
   rightHanded: 0
   infiniteAmmo: 0
   press: 0
-  hold: 0
+  hold: 1
   bulletPrefab: {fileID: 3973066098135447003, guid: e163f073a848f554cb3c781da9c2c9da, type: 3}
   jettisonPrefab: {fileID: 959586578758656293, guid: df4398ecdbdb43e46b3ad728bbafcb1e, type: 3}
   jettisonForce: 10
