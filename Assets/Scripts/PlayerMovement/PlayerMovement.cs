@@ -37,9 +37,9 @@ namespace KinematicCharacterControler
         public GameObject player;
         public GameObject camPoint;
         public CinemachineCamera ciniCamera;
-
         private Transform m_orientation;
         public Transform cam;
+
         [Header("Wall Ride Settings")]
         public float wallRideSpeed = 8f;
         public float wallRideGravity = -1f;      
@@ -47,6 +47,7 @@ namespace KinematicCharacterControler
         public float wallStickForce = 5f;
         public float maxWallRideTime = 2f;
         public bool canWallRide = true;
+        public LayerMask wallLayer;
 
         private bool isWallRiding = false;
         private Vector3 wallNormal;
@@ -246,6 +247,21 @@ namespace KinematicCharacterControler
                 HandleDashing(Time.deltaTime);
                 return;
             }
+            else if (isWallRiding)
+            {
+                HandleWallRide();
+                return;
+            }
+            ciniCamera.Lens.Dutch = 0f;
+
+
+            if (!isWallRiding && CheckForWall(transform.position, wallCheckDistance, out RaycastHit _wallHit))
+            {
+                if (m_jumpInputPressed)
+                {
+                    StartWallRide(_wallHit);
+                }
+            }
 
 
 
@@ -311,7 +327,7 @@ namespace KinematicCharacterControler
             // Apply movement
             //transform.position = MovePlayer(finalDir * Time.deltaTime);
             transform.position = MovePlayer(m_velocity * Time.deltaTime);
-            transform.rotation = new Quaternion(transform.rotation.x, cam.transform.rotation.y, transform.rotation.z, transform.rotation.w);
+            transform.rotation = new Quaternion(transform.rotation.x, cam.transform.rotation.y, transform.rotation.z, cam.rotation.w);
             m_velocity = new Vector3(0, m_velocity.y, 0);
 
             if (m_dashCooldownTimer > 0)
@@ -321,6 +337,72 @@ namespace KinematicCharacterControler
 
             if (onGround && !attemptingJump)
                     SnapPlayerDown();
+        }
+
+        void StartWallRide(RaycastHit _wallHit)
+        {
+            isWallRiding = true;
+            wallNormal = _wallHit.normal;
+            wallRideTimer = maxWallRideTime;
+            m_velocity.y = 0; 
+        }
+
+        void HandleWallRide()
+        {
+            if (CheckForWall(transform.position, wallCheckDistance, out RaycastHit hit))
+            {
+                wallNormal = hit.normal;
+            }
+            else
+            {
+                ExitWallRide();
+            }
+
+            if (Physics.Raycast(transform.position, transform.right, out _, wallCheckDistance, wallLayer))
+            {
+                ciniCamera.Lens.Dutch = 10;
+            }
+            else
+            {
+                ciniCamera.Lens.Dutch = -10;
+            }
+
+            Vector3 wallDirection = Vector3.Cross(wallNormal, Vector3.up).normalized;
+
+            if (Vector3.Dot(wallDirection, transform.forward) < 0)
+                wallDirection *= -1;
+
+            Vector3 horizontal = wallDirection * wallRideSpeed;
+            Vector3 vertical = new Vector3(0, m_velocity.y, 0);
+
+            m_velocity = horizontal + vertical;
+            m_velocity.y = wallRideGravity; // weaker gravity
+
+            transform.position = MovePlayer(m_velocity * Time.deltaTime);
+
+            wallRideTimer -= Time.deltaTime;
+            if (wallRideTimer <= 0f || CheckIfGrounded(out _))
+            {
+                ExitWallRide();
+            }
+        }
+
+        void ExitWallRide()
+        {
+            isWallRiding = false;
+            ciniCamera.Lens.Dutch = 0;
+
+        }
+        
+
+        bool CheckForWall(Vector3 _pos, float _dist, out RaycastHit _hit)
+        {
+            if (Physics.Raycast(_pos, transform.right, out _hit, wallCheckDistance, wallLayer))
+                return true;
+            if (Physics.Raycast(_pos, -transform.right, out _hit, wallCheckDistance, wallLayer))
+                return true;
+
+            return false;
         }
         void HandleDashing(float _delta)
         {
