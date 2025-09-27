@@ -1,17 +1,15 @@
 using UnityEngine;
-using UnityEngine.Rendering;
 
-public class SemiAuto : Gunbase
+public class AutoGun : Gunbase
 {
     public float fireRate = 1f;
 
-   
+
     public float nextFireTime;
 
-    
     public override void Fire(Transform _firingPoint, GameObject _bulletPrefab)
     {
-        if(Time.time >= nextFireTime && ammo !=0)
+        if(Time.time >= nextFireTime && ammo != 0)
         {
             GameObject temp = Instantiate(_bulletPrefab, _firingPoint);
 
@@ -19,8 +17,7 @@ public class SemiAuto : Gunbase
 
             ammo--;
         }
-
-
-       
     }
+
+    
 }
