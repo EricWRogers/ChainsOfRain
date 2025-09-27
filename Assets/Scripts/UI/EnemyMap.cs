@@ -9,4 +9,9 @@ public class EnemyMap : MonoBehaviour
     {
         MiniMap.Instance.RegisterEnemy(this);
     }
+    public void DeleteBlip()
+    {
+        if (MiniMap.Instance != null)
+            MiniMap.Instance.UnregisterEnemy(this);
+    }
 }
