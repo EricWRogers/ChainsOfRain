@@ -15,6 +15,8 @@ public class ChargeUI : MonoBehaviour
     void Update()
     {
         chargeSlider.value = Weapon.GetComponent<GTWeaponScript>().curCharge;
+
+        
     }
 
 }
