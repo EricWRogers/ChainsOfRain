@@ -112,7 +112,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1001e7217fae2d34480d94f9d29b3ab7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  barrel: {fileID: 0}
+  barrel: {fileID: 1939245804334911834}
   explosion: {fileID: 3333358416601468222}
   vfxExplosion: {fileID: 4897571093233125838}
   source: {fileID: 4689421981835326194}
@@ -20007,5 +20007,10 @@ PrefabInstance:
 --- !u!4 &93386175613402943 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7043755893526245759, guid: aa21511ee06e2804eb0faf255eb30290, type: 3}
+  m_PrefabInstance: {fileID: 6956852584509099584}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &1939245804334911834 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8818647690203160346, guid: aa21511ee06e2804eb0faf255eb30290, type: 3}
   m_PrefabInstance: {fileID: 6956852584509099584}
   m_PrefabAsset: {fileID: 0}

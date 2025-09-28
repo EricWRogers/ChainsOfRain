@@ -59,7 +59,7 @@ MonoBehaviour:
   maxAmmo: 100
   magazineAmmo: 10
   ammo: 10
-  damage: 1
+  damage: 4
   firingPoint: {fileID: 697139811546285269}
   onFire:
     m_PersistentCalls:
@@ -74,6 +74,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   fireRate: 1
+  muzzleFlash: {fileID: 0}
   nextFireTime: 0
 --- !u!1 &4885958812488587677
 GameObject:
