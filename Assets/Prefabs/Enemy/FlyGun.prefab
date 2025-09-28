@@ -264,7 +264,7 @@ MonoBehaviour:
   startId: 0
   endId: 0
   targetIndex: 0
-  speed: 2
+  speed: 3
   stopped: 0
 --- !u!114 &7535540225041354136
 MonoBehaviour:
