@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class AutoGun : Gunbase
 {
-    //public float fireRate = 1f;
+    public float fireRate = 1f;
 
 
     public float nextFireTime;
