@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using SuperPupSystems.Helper;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class EnemyDirector : MonoBehaviour
@@ -16,8 +17,12 @@ public class EnemyDirector : MonoBehaviour
 
     public int targetSpending = 10;
     public int currentSpending = 0;
+    public CloudNav cloudNav;
     public void Spawn()
     {
+        if (currentSpending >= targetSpending)
+            return;
+            
         // select traversal type
         EnemyTraversalType traversalType = (EnemyTraversalType)Random.Range(0, 2);
         GameObject prefab;
@@ -40,9 +45,12 @@ public class EnemyDirector : MonoBehaviour
         EnemyInfo info = enemy.GetComponent<EnemyInfo>();
         Health health = enemy.GetComponent<Health>();
 
+        if (traversalType == EnemyTraversalType.FLYING)
+            enemy.GetComponent<FlyGun>().cloudNav = cloudNav;
+
 
         // spend/connect event
-        currentSpending += info.cost;
+            currentSpending += info.cost;
         health.outOfHealth.AddListener(() => OnEnemyDeath(info.cost));
     }
 
