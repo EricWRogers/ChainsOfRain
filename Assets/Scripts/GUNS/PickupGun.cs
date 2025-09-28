@@ -1,5 +1,6 @@
 using SuperPupSystems.Helper;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PickupGun : MonoBehaviour
 {
@@ -9,7 +10,8 @@ public class PickupGun : MonoBehaviour
     public float spinSpeed;
     public float amplitude = 0.5f; 
     public float frequency = 1f;
-    public float heightOffset = 2.0f;
+    public float heightOffset = 1.0f;
+    public LayerMask mask;
 
 
     Vector3 startPos;
@@ -35,7 +37,7 @@ public class PickupGun : MonoBehaviour
     private void Awake()
     {
         RaycastHit hit;
-        if (Physics.Raycast(transform.position, Vector3.down, out hit, 1000.0f))
+        if (Physics.Raycast(transform.position, Vector3.down, out hit, 1000.0f, (int)mask))
         {
             startPos = hit.point;
         }
