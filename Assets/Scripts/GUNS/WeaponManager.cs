@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Events;
 
 public class WeaponManager : MonoBehaviour
 {
@@ -9,6 +10,7 @@ public class WeaponManager : MonoBehaviour
     public GunType rightArmType = GunType.None;
     public GameObject leftArm;
     public GunType leftArmType = GunType.None;
+    public UnityEvent OnAttach;
 
 
     private void Awake()
@@ -133,6 +135,7 @@ public class WeaponManager : MonoBehaviour
 
     public bool AttatchGun(GunType _gun)
     {
+        OnAttach.Invoke();
         GameObject arm = OpenArmCheck();
 
         if (arm == null)
@@ -140,7 +143,7 @@ public class WeaponManager : MonoBehaviour
             return false;
         }
 
-        Debug.Log("Guntype: " +  arm.name);
+        Debug.Log("Guntype: " + arm.name);
         switch (_gun)
         {
             case GunType.None:
@@ -182,7 +185,7 @@ public class WeaponManager : MonoBehaviour
             default:
                 return false;
         }
-       
+
 
         if (arm == rightArm)
         {
@@ -216,6 +219,8 @@ public class WeaponManager : MonoBehaviour
     //    return true;
 
     //}
+
+    
 }
 
 public enum GunType
