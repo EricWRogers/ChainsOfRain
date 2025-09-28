@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6202984607310884258}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: GFX
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -45,7 +45,7 @@ GameObject:
   - component: {fileID: 5527725821743017636}
   - component: {fileID: 6785063398240100365}
   - component: {fileID: 5996374828098086843}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: LegPickup
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -85,6 +85,7 @@ MonoBehaviour:
   spinSpeed: 10
   amplitude: 0.5
   frequency: 0.5
+  heightOffset: 1
 --- !u!54 &6785063398240100365
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -144,7 +145,7 @@ GameObject:
   - component: {fileID: 5782021587259795097}
   - component: {fileID: 1299823083899390013}
   - component: {fileID: 8989738675645116637}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Spot Light
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -321,6 +322,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 14d0c385fbe645f41b5cd0fcb9142c2c, type: 3}
       propertyPath: m_Name
       value: Leg_DoubleJump_FBX
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 14d0c385fbe645f41b5cd0fcb9142c2c, type: 3}
+      propertyPath: m_Layer
+      value: 9
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

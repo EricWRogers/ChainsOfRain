@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 4928435444571612506}
   - component: {fileID: 2520626544264367324}
   - component: {fileID: 6397505966825400318}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Spot Light
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -130,7 +130,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8264934164580732686}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: GFX
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -163,7 +163,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8820337803177590821}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: DashLegPickup
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -246,9 +246,21 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 90
       objectReference: {fileID: 0}
+    - target: {fileID: -4386572125101676502, guid: cd5c0e6152e758e439cc0dce19eb256c, type: 3}
+      propertyPath: m_Layer
+      value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: 656882779864163744, guid: cd5c0e6152e758e439cc0dce19eb256c, type: 3}
+      propertyPath: m_Layer
+      value: 9
+      objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: cd5c0e6152e758e439cc0dce19eb256c, type: 3}
       propertyPath: m_Name
       value: Leg_Dash_FBX
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: cd5c0e6152e758e439cc0dce19eb256c, type: 3}
+      propertyPath: m_Layer
+      value: 9
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: cd5c0e6152e758e439cc0dce19eb256c, type: 3}
       propertyPath: m_IsActive
@@ -294,6 +306,7 @@ MonoBehaviour:
   spinSpeed: 10
   amplitude: 0.5
   frequency: 1
+  heightOffset: 1
 --- !u!54 &8797534025679028103
 Rigidbody:
   m_ObjectHideFlags: 0

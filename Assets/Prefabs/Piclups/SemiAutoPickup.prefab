@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 1354804387597302384}
   - component: {fileID: 6490692278934721469}
   - component: {fileID: 4289133478717977854}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: SemiAutoPickup
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -113,7 +113,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 931169932827471538}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: GFX
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -148,7 +148,7 @@ GameObject:
   - component: {fileID: 6594435085855923083}
   - component: {fileID: 8169817181932239547}
   - component: {fileID: 8832873249198996337}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Spot Light
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -309,6 +309,18 @@ PrefabInstance:
     - target: {fileID: 1058821398676649301, guid: f29609562f04d2946a47bf0673820f04, type: 3}
       propertyPath: m_Name
       value: SemiModel
+      objectReference: {fileID: 0}
+    - target: {fileID: 1058821398676649301, guid: f29609562f04d2946a47bf0673820f04, type: 3}
+      propertyPath: m_Layer
+      value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: 6589272945759368875, guid: f29609562f04d2946a47bf0673820f04, type: 3}
+      propertyPath: m_Layer
+      value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: 9138786611271353317, guid: f29609562f04d2946a47bf0673820f04, type: 3}
+      propertyPath: m_Layer
+      value: 9
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
