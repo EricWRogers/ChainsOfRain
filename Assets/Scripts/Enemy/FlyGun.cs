@@ -61,11 +61,8 @@ public class FlyGun : MonoBehaviour
             {
                 targetIndex++;
 
-                if (targetIndex >= path.Count)
-                {
-                    GetNewPath();
+                GetNewPath();
                     return;
-                }
             }
 
             Vector3 direction = (path[targetIndex] - transform.position).normalized;
