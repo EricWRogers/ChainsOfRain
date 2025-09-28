@@ -8,9 +8,9 @@ using Unity.VisualScripting;
 using UnityEditor.PackageManager;
 using UnityEngine;
 using UnityEngine.Rendering.Universal.Internal;
+using KinematicCharacterControler;
 
-namespace KinematicCharacterControler
-{
+namespace KinematicCharacterControler{}
     public enum Stance
     {
         Standing,
@@ -770,4 +770,3 @@ namespace KinematicCharacterControler
 
         }
     }
-}
