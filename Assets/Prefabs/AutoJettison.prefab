@@ -10,6 +10,8 @@ GameObject:
   m_Component:
   - component: {fileID: 5796896424024956979}
   - component: {fileID: 4951884147683362640}
+  - component: {fileID: 898308090997069004}
+  - component: {fileID: 4644145467442490802}
   m_Layer: 0
   m_Name: AutoJettison
   m_TagString: Untagged
@@ -61,6 +63,49 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &898308090997069004
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 959586578758656293}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e00b1360970c67111b5bebcb41402618, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  explosion: {fileID: 2774587953531831966, guid: 66011d5e01d1f9c4db40dd0e02e1fd10, type: 3}
+  raidusExplosion: 5
+  blownUp: 0
+  time: 0
+  timeToDestory: 1
+  damage: 10
+  collideCount: 0
+  trigger: {fileID: 4644145467442490802}
+--- !u!136 &4644145467442490802
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 959586578758656293}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 0
+  serializedVersion: 2
+  m_Radius: 0.18
+  m_Height: 1.1
+  m_Direction: 2
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &2161542615574978653
 GameObject:
   m_ObjectHideFlags: 0
@@ -140,7 +185,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &3431274340248427617
 Transform:
   m_ObjectHideFlags: 0

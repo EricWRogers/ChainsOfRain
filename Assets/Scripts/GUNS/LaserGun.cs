@@ -9,6 +9,7 @@ public class LaserGun : Gunbase
     public float overChargeWarning; //The number at which we warn the player we're approaching burnout.
     public bool burnedOut = false;
     public float chargeRate;
+    public LineRenderer beam;
     private float damageTime;
     
 
@@ -21,6 +22,9 @@ public class LaserGun : Gunbase
         firing = true;
         if (Physics.Raycast(transform.position, transform.forward, out RaycastHit hit, Mathf.Infinity, -1) && damageTime >= 0.5f)
         {
+            beam.positionCount = 2;
+            beam.SetPosition(0, transform.position);
+            beam.SetPosition(1, hit.point);
             if (hit.transform.gameObject.tag == "Enemy")
             {
                 hit.transform.gameObject.GetComponent<Health>().Damage(damage);
@@ -42,6 +46,7 @@ public class LaserGun : Gunbase
     // Update is called once per frame
     new void Update()
     {
+        beam.positionCount = 0;
         base.Update();
         if (!burnedOut)
         {

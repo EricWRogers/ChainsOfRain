@@ -49,28 +49,15 @@ public abstract class Gunbase : MonoBehaviour
     public void Start()
     {
         ammo = magazineAmmo;
-        
-    }
 
+    }
 
     public void Update()
     {
+
         if (canShoot)
         {
-            if (rightHanded && !m_spawnedUI)
-            {
-                rightUI = WeaponManager.instance.rightArm.transform.parent.GetComponentInChildren<RectTransform>();
-                GameObject uI = Instantiate(uIPrefab, rightUI);
-                uI.GetComponent<GunUI>().weapon = this;
-                m_spawnedUI = true;
-            }
-            if (leftHanded && !m_spawnedUI)
-            {
-                leftUI = WeaponManager.instance.leftArm.transform.parent.GetComponentInChildren<RectTransform>();
-                GameObject uI = Instantiate(uIPrefab, leftUI);
-                uI.GetComponent<GunUI>().weapon = this;
-                m_spawnedUI = true;
-            }
+
 
             if (Input.GetKeyUp(KeyCode.Mouse0))
             {
@@ -80,7 +67,10 @@ public abstract class Gunbase : MonoBehaviour
             {
                 ReleaseFiring();
             }
-
+            if (Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out RaycastHit hit))
+            {
+                firingPoint.LookAt(hit.point);
+            }
             switch (inputMode)
             {
                 case InputType.GetKeyDown:
@@ -104,6 +94,10 @@ public abstract class Gunbase : MonoBehaviour
                 onReload.Invoke();
                 ammo = magazineAmmo;
             }
+            if (gameObject.activeInHierarchy && !m_spawnedUI)
+        {
+            SpawnUI();
+        }
         }
     }
 
@@ -120,11 +114,31 @@ public abstract class Gunbase : MonoBehaviour
 
     public void Jettison()
     {
+        m_spawnedUI = false;
         onJettison.Invoke();
 
         GameObject temp = Instantiate(jettisonPrefab, gameObject.transform.position, gameObject.transform.rotation);
 
         temp.GetComponent<Rigidbody>().AddForce(gameObject.transform.forward * jettisonForce, ForceMode.Impulse);
+        
+    }
+
+    public void SpawnUI()
+    {
+        if (rightHanded)
+        {
+            rightUI = WeaponManager.instance.rightArm.transform.parent.GetComponentInChildren<RectTransform>();
+            GameObject uI = Instantiate(uIPrefab, rightUI);
+            uI.GetComponent<GunUI>().weapon = this;
+            m_spawnedUI = true;
+        }
+        if (leftHanded)
+        {
+            leftUI = WeaponManager.instance.leftArm.transform.parent.GetComponentInChildren<RectTransform>();
+            GameObject uI = Instantiate(uIPrefab, leftUI);
+            uI.GetComponent<GunUI>().weapon = this;
+            m_spawnedUI = true;
+        }
     }
     private enum InputType
     {

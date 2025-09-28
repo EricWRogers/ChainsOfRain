@@ -131,6 +131,7 @@ GameObject:
   - component: {fileID: 5097516002036561513}
   - component: {fileID: -2720566155268836282}
   - component: {fileID: 7246340620973895769}
+  - component: {fileID: 1927561391313143227}
   m_Layer: 7
   m_Name: TankEnemy
   m_TagString: Enemy
@@ -244,7 +245,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-  maxHealth: 15
+  maxHealth: 8
   currentHealth: 0
   defaultToMaxHealth: 1
 --- !u!54 &3713955009017653989
@@ -324,6 +325,18 @@ MonoBehaviour:
   traversalType: 0
   cost: 2
   drop: {fileID: 1619578712219707797, guid: f6a5952614fe9554ba6950a7e1a0705e, type: 3}
+--- !u!114 &1927561391313143227
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4244094319675846167}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7a48f0245d003d0459bc126b090a77d3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &4512361573550725067
 GameObject:
   m_ObjectHideFlags: 0
