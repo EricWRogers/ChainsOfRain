@@ -215,7 +215,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e00b1360970c67111b5bebcb41402618, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  explosion: {fileID: 0}
+  explosion: {fileID: 2774587953531831966, guid: 66011d5e01d1f9c4db40dd0e02e1fd10, type: 3}
   raidusExplosion: 5
   blownUp: 0
   time: 0
