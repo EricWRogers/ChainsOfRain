@@ -1719,7 +1719,6 @@ GameObject:
   - component: {fileID: 5473672953631655455}
   - component: {fileID: 9159069216754533260}
   - component: {fileID: 3243344539301313692}
-  - component: {fileID: 7683083905211837804}
   - component: {fileID: 3231117486798855205}
   m_Layer: 6
   m_Name: Character
@@ -2017,23 +2016,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   pauseMenu: {fileID: 0}
---- !u!114 &7683083905211837804
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7015981434507550311}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6a64872a9e1347747a03e16941b2f2d9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  lookingAtInteractable: 0
-  interactText: {fileID: 0}
-  Interacted:
-    m_PersistentCalls:
-      m_Calls: []
 --- !u!114 &3231117486798855205
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2047,7 +2029,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   lookingAtInteractable: 0
-  interactText: {fileID: 0}
+  layerMask:
+    serializedVersion: 2
+    m_Bits: 256
 --- !u!1 &7289899700464958993
 GameObject:
   m_ObjectHideFlags: 0
