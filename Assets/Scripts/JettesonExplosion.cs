@@ -34,14 +34,6 @@ public class JettesonExplosion : MonoBehaviour
         {
             trigger.enabled = false;
         }
-        if (blownUp)
-        {
-            if (time >= timeToDestory)
-            {
-                Destroy(exploOBJ);
-                Destroy(this.gameObject);
-            }
-        }
         time += Time.deltaTime;
     }
 
@@ -52,6 +44,7 @@ public class JettesonExplosion : MonoBehaviour
         collideCount += 1;
         blownUp = true;
         exploOBJ = Instantiate(explosion, transform.position, Quaternion.identity);
+        Destroy(exploOBJ, 1.0f);
         RaycastHit[] hits = Physics.SphereCastAll(transform.position, raidusExplosion, Vector3.up);
         foreach (RaycastHit hit in hits)
         {
@@ -61,6 +54,7 @@ public class JettesonExplosion : MonoBehaviour
             }
 
         }
+        Destroy(gameObject);
         
     }
 }

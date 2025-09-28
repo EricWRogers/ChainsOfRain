@@ -10,6 +10,7 @@ public class LegPickup : MonoBehaviour
     public float amplitude = 0.5f;
     public float frequency = 1f;
     public float heightOffset = 1.0f;
+    public GameObject destroyTarget;
     Vector3 startPos;
     private void OnTriggerEnter(Collider other)
     {
@@ -18,7 +19,7 @@ public class LegPickup : MonoBehaviour
            bool didwork = LegManager.instance.AttatchLeg(legType);
             if (didwork)
             {
-                Destroy(gameObject);
+                Destroy(destroyTarget);
             }
         }
     }

@@ -2,6 +2,7 @@ using Unity.Cinemachine;
 using UnityEngine;
 using KinematicCharacterControler;
 using UnityEngine.InputSystem;
+using UnityEngine.Rendering;
 
 namespace KinematicCharacterControler{}
     public enum Stance
@@ -19,6 +20,7 @@ public class PlayerMovement : MovementEngine
     public Stance prevStance = Stance.Standing;
 
     [Header("Movement")]
+    public GameObject speedLines;
     public float speed = 5f;
     public float runSpeed = 10f;
     public float sprintFOV = 70f;
@@ -34,6 +36,7 @@ public class PlayerMovement : MovementEngine
     public float zoomSpeed = 5;
     private Transform m_orientation;
     public Transform cam;
+    public Quaternion playerRotation;
 
 
     [Header("Wall Ride Settings")]
@@ -179,6 +182,7 @@ public class PlayerMovement : MovementEngine
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = false;
         }
+        speedLines = GameObject.Find("SpeedLinesGo");
     }
 
     public void ChangeState(Stance newState)
@@ -266,6 +270,7 @@ public class PlayerMovement : MovementEngine
             m_dashDirecton = inputDir.normalized;
             m_isDashing = true;
             dashTime = dashDuration;
+            speedLines.GetComponent<SpeedLines>().speedLinesOn = true;
 
             m_dashCooldownTimer = dashCoolDown;
 
@@ -500,13 +505,14 @@ public class PlayerMovement : MovementEngine
         Vector3 finalVelocity = m_dashDirecton * dashForce * dashCurve.Evaluate(m_currTime) + vertical;
 
         transform.position = MovePlayer(finalVelocity * _delta);
-
+        
         dashTime -= _delta;
         if (dashTime <= 0f)
         {
             m_isDashing = false;
             ciniCamera.Lens.FieldOfView = Mathf.Lerp(dashFOV, walkFOV, _delta * zoomSpeed);
             m_currTime = 0f;
+            speedLines.GetComponent<SpeedLines>().speedLinesOn = false;
         }
 
     }
