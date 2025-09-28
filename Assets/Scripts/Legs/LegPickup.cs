@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class LegPickup : MonoBehaviour
 {
-    public GameObject legPrefab;
+    public LegType legType;
     public int health = 10;
 
     public float spinSpeed;
@@ -14,7 +14,7 @@ public class LegPickup : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-           bool didwork = LegManager.instance.AttatchLeg(legPrefab);
+           bool didwork = LegManager.instance.AttatchLeg(legType);
             if (didwork)
             {
                 Destroy(gameObject);
@@ -33,9 +33,9 @@ public class LegPickup : MonoBehaviour
     }
     private void Update()
     {
-        transform.parent.position = startPos + Vector3.up * Mathf.Sin(Time.time * Mathf.PI * frequency) * amplitude; //Hover
+        transform.position = startPos + Vector3.up * Mathf.Sin(Time.time * Mathf.PI * frequency) * amplitude; //Hover
 
 
-        transform.parent.Rotate(0f, spinSpeed * Time.deltaTime, 0f); //SPin
+        transform.Rotate(0f, spinSpeed * Time.deltaTime, 0f); //SPin
     }
 }

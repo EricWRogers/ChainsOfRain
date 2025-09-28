@@ -3,6 +3,9 @@ using UnityEngine.Events;
 
 public class Legbase : MonoBehaviour
 {
+    public bool canUse = false;
+
+
     public bool leftLegged = false;
 
     public bool rightLegged = false;

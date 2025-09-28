@@ -5,8 +5,9 @@ public class LegManager : MonoBehaviour
     public static LegManager instance;
 
     public GameObject rightLeg;
+    public LegType rightLegType = LegType.None;
     public GameObject leftLeg;
-
+    public LegType leftLegType = LegType.None;  
 
     private void Awake()
     {
@@ -25,46 +26,75 @@ public class LegManager : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Z))
         {
-            if (leftLeg.transform.childCount != 0)
+            if (leftLegType != LegType.None)
             {
+                switch (leftLegType)
+                {
+                    case LegType.DoubleJump:
+                        leftLegType = LegType.None;
+                        DoubleJumpLeg doubleJump = leftLeg.GetComponentInChildren<DoubleJumpLeg>();
+                        doubleJump.Jettison();
+                        doubleJump.transform.GetChild(0).gameObject.SetActive(false);
+                        doubleJump.canUse = false;
+                        break;
 
-
-                GameObject leg = leftLeg.transform.GetChild(0).gameObject;
-                leg.GetComponent<Legbase>().Jettison();
-                Destroy(leg);
+                    case LegType.Dash:
+                        leftLegType = LegType.None;
+                        DashLeg dash = leftLeg.GetComponentInChildren<DashLeg>();
+                        dash.Jettison();
+                        dash.transform.GetChild(0).gameObject.SetActive(false);
+                        dash.canUse = false;
+                        break;
+                   
+                }
             }
         }
 
         if (Input.GetKeyDown(KeyCode.X))
         {
-            if (rightLeg.transform.childCount != 0)
+            if (leftLegType != LegType.None)
             {
+                switch (rightLegType)
+                {
+                    case LegType.DoubleJump:
+                        rightLegType = LegType.None;
+                        DoubleJumpLeg doubleJump = rightLeg.GetComponentInChildren<DoubleJumpLeg>();
+                        doubleJump.Jettison();
+                        doubleJump.transform.GetChild(0).gameObject.SetActive(false);
+                        doubleJump.canUse = false;
+                        break;
 
-                GameObject leg = rightLeg.transform.GetChild(0).gameObject;
-                leg.GetComponent<Legbase>().Jettison();
-                Destroy(leg);
+                    case LegType.Dash:
+                        rightLegType = LegType.None;
+                        DashLeg dash = rightLeg.GetComponentInChildren<DashLeg>();
+                        dash.Jettison();
+                        dash.transform.GetChild(0).gameObject.SetActive(false);
+                        dash.canUse = false;
+                        break;
+
+                }
             }
         }
     }
 
     public GameObject OpenLegCheck()
     {
-        if (rightLeg.transform.childCount == 0)
+        if (rightLegType == LegType.None)
         {
             return rightLeg;
         }
-        else if (leftLeg.transform.childCount == 0)
+        else if (leftLegType == LegType.None)
         {
             return leftLeg;
         }
         else
         {
+            Debug.Log("No open arm");
             return null;
         }
-
     }
 
-    public bool AttatchLeg(GameObject _leg)
+    public bool AttatchLeg(LegType _leg)
     {
         GameObject leg = OpenLegCheck();
 
@@ -73,13 +103,54 @@ public class LegManager : MonoBehaviour
             return false;
         }
 
-        GameObject new_leg = Instantiate(_leg, leg.transform.parent.parent.GetChild(0).position, leg.transform.parent.parent.GetChild(0).rotation, leg.transform);
+        Debug.Log("legType: " + leg.name);
+        switch (_leg)
+        {
+            case LegType.None:
 
-        new_leg.GetComponent<Legbase>().leftLegged = leg.name == "LeftLeg";
-        new_leg.GetComponent<Legbase>().rightLegged = leg.name == "RightLeg";
+                break;
+
+            case LegType.DoubleJump:
+
+                leg.GetComponentInChildren<DoubleJumpLeg>().transform.GetChild(0).gameObject.SetActive(true);
+                leg.GetComponentInChildren<DoubleJumpLeg>().leftLegged = leg.name == "LeftBicep";
+                leg.GetComponentInChildren<DoubleJumpLeg>().rightLegged = leg.name == "RightBicep";
+
+                leg.GetComponentInChildren<DoubleJumpLeg>().canUse = true;
+                break;
+
+            case LegType.Dash:
+                leg.GetComponentInChildren<DashLeg>().transform.GetChild(0).gameObject.SetActive(true);
+                leg.GetComponentInChildren<DashLeg>().leftLegged = leg.name == "LeftBicep";
+                leg.GetComponentInChildren<DashLeg>().leftLegged = leg.name == "RightBicep";
+                leg.GetComponentInChildren<DashLeg>().canUse = true;
+                break;
+
+            default:
+                return false;
+        }
+
+
+        if (leg == rightLeg)
+        {
+            rightLegType = _leg;
+        }
+        else
+        {
+            leftLegType = _leg;
+        }
+
 
         return true;
 
+
     }
 
+}
+
+public enum LegType
+{
+    None,
+    DoubleJump,
+    Dash,
 }
