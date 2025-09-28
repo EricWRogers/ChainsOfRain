@@ -52,11 +52,14 @@ public class LegManager : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.X))
         {
-            if (leftLegType != LegType.None)
+            
+            if (rightLegType != LegType.None)
             {
+                
                 switch (rightLegType)
                 {
                     case LegType.DoubleJump:
+                        
                         rightLegType = LegType.None;
                         DoubleJumpLeg doubleJump = rightLeg.GetComponentInChildren<DoubleJumpLeg>();
                         doubleJump.Jettison();
@@ -89,7 +92,7 @@ public class LegManager : MonoBehaviour
         }
         else
         {
-            Debug.Log("No open arm");
+            Debug.Log("No open leg");
             return null;
         }
     }
