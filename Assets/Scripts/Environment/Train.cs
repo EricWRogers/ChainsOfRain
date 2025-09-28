@@ -7,17 +7,6 @@ public class Train : MonoBehaviour
     public int amountOfDamage = 25;
     public float knockBackStrength = 20f;
     public Animator train;
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 
     public void PlayAnimation(string _name)
     {
