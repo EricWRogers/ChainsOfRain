@@ -63,11 +63,13 @@ namespace KinematicCharacterControler{}
         public bool canDash = true;
         public KeyCode dashKey = KeyCode.Tab;
         public float dashFOV = 80f;
+        public AnimationCurve dashCurve;
 
         private bool m_isDashing = false;
         private float dashTime = 0f;
         private float m_dashCooldownTimer = 0f;
         private Vector3 m_dashDirecton;
+    private float m_currTime = 0f;
         
 
 
@@ -461,8 +463,9 @@ namespace KinematicCharacterControler{}
         }
         void HandleDashing(float _delta)
         {
+            m_currTime += _delta;
             Vector3 vertical = new Vector3(0, m_velocity.y, 0); // keep jump/gravity
-            Vector3 finalVelocity = m_dashDirecton * dashForce + vertical;
+            Vector3 finalVelocity = m_dashDirecton * dashForce * dashCurve.Evaluate(m_currTime) + vertical;
 
             transform.position = MovePlayer(finalVelocity * _delta);
 
@@ -471,6 +474,7 @@ namespace KinematicCharacterControler{}
             {
                 m_isDashing = false;
                 ciniCamera.Lens.FieldOfView = Mathf.Lerp(dashFOV, walkFOV, _delta * zoomSpeed);
+                m_currTime = 0f;
             }
             
         }   
