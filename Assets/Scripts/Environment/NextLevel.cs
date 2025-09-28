@@ -7,9 +7,14 @@ public class NextLevel : MonoBehaviour
 
     void OnTriggerEnter(Collider other)
     {
-        if(other.CompareTag("Player"))
+        if (other.CompareTag("Player"))
         {
             SceneManager.LoadSceneAsync(levelName);
         }
+    }
+
+    public void GoToNext(string _name)
+    {
+        SceneManager.LoadSceneAsync(_name);
     }
 }
