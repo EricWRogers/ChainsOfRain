@@ -35,6 +35,19 @@ public class MiniMap : MonoBehaviour
         enemiesOnMap.Add(temp.GetComponent<RectTransform>());
     }
 
+    public void UnregisterEnemy(EnemyMap _enemy)
+    {
+        int index = enemies.IndexOf(_enemy.transform);
+        if (index >= 0)
+        {
+            if (enemiesOnMap[index] != null)
+                Destroy(enemiesOnMap[index].gameObject);
+
+            enemies.RemoveAt(index);
+            enemiesOnMap.RemoveAt(index);
+        }
+    }
+
     void AlignPosition(int i)
     {
         Transform enemy = enemies[i];

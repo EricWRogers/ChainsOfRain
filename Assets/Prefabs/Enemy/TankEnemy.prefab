@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 6110696548467858069}
   m_Layer: 7
   m_Name: Tread
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -97,7 +97,7 @@ GameObject:
   - component: {fileID: 7402903596925474232}
   m_Layer: 7
   m_Name: GFX
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -134,7 +134,7 @@ GameObject:
   - component: {fileID: 7420680352919936135}
   m_Layer: 7
   m_Name: Tread (1)
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -322,8 +322,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7a48f0245d003d0459bc126b090a77d3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enemyHealth: {fileID: 0}
-  healthBar: {fileID: 0}
 --- !u!1 &4209282282765137684
 GameObject:
   m_ObjectHideFlags: 0
@@ -335,10 +333,9 @@ GameObject:
   - component: {fileID: 3610352884614465215}
   - component: {fileID: 1854685212609354091}
   - component: {fileID: 3844521325483423404}
-  - component: {fileID: 3478277797458022168}
   m_Layer: 7
   m_Name: Body
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -411,27 +408,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!65 &3478277797458022168
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4209282282765137684}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &4244094319675846167
 GameObject:
   m_ObjectHideFlags: 0
@@ -445,6 +421,9 @@ GameObject:
   - component: {fileID: 5539722340572161263}
   - component: {fileID: 8151790048682966380}
   - component: {fileID: 3713955009017653989}
+  - component: {fileID: 5097516002036561513}
+  - component: {fileID: -2720566155268836282}
+  - component: {fileID: 7246340620973895769}
   m_Layer: 7
   m_Name: TankEnemy
   m_TagString: Enemy
@@ -534,6 +513,18 @@ MonoBehaviour:
   outOfHealth:
     m_PersistentCalls:
       m_Calls:
+      - m_Target: {fileID: -2720566155268836282}
+        m_TargetAssemblyTypeName: EnemyMap, Assembly-CSharp
+        m_MethodName: DeleteBlip
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
       - m_Target: {fileID: 5539722340572161263}
         m_TargetAssemblyTypeName: TankEnemy, Assembly-CSharp
         m_MethodName: Dead
@@ -576,6 +567,56 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!65 &5097516002036561513
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4244094319675846167}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1, y: 1, z: 1.496233}
+  m_Center: {x: 0, y: 0, z: -0.0044050217}
+--- !u!114 &-2720566155268836282
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4244094319675846167}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6b4c778d110f84a45866677e783e745d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  scale: 0.7
+  color: {r: 1, g: 0, b: 0, a: 1}
+--- !u!114 &7246340620973895769
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4244094319675846167}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5e7586490e899a13b8b071e7af6fbc08, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  traversalType: 0
+  cost: 2
+  drop: {fileID: 1619578712219707797, guid: f6a5952614fe9554ba6950a7e1a0705e, type: 3}
 --- !u!1 &4512361573550725067
 GameObject:
   m_ObjectHideFlags: 0
@@ -895,7 +936,7 @@ GameObject:
   - component: {fileID: 4209777482771763515}
   m_Layer: 7
   m_Name: Cylinder
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

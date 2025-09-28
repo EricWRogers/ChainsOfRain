@@ -6,7 +6,10 @@ public class WeaponManager : MonoBehaviour
 
 
     public GameObject rightArm;
+    public GunType rightArmType = GunType.None;
     public GameObject leftArm;
+    public GunType leftArmType = GunType.None;
+
 
     private void Awake()
     {
@@ -25,37 +28,53 @@ public class WeaponManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Q))
-        {
-            if(leftArm.transform.childCount != 0)
-            {
-                
+        //if (Input.GetKeyDown(KeyCode.Q))
+        //{
+        //    if(leftArm.transform.childCount != 0)
+        //    {
 
-                GameObject gun = leftArm.transform.GetChild(0).gameObject;
-                gun.GetComponent<Gunbase>().Jettison();
-                Destroy(gun);
-            }
-        }
 
-        if (Input.GetKeyDown(KeyCode.E))
-        {
-            if (rightArm.transform.childCount != 0)
-            {
+        //        GameObject gun = leftArm.transform.GetChild(0).gameObject;
+        //        gun.GetComponent<Gunbase>().Jettison();
+        //        Destroy(gun);
+        //    }
+        //}
 
-                GameObject gun = rightArm.transform.GetChild(0).gameObject;
-                gun.GetComponent<Gunbase>().Jettison();
-                Destroy(gun);
-            }
-        }
+        //if (Input.GetKeyDown(KeyCode.E))
+        //{
+        //    if (rightArm.transform.childCount != 0)
+        //    {
+
+        //        GameObject gun = rightArm.transform.GetChild(0).gameObject;
+        //        gun.GetComponent<Gunbase>().Jettison();
+        //        Destroy(gun);
+        //    }
+        //}
     }
+
+    //public GameObject OpenArmCheck()
+    //{
+    //    if (rightArm.transform.childCount == 0)
+    //    {
+    //        return rightArm;
+    //    }
+    //    else if (leftArm.transform.childCount == 0)
+    //    {
+    //        return leftArm;
+    //    }
+    //    else
+    //    {
+    //        return null;
+    //    }
+    //}
 
     public GameObject OpenArmCheck()
     {
-        if (rightArm.transform.childCount == 0)
+        if (rightArmType == GunType.None)
         {
             return rightArm;
         }
-        else if (leftArm.transform.childCount == 0)
+        else if (leftArmType == GunType.None)
         {
             return leftArm;
         }
@@ -65,20 +84,88 @@ public class WeaponManager : MonoBehaviour
         }
     }
 
-    public bool AttatchGun(GameObject _gun)
+
+    public bool AttatchGun(GunType _gun)
     {
         GameObject arm = OpenArmCheck();
 
-        if(arm == null)
+        if (arm == null)
         {
             return false;
         }
-       GameObject gun = Instantiate(_gun, arm.transform.parent.parent.GetChild(0).position, arm.transform.parent.parent.GetChild(0).rotation, arm.transform);
 
-        gun.GetComponent<Gunbase>().leftHanded = arm.name == "LeftArm";
-        gun.GetComponent<Gunbase>().rightHanded = arm.name == "RightArm";
+        Debug.Log("Guntype: " +  arm.name);
+        switch (_gun)
+        {
+            case GunType.None:
+
+                break;
+
+            case GunType.SemiAuto:
+
+                arm.GetComponentInChildren<SemiAuto>().transform.GetChild(0).gameObject.SetActive(true);
+                arm.GetComponentInChildren<SemiAuto>().leftHanded = arm.name == "LeftBicep";
+                arm.GetComponentInChildren<SemiAuto>().rightHanded = arm.name == "RightBicep";
+
+                arm.GetComponentInChildren<SemiAuto>().canShoot = true;
+                break;
+
+            case GunType.Auto:
+                arm.GetComponentInChildren<AutoGun>().transform.GetChild(0).gameObject.SetActive(true);
+                arm.GetComponentInChildren<AutoGun>().leftHanded = arm.name == "LeftBicep";
+                arm.GetComponentInChildren<AutoGun>().rightHanded = arm.name == "RightBicep";
+                arm.GetComponentInChildren<SemiAuto>().canShoot = true;
+                break;
+
+            case GunType.Laser:
+                arm.GetComponentInChildren<LaserGun>().transform.GetChild(0).gameObject.SetActive(true);
+                arm.GetComponentInChildren<LaserGun>().leftHanded = arm.name == "LeftBicep";
+                arm.GetComponentInChildren<LaserGun>().rightHanded = arm.name == "RightBicep";
+                arm.GetComponentInChildren<SemiAuto>().canShoot = true;
+                break;
+
+            default:
+                return false;
+        }
+       
+
+        if (arm == rightArm)
+        {
+            rightArmType = _gun;
+        }
+        else
+        {
+            leftArmType = _gun;
+        }
+
 
         return true;
 
+
     }
+
+    //public bool AttatchGun(GameObject _gun)
+    //{
+    //    GameObject arm = OpenArmCheck();
+
+    //    if(arm == null)
+    //    {
+    //        return false;
+    //    }
+    //   GameObject gun = Instantiate(_gun, arm.transform.parent.parent.GetChild(0).position, arm.transform.parent.parent.GetChild(0).rotation, arm.transform);
+
+    //    gun.GetComponent<Gunbase>().leftHanded = arm.name == "LeftArm";
+    //    gun.GetComponent<Gunbase>().rightHanded = arm.name == "RightArm";
+
+    //    return true;
+
+    //}
+}
+
+public enum GunType
+{
+    SemiAuto,
+    Auto,
+    Laser,
+    None
 }

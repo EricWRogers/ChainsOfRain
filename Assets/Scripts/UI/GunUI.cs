@@ -3,7 +3,7 @@ using UnityEngine;
 public class GunUI : MonoBehaviour
 {
     public Gunbase weapon;
-    void Start()
+   public void Start()
     {
         weapon.onJettison.AddListener(DestroyUI);
     }

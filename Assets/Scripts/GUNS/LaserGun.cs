@@ -1,4 +1,5 @@
 using System;
+using SuperPupSystems.Helper;
 using UnityEngine;
 
 public class LaserGun : Gunbase
@@ -8,6 +9,7 @@ public class LaserGun : Gunbase
     public float overChargeWarning; //The number at which we warn the player we're approaching burnout.
     public bool burnedOut = false;
     public float chargeRate;
+    private float damageTime;
     
 
     public bool firing = false;
@@ -17,6 +19,15 @@ public class LaserGun : Gunbase
 
         Logger.instance.Log("Firing mah lazar!", Logger.LogType.Gun);
         firing = true;
+        if (Physics.Raycast(transform.position, transform.forward, out RaycastHit hit, Mathf.Infinity, -1) && damageTime >= 0.5f)
+        {
+            if (hit.transform.gameObject.tag == "Enemy")
+            {
+                hit.transform.gameObject.GetComponent<Health>().Damage(damage);
+                damageTime = 0f;
+            }
+        }
+    
         
         
     }
@@ -39,7 +50,7 @@ public class LaserGun : Gunbase
                 if (firing)
                 {
                     ammo++;
-                    
+
                 }
             }
             else if (ammo >= overChargeWarning)
@@ -60,6 +71,7 @@ public class LaserGun : Gunbase
 
 
         }
+        damageTime += Time.deltaTime;
     }
 
     public override void ReleaseFiring()

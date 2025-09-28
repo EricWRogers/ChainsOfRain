@@ -2,15 +2,25 @@ using UnityEngine;
 
 public class ExplodingBarrell : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    public GameObject barrel;
+    public GameObject explosion;
+    public GameObject vfxExplosion;
+
+    public AudioSource source;
+
+    void Awake()
     {
-        
+        barrel.SetActive(true);
+        explosion.SetActive(false);
+        vfxExplosion.SetActive(false);
     }
 
-    // Update is called once per frame
-    void Update()
+    public void Explode()
     {
-        
+        barrel.SetActive(false);
+        explosion.SetActive(true);
+        vfxExplosion.SetActive(true);
+
+        source.Play();
     }
 }
