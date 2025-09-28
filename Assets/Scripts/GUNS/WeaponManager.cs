@@ -28,28 +28,27 @@ public class WeaponManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //if (Input.GetKeyDown(KeyCode.Q))
-        //{
-        //    if(leftArm.transform.childCount != 0)
-        //    {
+        if (Input.GetKeyDown(KeyCode.Q))
+        {
+            if (leftArmType != GunType.None)
+            {
+                leftArmType = GunType.None;
+                Gunbase gun = leftArm.GetComponentInChildren<Gunbase>();
+                gun.Jettison();
+                gun.gameObject.SetActive(false);
+            }
+        }
 
-
-        //        GameObject gun = leftArm.transform.GetChild(0).gameObject;
-        //        gun.GetComponent<Gunbase>().Jettison();
-        //        Destroy(gun);
-        //    }
-        //}
-
-        //if (Input.GetKeyDown(KeyCode.E))
-        //{
-        //    if (rightArm.transform.childCount != 0)
-        //    {
-
-        //        GameObject gun = rightArm.transform.GetChild(0).gameObject;
-        //        gun.GetComponent<Gunbase>().Jettison();
-        //        Destroy(gun);
-        //    }
-        //}
+        if (Input.GetKeyDown(KeyCode.E))
+        {
+            if (rightArmType != GunType.None)
+            {
+                rightArmType = GunType.None;
+                Gunbase gun = rightArm.GetComponentInChildren<Gunbase>();
+                gun.Jettison();
+                gun.gameObject.SetActive(false);
+            }
+        }
     }
 
     //public GameObject OpenArmCheck()
@@ -80,6 +79,7 @@ public class WeaponManager : MonoBehaviour
         }
         else
         {
+            Debug.Log("No open arm");
             return null;
         }
     }
