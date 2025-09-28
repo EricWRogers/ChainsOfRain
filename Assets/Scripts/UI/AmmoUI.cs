@@ -1,26 +1,26 @@
 using TMPro;
+using Unity.Mathematics;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class AmmoUI : GunUI
 {
+    public Slider chargeSlider;
     public TextMeshProUGUI ammoCounterText;
-
-    void Start()
+    new void Start()
     {
-        weapon.onJettison.AddListener(DestroyUI);
+        base.Start();
+        chargeSlider.maxValue = weapon.maxAmmo;
     }
     void Update()
     {
-        ammoCounterText.text = weapon.ammo + "\n―\n" + weapon.maxAmmo;
+        chargeSlider.value = weapon.ammo;
+        ammoCounterText.text = weapon.ammo.ToString();
         if (weapon.leftHanded)
         {
             ammoCounterText.rectTransform.localScale = new Vector3(-1, 1, 1);
         }
-        
-    }
-    void DestroyUI()
-    {
-        Destroy(gameObject);
+
     }
 
 }
