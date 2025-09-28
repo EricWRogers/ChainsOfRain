@@ -84,7 +84,7 @@ MonoBehaviour:
   health: 10
   spinSpeed: 10
   amplitude: 0.5
-  frequency: 1
+  frequency: 0.5
 --- !u!54 &6785063398240100365
 Rigidbody:
   m_ObjectHideFlags: 0

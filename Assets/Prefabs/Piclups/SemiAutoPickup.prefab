@@ -99,7 +99,8 @@ MonoBehaviour:
   gun: 0
   spinSpeed: 10
   amplitude: 0.5
-  frequency: 1
+  frequency: 0.5
+  heightOffset: 1
 --- !u!1 &5195163503176665721
 GameObject:
   m_ObjectHideFlags: 0

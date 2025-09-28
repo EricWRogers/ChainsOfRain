@@ -183,7 +183,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   health: 10
-  gunPrefab: {fileID: 3134200392060333381, guid: 10d1e1442492059489494751749c66aa, type: 3}
+  gun: 2
   spinSpeed: 10
   amplitude: 0.5
   frequency: 1

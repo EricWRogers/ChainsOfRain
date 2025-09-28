@@ -236,7 +236,8 @@ MonoBehaviour:
   gun: 1
   spinSpeed: 10
   amplitude: 0.5
-  frequency: 1
+  frequency: 0.5
+  heightOffset: 1
 --- !u!54 &859136480906962354
 Rigidbody:
   m_ObjectHideFlags: 0
