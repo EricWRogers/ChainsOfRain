@@ -4,7 +4,7 @@ using UnityEngine;
 public class PickupGun : MonoBehaviour
 {
     public int health = 10;
-    public GameObject gunPrefab;
+    public GunType gun;
 
     public float spinSpeed;
     public float amplitude = 0.5f; 
@@ -15,7 +15,7 @@ public class PickupGun : MonoBehaviour
     {
         if(other.CompareTag("Player"))
         {
-           bool didwork = WeaponManager.instance.AttatchGun(gunPrefab);
+           bool didwork = WeaponManager.instance.AttatchGun(gun);
             if (didwork)
             {
                 Destroy(gameObject);
@@ -36,9 +36,9 @@ public class PickupGun : MonoBehaviour
     }
     private void Update()
     {
-        transform.parent.position = startPos + Vector3.up * Mathf.Sin(Time.time * Mathf.PI * frequency) * amplitude; //Hover
+        transform.position = startPos + Vector3.up * Mathf.Sin(Time.time * Mathf.PI * frequency) * amplitude; //Hover
 
 
-        transform.parent.Rotate(0f, spinSpeed * Time.deltaTime, 0f); //SPin
+        transform.Rotate(0f, spinSpeed * Time.deltaTime, 0f); //SPin
     }
 }

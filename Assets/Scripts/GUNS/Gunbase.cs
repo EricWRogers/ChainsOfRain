@@ -4,6 +4,7 @@ using UnityEngine.Events;
 
 public abstract class Gunbase : MonoBehaviour
 {
+    public bool canShoot = false;
     public bool leftHanded = false;
 
     public bool rightHanded = false;
@@ -68,39 +69,41 @@ public abstract class Gunbase : MonoBehaviour
 
     public void Update()
     {
-
-
-        if(Input.GetKeyUp(KeyCode.Mouse0))
+        if (canShoot)
         {
-            ReleaseFiring();
-        }
-        if (Input.GetKeyUp(KeyCode.Mouse1))
-        {
-            ReleaseFiring();
-        }
 
-        switch (inputMode)
-        {
-            case InputType.GetKeyDown:
-                if (Input.GetKeyDown(activeHand))
-                {
-                    Logger.instance.Log("Firing!", Logger.LogType.Gun);
-                    Fire(firingPoint, bulletPrefab);
-                }
-                break;
-            case InputType.GetKey:
-                if (Input.GetKey(activeHand))
-                {
-                    Logger.instance.Log("Firing! (holding)", Logger.LogType.Gun);
-                    Fire(firingPoint, bulletPrefab);
-                }
-                break;
-        }
+            if (Input.GetKeyUp(KeyCode.Mouse0))
+            {
+                ReleaseFiring();
+            }
+            if (Input.GetKeyUp(KeyCode.Mouse1))
+            {
+                ReleaseFiring();
+            }
 
-        if (reloadable && Input.GetKeyDown(KeyCode.R) && (infiniteAmmo || maxAmmo > 0)) //For now ill be lazy. Please set your max ammo to be divisible by your magazine ammo.
-        {
-            onReload.Invoke();
-            ammo = magazineAmmo;
+            switch (inputMode)
+            {
+                case InputType.GetKeyDown:
+                    if (Input.GetKeyDown(activeHand))
+                    {
+                        Logger.instance.Log("Firing!", Logger.LogType.Gun);
+                        Fire(firingPoint, bulletPrefab);
+                    }
+                    break;
+                case InputType.GetKey:
+                    if (Input.GetKey(activeHand))
+                    {
+                        Logger.instance.Log("Firing! (holding)", Logger.LogType.Gun);
+                        Fire(firingPoint, bulletPrefab);
+                    }
+                    break;
+            }
+
+            if (reloadable && Input.GetKeyDown(KeyCode.R) && (infiniteAmmo || maxAmmo > 0)) //For now ill be lazy. Please set your max ammo to be divisible by your magazine ammo.
+            {
+                onReload.Invoke();
+                ammo = magazineAmmo;
+            }
         }
     }
 

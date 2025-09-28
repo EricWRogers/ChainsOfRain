@@ -27,6 +27,6 @@ public class SemiAuto : Gunbase
 
     public override void ReleaseFiring()
     {
-        throw new System.NotImplementedException();
+       
     }
 }
