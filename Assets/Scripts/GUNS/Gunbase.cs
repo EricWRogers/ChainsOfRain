@@ -114,6 +114,7 @@ public abstract class Gunbase : MonoBehaviour
 
     public void Jettison()
     {
+        ammo = magazineAmmo;
         m_spawnedUI = false;
         onJettison.Invoke();
 
