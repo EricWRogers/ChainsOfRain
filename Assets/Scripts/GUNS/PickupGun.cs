@@ -8,7 +8,9 @@ public class PickupGun : MonoBehaviour
 
     public float spinSpeed;
     public float amplitude = 0.5f; 
-    public float frequency = 1f;   
+    public float frequency = 1f;
+    public float heightOffset = 2.0f;
+
 
     Vector3 startPos;
     private void OnTriggerEnter(Collider other)
@@ -30,13 +32,21 @@ public class PickupGun : MonoBehaviour
 
     
 
-    private void Start()
+    private void Awake()
     {
-        startPos = transform.position;
+        RaycastHit hit;
+        if (Physics.Raycast(transform.position, Vector3.down, out hit, 1000.0f))
+        {
+            startPos = hit.point;
+        }
+        else
+        {
+            startPos = transform.position;
+        }
     }
     private void Update()
     {
-        transform.position = startPos + Vector3.up * Mathf.Sin(Time.time * Mathf.PI * frequency) * amplitude; //Hover
+        transform.position = (Vector3.up * heightOffset) + startPos + Vector3.up * Mathf.Sin(Time.time * Mathf.PI * frequency) * amplitude; //Hover
 
 
         transform.Rotate(0f, spinSpeed * Time.deltaTime, 0f); //SPin
