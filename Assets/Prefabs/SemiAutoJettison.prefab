@@ -222,7 +222,7 @@ MonoBehaviour:
   timeToDestory: 1.5
   damage: 10
   collideCount: 0
-  trigger: {fileID: 0}
+  trigger: {fileID: 7349085681079384086}
 --- !u!65 &7349085681079384086
 BoxCollider:
   m_ObjectHideFlags: 0
