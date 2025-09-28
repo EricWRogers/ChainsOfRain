@@ -1,16 +1,22 @@
+using SuperPupSystems.Helper;
 using UnityEngine;
 
 public class AcidicBarrell : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-        
-    }
+    public int damage = 2;
+    float tickTime = 2f;
 
-    // Update is called once per frame
-    void Update()
+    void OnTriggerStay(Collider other)
     {
-        
+        if (other.CompareTag("Player") || other.CompareTag("Enemy"))
+        {
+            tickTime -= Time.deltaTime;
+
+            if (tickTime <= 0f)
+            {
+                other.GetComponent<Health>().Damage(damage);
+                tickTime = 2.0f;
+            }
+        }
     }
 }
