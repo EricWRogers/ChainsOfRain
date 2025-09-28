@@ -8,9 +8,9 @@ using Unity.VisualScripting;
 using UnityEditor.PackageManager;
 using UnityEngine;
 using UnityEngine.Rendering.Universal.Internal;
+using KinematicCharacterControler;
 
-namespace KinematicCharacterControler
-{
+namespace KinematicCharacterControler{}
     public enum Stance
     {
         Standing,
@@ -30,7 +30,7 @@ namespace KinematicCharacterControler
         public float runSpeed = 10f;
         public float sprintFOV = 70f;
         public float walkFOV = 60f;
-        private float prevFOV = 60f;
+        private float currFOV = 60f;
         public bool canSprint = true;
         public KeyCode sprintKey = KeyCode.LeftShift;
         public float rotationSpeed = 5f;
@@ -179,6 +179,7 @@ namespace KinematicCharacterControler
             HandleCursor();
             UpdateGrindInput();
             HandleInput();
+            HandleFOV();
 
             if (!isGrinding)
             {
@@ -242,13 +243,14 @@ namespace KinematicCharacterControler
                 dashTime = dashDuration;
 
                 m_dashCooldownTimer = dashCoolDown;
-                ciniCamera.Lens.FieldOfView = Mathf.Lerp(dashFOV, prevFOV, Time.deltaTime * zoomSpeed);
-                prevFOV = dashFOV;
+    
+        
             }
 
         }
         void HandleRegularMovement()
         {
+            
             if (isTakingKB)
             {
                 HandleKnockBack();
@@ -321,20 +323,18 @@ namespace KinematicCharacterControler
             if (Input.GetKey(sprintKey))
             {
                 finalDir = inputDir * runSpeed;
-                ciniCamera.Lens.FieldOfView = Mathf.Lerp(sprintFOV, prevFOV, Time.deltaTime * zoomSpeed);
-                prevFOV = sprintFOV;
+         
             }
             else if (isCrouching)
             {
                 finalDir = inputDir * crouchSpeed;
-                ciniCamera.Lens.FieldOfView = walkFOV;
-                prevFOV = walkFOV;
+            
             }
             else
             {
                 finalDir = inputDir * speed;
-                ciniCamera.Lens.FieldOfView = Mathf.Lerp(walkFOV, prevFOV, Time.deltaTime * zoomSpeed);
-                prevFOV = walkFOV;
+
+             
             }
             
             m_velocity += finalDir; 
@@ -369,6 +369,29 @@ namespace KinematicCharacterControler
             {
                 isTakingKB = false;
             }
+        }
+
+        void HandleFOV()
+        {
+            float targetFOV = walkFOV; 
+
+                if (m_isDashing)
+                {
+                    targetFOV = dashFOV;
+                }
+                else if (Input.GetKey(sprintKey))
+                {
+                    targetFOV = sprintFOV;
+                }
+                else if (isCrouching)
+                {
+                    targetFOV = walkFOV;
+                }
+
+                float lerpSpeed = m_isDashing ? zoomSpeed * 1.5f : zoomSpeed;
+                currFOV = Mathf.Lerp(currFOV, targetFOV, Time.deltaTime * lerpSpeed);
+
+                ciniCamera.Lens.FieldOfView = currFOV;
         }
 
         void StartWallRide(RaycastHit _wallHit)
@@ -459,7 +482,7 @@ namespace KinematicCharacterControler
                 capsule.height = crouchHeight;
                 capsule.center = new Vector3(0, -0.25f, 0);
                 isCrouching = true;
-                camPoint.transform.position -= new Vector3(0, capsuleHeight - crouchHeight, 0);
+                camPoint.transform.position -= new Vector3(0,  0.5f, 0);
                 return;
 
             }
@@ -470,7 +493,7 @@ namespace KinematicCharacterControler
                 capsule.height = capsuleHeight;
                 capsule.center = Vector3.zero;
                 isCrouching = false;
-                camPoint.transform.position -= new Vector3(0, crouchHeight - capsuleHeight, 0);
+                camPoint.transform.position += new Vector3(0, 0.5f, 0);
             }
         }
 
@@ -747,4 +770,3 @@ namespace KinematicCharacterControler
 
         }
     }
-}
