@@ -1,4 +1,5 @@
 using UnityEngine;
+using KinematicCharacterControler;
 
 public class Elevator : MonoBehaviour
 {
@@ -16,14 +17,8 @@ public class Elevator : MonoBehaviour
         if(other.CompareTag("Player") && isBossDead)
         {
             elevator.Play("ElevatorMove");
-        }
-    }
-
-    void OnTriggerStay(Collider other)
-    {
-        if(other.CompareTag("Player") && isBossDead)
-        {
-            other.gameObject.transform.position = new Vector3(other.gameObject.transform.position.x, transform.position.y + offset,other.gameObject.transform.position.z);
+            other.GetComponent<PlayerMovement>().enabled = false;
+            other.gameObject.transform.SetParent(transform);
         }
     }
 }
