@@ -1,5 +1,4 @@
 using SuperPupSystems.Helper;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class LoseMenu : MonoBehaviour

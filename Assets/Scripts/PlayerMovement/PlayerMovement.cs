@@ -4,7 +4,6 @@ using JetBrains.Annotations;
 using NUnit.Framework;
 using TMPro;
 using Unity.Cinemachine;
-using Unity.VisualScripting;
 using UnityEditor.PackageManager;
 using UnityEngine;
 using UnityEngine.Rendering.Universal.Internal;
