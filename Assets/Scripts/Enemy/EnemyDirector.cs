@@ -46,7 +46,10 @@ public class EnemyDirector : MonoBehaviour
         Health health = enemy.GetComponent<Health>();
 
         if (traversalType == EnemyTraversalType.FLYING)
+        {
+            Debug.Log("cloud nav");
             enemy.GetComponent<FlyGun>().cloudNav = cloudNav;
+        }
 
 
         // spend/connect event
