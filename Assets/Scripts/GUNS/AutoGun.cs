@@ -22,6 +22,6 @@ public class AutoGun : Gunbase
 
     public override void ReleaseFiring()
     {
-        throw new System.NotImplementedException();
+        
     }
 }

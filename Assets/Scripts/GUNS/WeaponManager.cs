@@ -32,11 +32,36 @@ public class WeaponManager : MonoBehaviour
         {
             if (leftArmType != GunType.None)
             {
-                leftArmType = GunType.None;
-                Gunbase gun = leftArm.GetComponentInChildren<Gunbase>();
-                gun.Jettison();
-                gun.transform.GetChild(0).gameObject.SetActive(false);
-                gun.canShoot = false;
+                switch (leftArmType)
+                {
+                    case GunType.SemiAuto:
+                        leftArmType = GunType.None;
+                        Gunbase semi = leftArm.GetComponentInChildren<SemiAuto>();
+                        semi.Jettison();
+                        semi.transform.GetChild(0).gameObject.SetActive(false);
+                        semi.canShoot = false;
+                        break;
+
+                    case GunType.Auto:
+                        leftArmType = GunType.None;
+                        Gunbase auto = leftArm.GetComponentInChildren<AutoGun>();
+                        auto.Jettison();
+                        auto.transform.GetChild(0).gameObject.SetActive(false);
+                        auto.canShoot = false;
+                        break;
+
+                    case GunType.Laser:
+                        leftArmType = GunType.None;
+                        Gunbase laser = leftArm.GetComponentInChildren<LaserGun>();
+                        laser.Jettison();
+                        laser.transform.GetChild(0).gameObject.SetActive(false);
+                        laser.canShoot = false;
+                        break;
+
+
+                }
+
+
             }
         }
 
@@ -44,11 +69,34 @@ public class WeaponManager : MonoBehaviour
         {
             if (rightArmType != GunType.None)
             {
-                rightArmType = GunType.None;
-                Gunbase gun = rightArm.GetComponentInChildren<Gunbase>();
-                gun.Jettison();
-                gun.transform.GetChild(0).gameObject.SetActive(false);
-                gun.canShoot = false;
+                switch (rightArmType)
+                {
+                    case GunType.SemiAuto:
+                        rightArmType = GunType.None;
+                        Gunbase semi = rightArm.GetComponentInChildren<SemiAuto>();
+                        semi.Jettison();
+                        semi.transform.GetChild(0).gameObject.SetActive(false);
+                        semi.canShoot = false;
+                        break;
+
+                    case GunType.Auto:
+                        rightArmType = GunType.None;
+                        Gunbase auto = rightArm.GetComponentInChildren<AutoGun>();
+                        auto.Jettison();
+                        auto.transform.GetChild(0).gameObject.SetActive(false);
+                        auto.canShoot = false;
+                        break;
+
+                    case GunType.Laser:
+                        rightArmType = GunType.None;
+                        Gunbase laser = rightArm.GetComponentInChildren<LaserGun>();
+                        laser.Jettison();
+                        laser.transform.GetChild(0).gameObject.SetActive(false);
+                        laser.canShoot = false;
+                        break;
+
+
+                }
             }
         }
     }
@@ -116,14 +164,14 @@ public class WeaponManager : MonoBehaviour
                 arm.GetComponentInChildren<AutoGun>().transform.GetChild(0).gameObject.SetActive(true);
                 arm.GetComponentInChildren<AutoGun>().leftHanded = arm.name == "LeftBicep";
                 arm.GetComponentInChildren<AutoGun>().rightHanded = arm.name == "RightBicep";
-                arm.GetComponentInChildren<SemiAuto>().canShoot = true;
+                arm.GetComponentInChildren<AutoGun>().canShoot = true;
                 break;
 
             case GunType.Laser:
                 arm.GetComponentInChildren<LaserGun>().transform.GetChild(0).gameObject.SetActive(true);
                 arm.GetComponentInChildren<LaserGun>().leftHanded = arm.name == "LeftBicep";
                 arm.GetComponentInChildren<LaserGun>().rightHanded = arm.name == "RightBicep";
-                arm.GetComponentInChildren<SemiAuto>().canShoot = true;
+                arm.GetComponentInChildren<LaserGun>().canShoot = true;
                 break;
 
             default:
