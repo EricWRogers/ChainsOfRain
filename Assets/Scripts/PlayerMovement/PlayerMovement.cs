@@ -36,7 +36,9 @@ public class PlayerMovement : MovementEngine
     public float zoomSpeed = 5;
     private Transform m_orientation;
     public Transform cam;
-    public Quaternion playerRotation;
+
+    public Vector3 spwanPos;
+
 
 
     [Header("Wall Ride Settings")]
@@ -183,6 +185,7 @@ public class PlayerMovement : MovementEngine
             Cursor.visible = false;
         }
         speedLines = GameObject.Find("SpeedLinesGo");
+        spwanPos = transform.position;
     }
 
     public void ChangeState(Stance newState)
@@ -260,22 +263,27 @@ public class PlayerMovement : MovementEngine
             StartSliding();
         }
 
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            transform.position = spwanPos;
+        }
+
 
         if (Input.GetKeyDown(dashKey) && m_dashCooldownTimer <= 0f && !m_isDashing && dashForce > 0f)
-        {
-            Vector3 inputDir = transform.TransformDirection(new Vector3(mouseInput.x, 0, mouseInput.y));
-            if (inputDir.magnitude < 0.1f)
-                inputDir = transform.forward; // default forward dash
+            {
+                Vector3 inputDir = transform.TransformDirection(new Vector3(mouseInput.x, 0, mouseInput.y));
+                if (inputDir.magnitude < 0.1f)
+                    inputDir = transform.forward; // default forward dash
 
-            m_dashDirecton = inputDir.normalized;
-            m_isDashing = true;
-            dashTime = dashDuration;
-            speedLines.GetComponent<SpeedLines>().speedLinesOn = true;
+                m_dashDirecton = inputDir.normalized;
+                m_isDashing = true;
+                dashTime = dashDuration;
+                speedLines.GetComponent<SpeedLines>().speedLinesOn = true;
 
-            m_dashCooldownTimer = dashCoolDown;
+                m_dashCooldownTimer = dashCoolDown;
 
 
-        }
+            }
 
     }
     void HandleRegularMovement()
