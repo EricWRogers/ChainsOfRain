@@ -238,6 +238,9 @@ MonoBehaviour:
   amplitude: 0.5
   frequency: 0.5
   heightOffset: 1
+  mask:
+    serializedVersion: 2
+    m_Bits: 9
 --- !u!54 &859136480906962354
 Rigidbody:
   m_ObjectHideFlags: 0

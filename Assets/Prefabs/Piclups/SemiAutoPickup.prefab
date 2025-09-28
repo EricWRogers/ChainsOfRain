@@ -101,6 +101,9 @@ MonoBehaviour:
   amplitude: 0.5
   frequency: 0.5
   heightOffset: 1
+  mask:
+    serializedVersion: 2
+    m_Bits: 9
 --- !u!1 &5195163503176665721
 GameObject:
   m_ObjectHideFlags: 0
