@@ -111,19 +111,20 @@ public class LegManager : MonoBehaviour
                 break;
 
             case LegType.DoubleJump:
+                DoubleJumpLeg doubleJump = leg.GetComponentInChildren<DoubleJumpLeg>();
+                doubleJump.transform.GetChild(0).gameObject.SetActive(true);
+                doubleJump.leftLegged = leg.name == "LeftBicep";
+                doubleJump.rightLegged = leg.name == "RightBicep";
 
-                leg.GetComponentInChildren<DoubleJumpLeg>().transform.GetChild(0).gameObject.SetActive(true);
-                leg.GetComponentInChildren<DoubleJumpLeg>().leftLegged = leg.name == "LeftBicep";
-                leg.GetComponentInChildren<DoubleJumpLeg>().rightLegged = leg.name == "RightBicep";
-
-                leg.GetComponentInChildren<DoubleJumpLeg>().canUse = true;
+                doubleJump.canUse = true;
                 break;
 
             case LegType.Dash:
-                leg.GetComponentInChildren<DashLeg>().transform.GetChild(0).gameObject.SetActive(true);
-                leg.GetComponentInChildren<DashLeg>().leftLegged = leg.name == "LeftBicep";
-                leg.GetComponentInChildren<DashLeg>().leftLegged = leg.name == "RightBicep";
-                leg.GetComponentInChildren<DashLeg>().canUse = true;
+                DashLeg dashLeg = leg.GetComponentInChildren<DashLeg>();
+                dashLeg.transform.GetChild(0).gameObject.SetActive(true);
+                dashLeg.leftLegged = leg.name == "LeftBicep";
+                dashLeg.leftLegged = leg.name == "RightBicep";
+                dashLeg.canUse = true;
                 break;
 
             default:
