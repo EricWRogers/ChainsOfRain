@@ -80,7 +80,10 @@ public abstract class Gunbase : MonoBehaviour
             {
                 ReleaseFiring();
             }
-
+            if (Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out RaycastHit hit))
+            {
+                firingPoint.LookAt(hit.point);
+            }
             switch (inputMode)
             {
                 case InputType.GetKeyDown:

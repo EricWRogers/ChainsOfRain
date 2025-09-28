@@ -48,6 +48,7 @@ public class TankEnemy : MonoBehaviour
         {
             GameObject bullet = Instantiate(bulletPrefab, firePoint.position, transform.rotation);
             bullet.GetComponent<Bullet>().damage = damage;
+            bullet.GetComponent<Bullet>().hitTarget.AddListener(() => PlayerMovement.instance.transform.parent.GetComponentInChildren<DamageIndicator>().ShowIndicator(transform.position));
             m_curFireTime = fireRate;
         }
             
