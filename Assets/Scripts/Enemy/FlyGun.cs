@@ -42,7 +42,7 @@ public class FlyGun : MonoBehaviour
             return;
         }
 
-        float distance = Vector3.Distance(ZeroY(transform.position), ZeroY(m_player.transform.position));
+        float distance = Vector3.Distance(transform.position, m_player.transform.position);
 
         if (distance <= minStopDistance)
         {
@@ -61,11 +61,8 @@ public class FlyGun : MonoBehaviour
             {
                 targetIndex++;
 
-                if (targetIndex >= path.Count)
-                {
-                    GetNewPath();
+                GetNewPath();
                     return;
-                }
             }
 
             Vector3 direction = (path[targetIndex] - transform.position).normalized;

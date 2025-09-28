@@ -8,9 +8,9 @@ using Unity.VisualScripting;
 using UnityEditor.PackageManager;
 using UnityEngine;
 using UnityEngine.Rendering.Universal.Internal;
+using KinematicCharacterControler;
 
-namespace KinematicCharacterControler
-{
+namespace KinematicCharacterControler{}
     public enum Stance
     {
         Standing,
@@ -63,11 +63,13 @@ namespace KinematicCharacterControler
         public bool canDash = true;
         public KeyCode dashKey = KeyCode.Tab;
         public float dashFOV = 80f;
+        public AnimationCurve dashCurve;
 
         private bool m_isDashing = false;
         private float dashTime = 0f;
         private float m_dashCooldownTimer = 0f;
         private Vector3 m_dashDirecton;
+    private float m_currTime = 0f;
         
 
 
@@ -176,7 +178,7 @@ namespace KinematicCharacterControler
         }
         void Update()
         {
-            HandleCursor();
+            //HandleCursor();
             UpdateGrindInput();
             HandleInput();
             HandleFOV();
@@ -223,14 +225,11 @@ namespace KinematicCharacterControler
             else
                 jumpInputElapsed += Time.deltaTime;
 
-            if (Input.GetKeyDown(crouchKey))
+            if (Input.GetKeyDown(crouchKey) && mouseInput.magnitude > 0.01)
             {
-                m_requestedCrouch = true;
+                StartSliding();
             }
-            else
-            {
-                m_requestedCrouch = false;
-            }
+            
 
             if (Input.GetKeyDown(dashKey) && m_dashCooldownTimer <= 0f && !m_isDashing && dashForce > 0f)
             {
@@ -256,17 +255,23 @@ namespace KinematicCharacterControler
                 HandleKnockBack();
                 return;
             }
-            HandleCrouch();
-            if (m_isDashing)
+
+        if (m_isDashing)
+        {
+            HandleDashing(Time.deltaTime);
+            return;
+        }
+        else if (isWallRiding)
+        {
+            HandleWallRide();
+            return;
+        }
+        else if (isSliding)
             {
-                HandleDashing(Time.deltaTime);
-                return;
+            HandleSliding();
+            return;
             }
-            else if (isWallRiding)
-            {
-                HandleWallRide();
-                return;
-            }
+            
             ciniCamera.Lens.Dutch = 0f;
 
 
@@ -461,8 +466,9 @@ namespace KinematicCharacterControler
         }
         void HandleDashing(float _delta)
         {
+            m_currTime += _delta;
             Vector3 vertical = new Vector3(0, m_velocity.y, 0); // keep jump/gravity
-            Vector3 finalVelocity = m_dashDirecton * dashForce + vertical;
+            Vector3 finalVelocity = m_dashDirecton * dashForce * dashCurve.Evaluate(m_currTime) + vertical;
 
             transform.position = MovePlayer(finalVelocity * _delta);
 
@@ -471,6 +477,7 @@ namespace KinematicCharacterControler
             {
                 m_isDashing = false;
                 ciniCamera.Lens.FieldOfView = Mathf.Lerp(dashFOV, walkFOV, _delta * zoomSpeed);
+                m_currTime = 0f;
             }
             
         }   
@@ -497,65 +504,15 @@ namespace KinematicCharacterControler
             }
         }
 
-       void HandleSliding()
-        {
-            if (!isSliding)
-            {
-                // Start sliding
-                isSliding = true;
-                isCrouching = false; // Exit crouch when starting slide
-        
-        
 
-               Vector3 inputDir = transform.TransformDirection(new Vector3(mouseInput.x, 0, mouseInput.y));
-
-        
-                if (m_velocity.magnitude > 0.1f)
-                {
-                    m_slideDirection = new Vector3(m_velocity.x, 0, m_velocity.z).normalized;
-                
-                }
-                else
-                {
-                    m_slideDirection = inputDir.magnitude > 0 ? inputDir.normalized : transform.forward;
-                    
-                }
-        
-                m_velocity = m_slideDirection * slideForce;
-            }
-    
-             bool onGround = CheckIfGrounded(out RaycastHit groundHit);
-    
-    
- 
-    
-            if (onGround)
-            {
-                Vector3 slopeDirection = Vector3.ProjectOnPlane(m_slideDirection, groundHit.normal).normalized;
-               float slopeAngle = Vector3.Angle(Vector3.up, groundHit.normal);
-        
-            if (slopeAngle > 5f && slopeAngle <= maxSlideAngle)
-            {
-                Vector3 slopeInfluence = Vector3.Project(Physics.gravity, slopeDirection);
-                m_slideSpeed += slopeInfluence.magnitude * Time.deltaTime;
-                 m_slideSpeed = Mathf.Clamp(m_slideSpeed, endSlideSpeed, slideForce * 2f);
-            }
-        
-            m_slideDirection = slopeDirection;
-            m_velocity = new Vector3(slopeDirection.x * m_slideSpeed, m_velocity.y, slopeDirection.z * m_slideSpeed);
-        
-            m_velocity.y = 0;
-        }
-        else
+        void StartSliding()
         {
-            m_velocity += gravity * Time.deltaTime;
+
         }
-    
-        transform.position = MovePlayer(m_velocity * Time.deltaTime);
-    
-        if (onGround)
-            SnapPlayerDown();
-    }
+        void HandleSliding()
+        {
+           
+        }
 
         // RAIL GRINDING SYSTEM
         void TryStartGrinding()
@@ -770,4 +727,3 @@ namespace KinematicCharacterControler
 
         }
     }
-}
