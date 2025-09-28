@@ -2277,7 +2277,19 @@ MonoBehaviour:
       m_Calls: []
   outOfHealth:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 3343882528119252046}
+        m_TargetAssemblyTypeName: LoseMenu, Assembly-CSharp
+        m_MethodName: LoseScreen
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   maxHealth: 100
   currentHealth: 0
   defaultToMaxHealth: 1
@@ -3490,6 +3502,17 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 8120925106310868290}
   m_SourcePrefab: {fileID: 100100000, guid: d7e1ba19e07d98949bffdda2703f77dd, type: 3}
+--- !u!114 &3343882528119252046 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 411488160200458736, guid: d7e1ba19e07d98949bffdda2703f77dd, type: 3}
+  m_PrefabInstance: {fileID: 3157653618277606846}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 309708cbabce21644bb2814b9779eaf9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &5571385835979867623 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 7386946663775002713, guid: d7e1ba19e07d98949bffdda2703f77dd, type: 3}

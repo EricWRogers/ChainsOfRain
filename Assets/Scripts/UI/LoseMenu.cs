@@ -10,7 +10,7 @@ public class LoseMenu : MonoBehaviour
 
     public void LoseScreen()
     { 
-        gameObject.SetActive(true);
+        transform.GetChild(0).gameObject.SetActive(true);
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
         //Stop all player input
