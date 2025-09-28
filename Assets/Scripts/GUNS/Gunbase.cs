@@ -38,6 +38,7 @@ public abstract class Gunbase : MonoBehaviour
     public GameObject uIPrefab;
     public RectTransform rightUI;
     public RectTransform leftUI;
+    private bool m_spawnedUI;
 
     private KeyCode activeHand => leftHanded ? KeyCode.Mouse0 : KeyCode.Mouse1;
 
@@ -48,22 +49,7 @@ public abstract class Gunbase : MonoBehaviour
     public void Start()
     {
         ammo = magazineAmmo;
-        if (rightHanded)
-        {
-            rightUI = WeaponManager.instance.rightArm.transform.parent.GetComponentInChildren<RectTransform>();
-            
-            GameObject uI = Instantiate(uIPrefab, rightUI);
-            uI.GetComponent<GunUI>().weapon = this;
-        }
-        if (leftHanded)
-        {
-            leftUI = WeaponManager.instance.leftArm.transform.parent.GetComponentInChildren<RectTransform>();
-           
-            GameObject uI = Instantiate(uIPrefab, leftUI);
-            uI.GetComponent<GunUI>().weapon = this;
-
-
-        }
+        
     }
 
 
@@ -71,6 +57,20 @@ public abstract class Gunbase : MonoBehaviour
     {
         if (canShoot)
         {
+            if (rightHanded && !m_spawnedUI)
+            {
+                rightUI = WeaponManager.instance.rightArm.transform.parent.GetComponentInChildren<RectTransform>();
+                GameObject uI = Instantiate(uIPrefab, rightUI);
+                uI.GetComponent<GunUI>().weapon = this;
+                m_spawnedUI = true;
+            }
+            if (leftHanded && !m_spawnedUI)
+            {
+                leftUI = WeaponManager.instance.leftArm.transform.parent.GetComponentInChildren<RectTransform>();
+                GameObject uI = Instantiate(uIPrefab, leftUI);
+                uI.GetComponent<GunUI>().weapon = this;
+                m_spawnedUI = true;
+            }
 
             if (Input.GetKeyUp(KeyCode.Mouse0))
             {
