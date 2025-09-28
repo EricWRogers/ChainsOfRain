@@ -13,6 +13,7 @@ public class GunUI : MonoBehaviour
     }
     void DestroyUI()
     {
-        gameObject.SetActive(false);
+        Destroy(gameObject);
+        //gameObject.SetActive(false);
     }
 }
