@@ -35,12 +35,7 @@ public class Interact : MonoBehaviour
 
 
     }
-    private void OnDrawGizmos()
-    {
-        if (lookingAtInteractable) Gizmos.color = Color.blue;
-        else Gizmos.color = Color.red;
-        Gizmos.DrawRay(m_startPos.position, m_startPos.forward * 5f);
-    }
+    
     
     
 }
