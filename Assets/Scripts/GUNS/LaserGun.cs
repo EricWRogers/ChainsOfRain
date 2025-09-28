@@ -20,10 +20,11 @@ public class LaserGun : Gunbase
 
         Logger.instance.Log("Firing mah lazar!", Logger.LogType.Gun);
         firing = true;
-        if (Physics.Raycast(transform.position, transform.forward, out RaycastHit hit, Mathf.Infinity, -1) && damageTime >= 0.5f)
+        if (Physics.Raycast(firingPoint.position, firingPoint.forward, out RaycastHit hit, Mathf.Infinity, Physics.AllLayers) && damageTime >= 0.5f)
         {
+            Debug.Log("hit somtihgn");
             beam.positionCount = 2;
-            beam.SetPosition(0, transform.position);
+            beam.SetPosition(0, firingPoint.position);
             beam.SetPosition(1, hit.point);
             if (hit.transform.gameObject.tag == "Enemy")
             {
@@ -46,7 +47,8 @@ public class LaserGun : Gunbase
     // Update is called once per frame
     new void Update()
     {
-        beam.positionCount = 0;
+        if(!firing)
+            beam.positionCount = 0;
         base.Update();
         if (!burnedOut)
         {
