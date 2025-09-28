@@ -57,11 +57,7 @@ public class WeaponManager : MonoBehaviour
                         laser.transform.GetChild(0).gameObject.SetActive(false);
                         laser.canShoot = false;
                         break;
-
-
                 }
-
-
             }
         }
 
