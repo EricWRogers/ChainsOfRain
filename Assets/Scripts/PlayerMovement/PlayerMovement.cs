@@ -9,6 +9,7 @@ using UnityEditor.PackageManager;
 using UnityEngine;
 using UnityEngine.Rendering.Universal.Internal;
 using KinematicCharacterControler;
+using UnityEngine.InputSystem;
 
 namespace KinematicCharacterControler{}
     public enum Stance
@@ -65,11 +66,11 @@ namespace KinematicCharacterControler{}
         public float dashFOV = 80f;
         public AnimationCurve dashCurve;
 
-        private bool m_isDashing = false;
+        protected bool m_isDashing = false;
         private float dashTime = 0f;
         private float m_dashCooldownTimer = 0f;
         private Vector3 m_dashDirecton;
-    private float m_currTime = 0f;
+        private float m_currTime = 0f;
         
 
 
@@ -137,6 +138,7 @@ namespace KinematicCharacterControler{}
         private Vector3 kbDir;
         private float kbStrength;
         private bool isTakingKB = false;
+    private Vector3 lasPos;
 
         void Awake()
         {
@@ -154,6 +156,17 @@ namespace KinematicCharacterControler{}
         {
             player = GameObject.Find("Player");
             m_orientation = cam;
+            lasPos = transform.position;
+            if (lockCursor)
+            {
+                Cursor.lockState = CursorLockMode.Locked;
+                Cursor.visible = false;
+            }
+            else
+            {
+                Cursor.lockState = CursorLockMode.None;
+                Cursor.visible = false;
+            } 
         }
 
         public void ChangeState(Stance newState)
@@ -192,6 +205,7 @@ namespace KinematicCharacterControler{}
             {
                 ContinueGrinding();
             }
+            lasPos = transform.position;
         }
         void HandleCursor()
         {
@@ -249,7 +263,10 @@ namespace KinematicCharacterControler{}
         }
         void HandleRegularMovement()
         {
-            
+            if (lasPos - transform.position == Vector3.zero && mouseInput.magnitude > 0.001)
+            {
+               // transform.position = MovePlayer(new Vector3(0, 0.2f, 0));
+            }
             if (isTakingKB)
             {
                 HandleKnockBack();
