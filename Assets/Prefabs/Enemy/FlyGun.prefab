@@ -91,6 +91,7 @@ GameObject:
   - component: {fileID: 7827601757241167219}
   - component: {fileID: 7535540225041354136}
   - component: {fileID: -4944557245869189472}
+  - component: {fileID: -4998951801587204313}
   m_Layer: 7
   m_Name: FlyGun
   m_TagString: Enemy
@@ -295,6 +296,18 @@ MonoBehaviour:
   traversalType: 1
   cost: 2
   drop: {fileID: 8700248398572951904, guid: b2bca08717ffbf347b60d19d90fb3043, type: 3}
+--- !u!114 &-4998951801587204313
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3653606285374236233}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7a48f0245d003d0459bc126b090a77d3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &4098244173016988505
 GameObject:
   m_ObjectHideFlags: 0
