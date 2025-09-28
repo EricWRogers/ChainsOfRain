@@ -1,8 +1,9 @@
+using SuperPupSystems.Helper;
 using UnityEngine;
 
 public class PickupGun : MonoBehaviour
 {
-
+    public int health = 10;
     public GameObject gunPrefab;
 
     private void OnTriggerEnter(Collider other)
@@ -15,5 +16,10 @@ public class PickupGun : MonoBehaviour
                 Destroy(gameObject);
             }
         }
+    }
+
+    public void AddHealth()
+    {
+        PlayerMovement.instance.gameObject.GetComponent<Health>().Heal(health);
     }
 }
