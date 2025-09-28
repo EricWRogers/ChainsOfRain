@@ -1,12 +1,5 @@
-using System.ComponentModel.Design.Serialization;
-using System.Net.Mail;
-using JetBrains.Annotations;
-using NUnit.Framework;
-using TMPro;
 using Unity.Cinemachine;
-using UnityEditor.PackageManager;
 using UnityEngine;
-using UnityEngine.Rendering.Universal.Internal;
 using KinematicCharacterControler;
 using UnityEngine.InputSystem;
 
