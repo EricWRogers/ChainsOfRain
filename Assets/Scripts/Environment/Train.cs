@@ -36,6 +36,7 @@ public class Train : MonoBehaviour
         }
         if(other.CompareTag("Enemy"))
         {
+            Debug.Log("The name is " + other.gameObject.name);
             other.GetComponent<Health>().Kill();
         }
     }

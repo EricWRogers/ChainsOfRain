@@ -294,6 +294,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   traversalType: 1
   cost: 2
+  drop: {fileID: 8700248398572951904, guid: b2bca08717ffbf347b60d19d90fb3043, type: 3}
 --- !u!1 &4098244173016988505
 GameObject:
   m_ObjectHideFlags: 0
