@@ -35,7 +35,8 @@ public class WeaponManager : MonoBehaviour
                 leftArmType = GunType.None;
                 Gunbase gun = leftArm.GetComponentInChildren<Gunbase>();
                 gun.Jettison();
-                gun.gameObject.SetActive(false);
+                gun.transform.GetChild(0).gameObject.SetActive(false);
+                gun.canShoot = false;
             }
         }
 
@@ -46,7 +47,8 @@ public class WeaponManager : MonoBehaviour
                 rightArmType = GunType.None;
                 Gunbase gun = rightArm.GetComponentInChildren<Gunbase>();
                 gun.Jettison();
-                gun.gameObject.SetActive(false);
+                gun.transform.GetChild(0).gameObject.SetActive(false);
+                gun.canShoot = false;
             }
         }
     }
