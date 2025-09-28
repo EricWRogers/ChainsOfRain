@@ -297,6 +297,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   scale: 0.7
   color: {r: 1, g: 0, b: 0, a: 1}
+  added: 0
 --- !u!114 &7246340620973895769
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -641,6 +642,10 @@ PrefabInstance:
     - target: {fileID: 5748523807635667038, guid: 815d2e988f9aeb64cbf1ada27ecaf4f1, type: 3}
       propertyPath: m_Name
       value: Wheelie
+      objectReference: {fileID: 0}
+    - target: {fileID: 5748523807635667038, guid: 815d2e988f9aeb64cbf1ada27ecaf4f1, type: 3}
+      propertyPath: m_Layer
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 9140765812045944747, guid: 815d2e988f9aeb64cbf1ada27ecaf4f1, type: 3}
       propertyPath: m_LocalPosition.x
