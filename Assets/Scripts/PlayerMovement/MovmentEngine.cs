@@ -3,6 +3,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using System.Linq;
 using System.Collections.Generic;
+using System.IO.MemoryMappedFiles;
 
 
 namespace KinematicCharacterControler
@@ -26,6 +27,7 @@ namespace KinematicCharacterControler
         public float defaultGroundedDistance = 0.05f;
         public float snapDownDistance = 0.45f; 
         public bool shouldSnapDown = true; // Should snap to ground
+        private Vector3 prevPos;
 
 
         public GroundedState groundedState { get; protected set; }
@@ -37,6 +39,7 @@ namespace KinematicCharacterControler
 
         public Vector3 MovePlayer(Vector3 movement)
         {
+
             Vector3 position = transform.position;
             Quaternion rotation = transform.rotation;
 
@@ -106,15 +109,56 @@ namespace KinematicCharacterControler
                 bounces++;
             }
 
-             
+            
+            if (prevPos == transform.position && movement.magnitude > 0)
+            {
+                TryUnstuck();
+            }
+            prevPos = position;
             return position;
+        }
+
+        public void TryUnstuck()
+        {
+            bool leftCheck = Physics.Raycast(transform.position, -transform.right, 0.5f, collisionLayers);
+            bool righCheck = Physics.Raycast(transform.position, transform.right, 0.5f, collisionLayers);
+            bool forwardCheck = Physics.Raycast(transform.position, transform.forward, 0.5f, collisionLayers);
+            bool backCheck = Physics.Raycast(transform.position, -transform.forward, 0.5f, collisionLayers);
+            bool upCheck = Physics.Raycast(transform.position, transform.up, 1.5f, collisionLayers);
+            bool downCheck = Physics.Raycast(transform.position, -transform.up, 1.5f, collisionLayers);
+
+            if (!leftCheck)
+            {
+                transform.position = -transform.right * 0.2f;
+            }
+            if (!righCheck)
+            {
+                transform.position = transform.right * 0.2f;
+            }
+            if (!forwardCheck)
+            {
+                transform.position = transform.forward * 0.2f;
+            }
+            if (!backCheck)
+            {
+                transform.position = -transform.forward * 0.2f;
+            }
+            if (!upCheck)
+            {
+                transform.position = transform.up * 0.2f;
+            }
+            if (!downCheck)
+            {
+                transform.position = -transform.up * 0.2f;
+            }
+         
         }
     
 
         public bool CheckIfGrounded(out RaycastHit _hit)
         {
 
-            
+
             if (CastSelf(transform.position, transform.rotation, Vector3.down, defaultGroundCheck, out _hit))
             {
                 float angle = Vector3.Angle(_hit.normal, Vector3.up);
@@ -122,14 +166,14 @@ namespace KinematicCharacterControler
 
                 groundedState = new GroundedState(_hit.distance, isGrounded, angle, _hit.normal, _hit.point);
                 return isGrounded;
-                
+
             }
             else
             {
                 groundedState = new GroundedState(defaultGroundCheck, false, 0f, Vector3.up, Vector3.zero);
                 return false;
             }
-         }
+        }
 
 
 

@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 3946184680630671249}
   - component: {fileID: 1236059181203891035}
   - component: {fileID: 3195384174762237242}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Lazer_Gun_FBX
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -117,7 +117,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7853334577362847606}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: GFX
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -150,7 +150,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4889623730327980161}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: GFX
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -184,7 +184,7 @@ GameObject:
   - component: {fileID: 4909367210781570379}
   - component: {fileID: 8929511482067282154}
   - component: {fileID: 3032864261439779422}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Spot Light
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -303,7 +303,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5448890619333306190}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: LaserGunPickup
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -338,7 +338,7 @@ GameObject:
   - component: {fileID: 1860109178721535106}
   - component: {fileID: 6938287025388248328}
   - component: {fileID: 287173614201152169}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: LaserGun
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -428,6 +428,9 @@ MonoBehaviour:
   amplitude: 0.5
   frequency: 1
   heightOffset: 1
+  mask:
+    serializedVersion: 2
+    m_Bits: 0
 --- !u!1 &8721533573199872727
 GameObject:
   m_ObjectHideFlags: 0
@@ -437,7 +440,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7872056286737183489}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: FiringPoint
   m_TagString: Untagged
   m_Icon: {fileID: 7174288486110832750, guid: 0000000000000000d000000000000000, type: 0}
