@@ -2,8 +2,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using SuperPupSystems.Helper;
 using KinematicCharacterControler;
-using Unity.VisualScripting;
-
 public class FlyGun : MonoBehaviour
 {
     public CloudNav cloudNav;
