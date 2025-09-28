@@ -2,35 +2,18 @@ using UnityEngine;
 
 public class TestPause : MonoBehaviour
 {
-    public GameObject pauseMenu;
-    private bool m_paused;
+    public PauseMenu pauseMenu;
+    void Start()
+    {
+        pauseMenu = GameObject.Find("PauseMenuGo").GetComponentInChildren<PauseMenu>();
+    }
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.F))
+        if (Input.GetKeyDown(KeyCode.Escape))
         {
-            TogglePause();
+            pauseMenu.TogglePause();
         }
     }
-    public void TogglePause()
-    {
-        if (!m_paused)
-        {
-            pauseMenu.SetActive(true);
-            Cursor.lockState = CursorLockMode.None;
-            Cursor.visible = true;
-            //Stop all player input
-            Time.timeScale = 0;
-            m_paused = true;
-        }
-        else
-        {
-            m_paused = false;
-            pauseMenu.SetActive(false);
-            Cursor.lockState = CursorLockMode.Locked;
-            Cursor.visible = false;
-            //Stop all player input
-            Time.timeScale = 1;
-        }
-    }
+    
 }
