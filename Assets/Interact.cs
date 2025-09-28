@@ -4,36 +4,42 @@ using TMPro;
 
 public class Interact : MonoBehaviour
 {
-    
+
     public bool lookingAtInteractable = false;
-    public TextMeshProUGUI interactText;
+    public LayerMask layerMask;
+    private Transform m_startPos;
+
+    void Start()
+    {
+        m_startPos = Camera.main.transform;
+    }
     void Update()
     {
-        if (Physics.Raycast(new Ray(Camera.main.transform.position, Camera.main.transform.forward), out RaycastHit hit, 2f))
+        if (Physics.Raycast(m_startPos.position, m_startPos.forward, out RaycastHit hit, 5f, layerMask))
         {
-
-            if (hit.collider.CompareTag("Interactable"))
+            Debug.Log("hit");
+            if (hit.transform.CompareTag("Interactable"))
             {
                 lookingAtInteractable = true;
-                interactText.color = Color.white;
             }
             else
             {
                 lookingAtInteractable = false;
             }
+            if (lookingAtInteractable && Input.GetKeyDown(KeyCode.F))
+            {
+                Debug.Log("Interacted with: " + hit.collider.name);
+                hit.transform.GetComponent<Interactable>().Interacted.Invoke();
+            }
         }
 
-        else
-        {
-            lookingAtInteractable = false;
-            interactText.color = Color.clear;
-        }
 
-        if (lookingAtInteractable && Input.GetKeyDown(KeyCode.E))
-        {
-            Debug.Log("Interacted with: " + hit.collider.name);
-            hit.collider.GetComponent<Interactable>().Interacted.Invoke();
-        }
+    }
+    private void OnDrawGizmos()
+    {
+        if (lookingAtInteractable) Gizmos.color = Color.blue;
+        else Gizmos.color = Color.red;
+        Gizmos.DrawRay(m_startPos.position, m_startPos.forward * 5f);
     }
     
     
