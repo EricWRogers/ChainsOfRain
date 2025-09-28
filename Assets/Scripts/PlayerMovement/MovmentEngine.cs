@@ -4,7 +4,6 @@ using UnityEngine.InputSystem;
 using System.Linq;
 using System.Collections.Generic;
 using System.IO.MemoryMappedFiles;
-using UnityEditor.Callbacks;
 
 
 namespace KinematicCharacterControler
@@ -29,77 +28,74 @@ namespace KinematicCharacterControler
         public float snapDownDistance = 0.45f; 
         public bool shouldSnapDown = true; // Should snap to ground
         private Vector3 prevPos;
-        public Quaternion playerRotation;
-       
 
 
         public GroundedState groundedState { get; protected set; }
 
         private Bounds bounds;
-        public bool stuck = false;
-        public Rigidbody rb;
-        void Awake()
-        {
 
-            rb = GetComponent<Rigidbody>();
-        }
+
+
 
         public Vector3 MovePlayer(Vector3 movement)
         {
+
             Vector3 position = transform.position;
             Quaternion rotation = transform.rotation;
+
             Vector3 remaining = movement;
+
             int bounces = 0;
-            bool wasStuck = stuck;
 
             while (bounces < maxBounces && remaining.magnitude > 0.001f)
             {
+                // Do a cast of the collider to see if an object is hit during this
+                // movement bounce
                 float distance = remaining.magnitude;
                 if (!CastSelf(position, rotation, remaining.normalized, distance, out RaycastHit hit))
                 {
+                    // If there is no hit, move to desired position
                     position += remaining;
+
+                    // Exit as we are done bouncing
                     break;
                 }
 
-                // Improved stuck detection
-                if (hit.distance < skinWidth * 2f)
+                // If we are overlapping with something, just exit.
+                if (hit.distance == 0)
                 {
-                    stuck = true;
-
-                    // Try to resolve overlap by moving along hit normal
-                    Vector3 pushOut = hit.normal * (skinWidth * 3f);
-                    position += pushOut;
-
-                    // Reduce remaining movement significantly when stuck
-                    remaining *= 0.1f;
-
-                    // If we're still stuck after a few attempts, try unstuck logic
-                    if (bounces > 2)
-                    {
-                        TryUnstuck();
-                        break;
-                    }
-                }
-                else
-                {
-                    stuck = false;
+                    break;
                 }
 
-                float fraction = Mathf.Max(hit.distance - skinWidth, 0f) / distance;
+                float fraction = hit.distance / distance;
 
-                position += remaining * fraction;
-                position += hit.normal * skinWidth; // Consistent skin width application
+                // Set the fraction of remaining movement (minus some small value)
+                position += remaining * (fraction);
+                // Push slightly along normal to stop from getting caught in walls
+                position += hit.normal * 0.001f * 2;
+                // Decrease remaining movement by fraction of movement remaining
                 remaining *= (1 - fraction);
 
+                // Plane to project rest of movement onto
                 Vector3 planeNormal = hit.normal;
-                float angleBetween = Vector3.Angle(hit.normal, remaining) - 90.0f;
-                angleBetween = Mathf.Abs(angleBetween);
-                float normalizedAngle = angleBetween / 90;
 
+                // Only apply angular change if hitting something
+                // Get angle between surface normal and remaining movement
+                float angleBetween = Vector3.Angle(hit.normal, remaining) - 90.0f;
+
+                // Normalize angle between to be between 0 and 1
+                // 0 means no angle, 1 means 90 degree angle
+                angleBetween = Mathf.Min(60f, Mathf.Abs(angleBetween));
+                float normalizedAngle = angleBetween / 60f;
+
+                // Reduce the remaining movement by the remaining movement that ocurred
                 remaining *= Mathf.Pow(1 - normalizedAngle, m_anglePower) * 0.9f + 0.1f;
 
+                // Rotate the remaining movement to be projected along the plane of the hit surface
                 Vector3 projected = Vector3.ProjectOnPlane(remaining, planeNormal).normalized * remaining.magnitude;
 
+                // If projected remaining movement is less than original remaining movement (broke from floating point),
+                // then change this to just project along the vertical.
                 if (projected.magnitude + 0.001f < remaining.magnitude)
                 {
                     remaining = Vector3.ProjectOnPlane(remaining, Vector3.up).normalized * remaining.magnitude;
@@ -109,62 +105,54 @@ namespace KinematicCharacterControler
                     remaining = projected;
                 }
 
+                // Track number of times the character has bounced
                 bounces++;
             }
 
-            // Improved stuck handling - don't toggle rigidbody kinematic
-            if (movement.magnitude > 0 && Vector3.Distance(prevPos, position) < 0.001f)
+            
+            if (prevPos == transform.position && movement.magnitude > 0)
             {
-                // Player is stuck, but don't change rigidbody state
-                // Instead, try to resolve the stuck state
-                if (!wasStuck) // Only try once per stuck event
-                {
-                    TryUnstuck();
-                }
-                // Still return the position we calculated
+                TryUnstuck();
             }
-
             prevPos = position;
             return position;
         }
 
-
-    public void TryUnstuck()
-    {
-        Vector3 originalPosition = transform.position;
-        bool foundEscape = false;
-
-        // Try different directions to escape
-        Vector3[] escapeDirections = {
-            Vector3.up * 0.3f,          // Try up first (most common case)
-            -transform.right * 0.2f,     // Left
-            transform.right * 0.2f,      // Right  
-            transform.forward * 0.2f,    // Forward
-            -transform.forward * 0.2f,   // Back
-            -Vector3.up * 0.1f          // Slightly down (last resort)
-        };
-
-        foreach (Vector3 direction in escapeDirections)
+        public void TryUnstuck()
         {
-            Vector3 testPosition = originalPosition + direction;
+            bool leftCheck = Physics.Raycast(transform.position, -transform.right, 0.5f, collisionLayers);
+            bool righCheck = Physics.Raycast(transform.position, transform.right, 0.5f, collisionLayers);
+            bool forwardCheck = Physics.Raycast(transform.position, transform.forward, 0.5f, collisionLayers);
+            bool backCheck = Physics.Raycast(transform.position, -transform.forward, 0.5f, collisionLayers);
+            bool upCheck = Physics.Raycast(transform.position, transform.up, 1.5f, collisionLayers);
+            bool downCheck = Physics.Raycast(transform.position, -transform.up, 1.5f, collisionLayers);
 
-            // Check if this position is clear
-            if (!CastSelf(testPosition, transform.rotation, Vector3.zero, 0.01f, out RaycastHit hit))
+            if (!leftCheck)
             {
-                transform.position = testPosition;
-                foundEscape = true;
-                Debug.Log($"Unstuck by moving {direction}");
-                break;
+                transform.position = -transform.right * 0.2f;
             }
+            if (!righCheck)
+            {
+                transform.position = transform.right * 0.2f;
+            }
+            if (!forwardCheck)
+            {
+                transform.position = transform.forward * 0.2f;
+            }
+            if (!backCheck)
+            {
+                transform.position = -transform.forward * 0.2f;
+            }
+            if (!upCheck)
+            {
+                transform.position = transform.up * 0.2f;
+            }
+            if (!downCheck)
+            {
+                transform.position = -transform.up * 0.2f;
+            }
+         
         }
-
-        if (!foundEscape)
-        {
-            Debug.LogWarning("Could not find escape route from stuck position");
-            // As last resort, move up more aggressively
-            transform.position = originalPosition + Vector3.up * 0.5f;
-        }
-    }
     
 
         public bool CheckIfGrounded(out RaycastHit _hit)
@@ -191,36 +179,25 @@ namespace KinematicCharacterControler
 
         public bool CastSelf(Vector3 pos, Quaternion rot, Vector3 dir, float dist, out RaycastHit hit)
         {
+           
             Vector3 center = rot * capsule.center + pos;
             float radius = capsule.radius;
             float height = capsule.height;
-        
-            // Ensure we have valid dimensions
-            Vector3 bottom = center + rot * Vector3.down * Mathf.Max(0.001f, (height / 2 - radius));
-            Vector3 top = center + rot * Vector3.up * Mathf.Max(0.001f, (height / 2 - radius));
-        
-            // Use a more conservative skin width for casting
-            float castRadius = Mathf.Max(0.001f, radius - skinWidth);
-            
-            RaycastHit[] hits = Physics.CapsuleCastAll(top, bottom, castRadius, dir, dist, collisionLayers, QueryTriggerInteraction.Ignore);
-            
-            // Filter out self collisions and invalid hits
-            var validHits = hits.Where(h => h.collider != null && 
-                                           h.collider.gameObject != gameObject &&
-                                           h.distance >= 0f).ToArray();
-            
-            bool didHit = validHits.Length > 0;
-        
-            if (didHit)
-            {
-                // Find the closest valid hit
-                hit = validHits.OrderBy(h => h.distance).First();
-            }
-            else
-            {
-                hit = new RaycastHit();
-            }
-        
+
+            // Get top and bottom points of collider
+            Vector3 bottom = center + rot * Vector3.down * (height / 2 - radius);
+            Vector3 top = center + rot * Vector3.up * (height / 2 - radius);
+
+            IEnumerable<RaycastHit> hits = Physics.CapsuleCastAll( top, bottom, radius, dir, dist, collisionLayers, QueryTriggerInteraction.Ignore);
+            bool didHit = hits.Count() > 0;
+
+            // Find the closest objects hit
+            float closestDist = didHit ? Enumerable.Min(hits.Select(hit => hit.distance)) : 0;
+            IEnumerable<RaycastHit> closestHit = hits.Where(hit => hit.distance == closestDist);
+
+            hit = closestHit.FirstOrDefault();
+
+            // Return if any objects were hit
             return didHit;
         }
 
