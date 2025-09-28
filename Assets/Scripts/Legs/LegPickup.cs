@@ -1,9 +1,10 @@
+using SuperPupSystems.Helper;
 using UnityEngine;
 
 public class LegPickup : MonoBehaviour
 {
     public GameObject legPrefab;
-
+    public int health = 10;
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Player"))
@@ -14,5 +15,10 @@ public class LegPickup : MonoBehaviour
                 Destroy(gameObject);
             }
         }
+    }
+
+    public void AddHealth()
+    {
+        PlayerMovement.instance.gameObject.GetComponent<Health>().Heal(health);
     }
 }
