@@ -1997,6 +1997,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player
       objectReference: {fileID: 0}
+    - target: {fileID: 1385021078780367156, guid: ec7c4a95275596a659f52b59480f657a, type: 3}
+      propertyPath: uIPrefab
+      value: 
+      objectReference: {fileID: 7799965945971305153, guid: a62cf4994c51d0140a7549572b99c8f9, type: 3}
+    - target: {fileID: 1385021078780367156, guid: ec7c4a95275596a659f52b59480f657a, type: 3}
+      propertyPath: rightHanded
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
