@@ -9,7 +9,7 @@ public class PickupGun : MonoBehaviour
     public float spinSpeed;
     public float amplitude = 0.5f; 
     public float frequency = 1f;
-    public float heightOffset = 2.0f;
+    public float heightOffset = 1.0f;
 
 
     Vector3 startPos;
