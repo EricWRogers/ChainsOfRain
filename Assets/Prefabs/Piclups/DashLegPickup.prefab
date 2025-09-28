@@ -307,6 +307,7 @@ MonoBehaviour:
   amplitude: 0.5
   frequency: 1
   heightOffset: 1
+  destroyTarget: {fileID: 5693286675807699914}
 --- !u!54 &8797534025679028103
 Rigidbody:
   m_ObjectHideFlags: 0

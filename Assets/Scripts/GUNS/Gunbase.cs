@@ -55,7 +55,7 @@ public abstract class Gunbase : MonoBehaviour
     public void Update()
     {
 
-        if (canShoot)
+        if (canShoot && Time.timeScale !=0)
         {
 
 
