@@ -129,6 +129,6 @@ MonoBehaviour:
       m_Calls: []
   mask:
     serializedVersion: 2
-    m_Bits: 64
+    m_Bits: 73
   tags:
   - Player
