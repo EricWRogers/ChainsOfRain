@@ -26,7 +26,7 @@ public class JettesonExplosion : MonoBehaviour
 
     void Update()
     {
-        if (time > 0.3f)
+        if (time > 0.1f)
         {
             trigger.enabled = true;
         }
