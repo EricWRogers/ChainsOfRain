@@ -1195,12 +1195,8 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player
       objectReference: {fileID: 0}
-    - target: {fileID: 4130195377018945632, guid: ec7c4a95275596a659f52b59480f657a, type: 3}
+    - target: {fileID: 2318997694934573967, guid: ec7c4a95275596a659f52b59480f657a, type: 3}
       propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4266485043367309194, guid: ec7c4a95275596a659f52b59480f657a, type: 3}
-      propertyPath: m_LocalPosition.x
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4586863230530806638, guid: ec7c4a95275596a659f52b59480f657a, type: 3}
@@ -1211,11 +1207,7 @@ PrefabInstance:
       propertyPath: m_AnchorMax.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 7740244206455916920, guid: ec7c4a95275596a659f52b59480f657a, type: 3}
-      propertyPath: jettisonPrefab
-      value: 
-      objectReference: {fileID: 8110591809227985467, guid: 97f397449d94d104da44ff8ee5756cf7, type: 3}
-    - target: {fileID: 8683197889705981956, guid: ec7c4a95275596a659f52b59480f657a, type: 3}
+    - target: {fileID: 7297903559386646304, guid: ec7c4a95275596a659f52b59480f657a, type: 3}
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
