@@ -22,6 +22,7 @@ public class PickupGun : MonoBehaviour
            bool didwork = WeaponManager.instance.AttatchGun(gun);
             if (didwork)
             {
+                AddHealth();
                 Destroy(gameObject);
             }
         }
