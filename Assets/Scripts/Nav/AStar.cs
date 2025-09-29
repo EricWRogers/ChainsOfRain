@@ -1,4 +1,7 @@
+using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Runtime.InteropServices;
 using UnityEngine;
 
 [System.Serializable]
@@ -59,12 +62,14 @@ public class AStar
                 node.g = 0.0f;
                 node.h = 0.0f;
                 node.predecessorID = -1;
+                graph[i] = node;
             }
         }
 
         searchingSet.Clear();
         hasSearchedSet.Clear();
         int graphNodeIndex;
+        AStarNode neighborNode;
 
         searchingSet.Add(_idFrom);
 
@@ -80,26 +85,27 @@ public class AStar
                 }
             }
 
-            AStarNode node = graph[searchingSet[lowestPath]];
+            int nodeId = searchingSet[lowestPath];
+
             graphNodeIndex = searchingSet[lowestPath];
 
             if (_idTo == searchingSet[lowestPath])
             {
-                return BuildPath(node);
+                return BuildPath(nodeId);
             }
 
             hasSearchedSet.Add(searchingSet[lowestPath]);
 
             searchingSet.RemoveAt(lowestPath);
 
-            List<int> neighborIDs = node.adjacentPointIDs;
+            List<int> neighborIDs = graph[nodeId].adjacentPointIDs;
 
             for (int i = 0; i < neighborIDs.Count; i++)
             {
                 //if (graph.Count <= neighborIDs[i])
                 //    continue;
                 
-                AStarNode neighborNode = graph[neighborIDs[i]];
+                neighborNode = graph[neighborIDs[i]];
 
                 if (hasSearchedSet.Contains(neighborIDs[i]) == false)
                 {
@@ -108,7 +114,7 @@ public class AStar
                         continue;
                     }
 
-                    float currentG = node.g + Vector3.Distance(node.position, neighborNode.position);
+                    float currentG = graph[nodeId].g + Vector3.Distance(graph[nodeId].position, neighborNode.position);
 
                     bool isNewPath = false;
 
@@ -133,6 +139,8 @@ public class AStar
                         neighborNode.f = neighborNode.g + neighborNode.h;
                         neighborNode.predecessorID = graphNodeIndex;
                     }
+
+                    graph[neighborIDs[i]] = neighborNode;
                 }
             }
         }
@@ -279,16 +287,16 @@ public class AStar
     {
         return m_umap.ContainsKey(_position);
     }
-    private List<Vector3> BuildPath(AStarNode _node)
+    private List<Vector3> BuildPath(int _nodeId)
     {
         List<Vector3> path = new List<Vector3>();
 
-        AStarNode currentNode = _node;
+        int currentNodeId = _nodeId;
 
-        while (currentNode.predecessorID != -1)
+        while (graph[currentNodeId].predecessorID != -1)
         {
-            path.Insert(0, currentNode.position);
-            currentNode = graph[currentNode.predecessorID];
+            path.Insert(0, graph[currentNodeId].position);
+            currentNodeId = graph[currentNodeId].predecessorID;
         }
 
         return path;
