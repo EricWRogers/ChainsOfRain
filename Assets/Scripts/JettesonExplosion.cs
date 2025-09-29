@@ -39,6 +39,9 @@ public class JettesonExplosion : MonoBehaviour
 
     void OnTriggerEnter(Collider other)
     {
+        if (other.gameObject.tag == "Player")
+            return;
+            
         time = 0f;
         if (collideCount > 0) return;
         collideCount += 1;

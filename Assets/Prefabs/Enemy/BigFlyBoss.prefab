@@ -239,7 +239,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-  maxHealth: 5
+  maxHealth: 30
   currentHealth: 0
   defaultToMaxHealth: 1
 --- !u!114 &7827601757241167219
