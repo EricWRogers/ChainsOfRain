@@ -74,7 +74,7 @@ public class PlayerMovement : MovementEngine
     [Header("Crouch")]
     public KeyCode crouchKey = KeyCode.LeftControl;
     public bool isCrouching;
-    public float crouchSpeed;
+    public float crouchSpeed = 5f;
     private bool m_requestedCrouch = false;
     public float crouchHeight = 1.5f;
     public bool canCrouch = true;
@@ -288,10 +288,6 @@ public class PlayerMovement : MovementEngine
     }
     void HandleRegularMovement()
     {
-        if (lasPos - transform.position == Vector3.zero && mouseInput.magnitude > 0.001)
-        {
-            // transform.position = MovePlayer(new Vector3(0, 0.2f, 0));
-        }
         if (isTakingKB)
         {
             HandleKnockBack();
@@ -380,13 +376,14 @@ public class PlayerMovement : MovementEngine
         else
         {
             finalDir = inputDir * speed;
-
-
         }
 
         m_velocity += finalDir;
         // Apply movement
         //transform.position = MovePlayer(finalDir * Time.deltaTime);
+
+
+
         transform.position = MovePlayer(m_velocity * Time.deltaTime);
         transform.rotation = new Quaternion(transform.rotation.x, cam.transform.rotation.y, transform.rotation.z, cam.rotation.w);
         m_velocity = new Vector3(0, m_velocity.y, 0);

@@ -4,6 +4,7 @@ using UnityEngine.InputSystem;
 using System.Linq;
 using System.Collections.Generic;
 using System.IO.MemoryMappedFiles;
+using System;
 
 
 namespace KinematicCharacterControler
@@ -25,7 +26,7 @@ namespace KinematicCharacterControler
         [Header("Ground Checks")]
         public float defaultGroundCheck = 0.25f;
         public float defaultGroundedDistance = 0.05f;
-        public float snapDownDistance = 0.45f; 
+        public float snapDownDistance = 0.45f;
         public bool shouldSnapDown = true; // Should snap to ground
         private Vector3 prevPos;
 
@@ -39,11 +40,12 @@ namespace KinematicCharacterControler
 
         public Vector3 MovePlayer(Vector3 movement)
         {
+            CheckIfGrounded(out _);
 
             Vector3 position = transform.position;
             Quaternion rotation = transform.rotation;
 
-            Vector3 remaining = movement;
+            Vector3 remaining =  movement;
 
             int bounces = 0;
 
@@ -64,6 +66,11 @@ namespace KinematicCharacterControler
                 // If we are overlapping with something, just exit.
                 if (hit.distance == 0)
                 {
+                     Debug.LogWarning("Overlapping with " + hit.transform.gameObject.name);
+                    position += hit.normal * skinWidth * 2;  // Push out
+                    remaining *= 0.5f;  // Reduce remaining movement
+                    bounces++;
+                    continue;  // Try againDebug.Log("Overlaping COllider" + hit.transform.gameObject.name);
                     break;
                 }
 
@@ -85,8 +92,10 @@ namespace KinematicCharacterControler
 
                 // Normalize angle between to be between 0 and 1
                 // 0 means no angle, 1 means 90 degree angle
-                angleBetween = Mathf.Min(60f, Mathf.Abs(angleBetween));
-                float normalizedAngle = angleBetween / 60f;
+                angleBetween = Mathf.Min(60, Mathf.Abs(angleBetween));
+                Debug.Log("Angle Betwee: " + angleBetween);
+                float normalizedAngle = angleBetween / 60;
+                Debug.Log("Normalized Angle: " + normalizedAngle);
 
                 // Reduce the remaining movement by the remaining movement that ocurred
                 remaining *= Mathf.Pow(1 - normalizedAngle, m_anglePower) * 0.9f + 0.1f;
@@ -109,10 +118,10 @@ namespace KinematicCharacterControler
                 bounces++;
             }
 
-            
+
             if (prevPos == transform.position && movement.magnitude > 0)
             {
-                TryUnstuck();
+                //TryUnstuck();
             }
             prevPos = position;
             return position;
@@ -151,9 +160,9 @@ namespace KinematicCharacterControler
             {
                 transform.position = -transform.up * 0.2f;
             }
-         
+
         }
-    
+
 
         public bool CheckIfGrounded(out RaycastHit _hit)
         {
@@ -179,7 +188,7 @@ namespace KinematicCharacterControler
 
         public bool CastSelf(Vector3 pos, Quaternion rot, Vector3 dir, float dist, out RaycastHit hit)
         {
-           
+
             Vector3 center = rot * capsule.center + pos;
             float radius = capsule.radius;
             float height = capsule.height;
@@ -188,7 +197,7 @@ namespace KinematicCharacterControler
             Vector3 bottom = center + rot * Vector3.down * (height / 2 - radius);
             Vector3 top = center + rot * Vector3.up * (height / 2 - radius);
 
-            IEnumerable<RaycastHit> hits = Physics.CapsuleCastAll( top, bottom, radius, dir, dist, collisionLayers, QueryTriggerInteraction.Ignore);
+            IEnumerable<RaycastHit> hits = Physics.CapsuleCastAll(top, bottom, radius, dir, dist, collisionLayers, QueryTriggerInteraction.Ignore);
             bool didHit = hits.Count() > 0;
 
             // Find the closest objects hit
@@ -214,11 +223,15 @@ namespace KinematicCharacterControler
             if (closeToGround && groundHit.distance > 0)
             {
                 // Snap the player down the distance they are from the ground
-                transform.position += Vector3.down * (groundHit.distance - 0.001f);
+                transform.position += Vector3.down * (groundHit.distance - 0.001f * 2);
             }
         }
-       [System.Serializable]
-        public struct GroundedState
+        
+
+    }
+
+        [Serializable]
+            public struct GroundedState
         {
             public float distToGround;
             public bool isGrounded;
@@ -236,5 +249,4 @@ namespace KinematicCharacterControler
             }
 
         }
-    }
 }
