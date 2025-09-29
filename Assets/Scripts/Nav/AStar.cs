@@ -1,5 +1,8 @@
+using System;
+using System.Threading;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 
 [System.Serializable]
 public class AStar
@@ -9,9 +12,90 @@ public class AStar
     public List<AStarNode> graph;
     private Dictionary<Vector3, int> m_umap = new Dictionary<Vector3, int>();
 
+    private Queue<AStarRequest> requestQueue = new Queue<AStarRequest>();
+    private Queue<AStarResponse> responseQueue = new Queue<AStarResponse>();
+    private Thread workerThread;
+    private bool working = false;
+
     // cache
     private List<int> searchingSet = new List<int>();
     private List<int> hasSearchedSet = new List<int>();
+
+    public void StartWorker()
+    {
+        if (working)
+            return;
+
+        working = true;
+        
+        ThreadStart threadStart = delegate
+        {
+            while (true)
+            {
+                AStarRequest request;
+
+                lock (requestQueue)
+                {
+                    if (requestQueue.Count == 0)
+                        continue;
+
+                    request = requestQueue.Dequeue();
+                }
+
+                List<Vector3> payload = GetPath(request.idFrom, request.idTo);
+
+                AStarResponse response = new AStarResponse(request.callback, payload);
+
+                lock (responseQueue)
+                {
+                    responseQueue.Enqueue(response);
+                }
+            }
+        };
+
+        workerThread = new Thread(threadStart);
+        workerThread.Start();
+    }
+
+    public void RequestPath(Action<List<Vector3>> _callback, int _idFrom, int _idTo)
+    {
+        Debug.Log("ENQUEUE");
+        //AStarRequest request = new AStarRequest(_callback, _idFrom, _idTo);
+        //requestQueue.Enqueue(request);
+
+        ThreadStart threadStart = delegate
+        {
+            lock (requestQueue)
+            {
+                AStarRequest request = new AStarRequest(_callback, _idFrom, _idTo);
+                requestQueue.Enqueue(request);
+            }
+        };
+
+        new Thread(threadStart).Start();
+
+        working = true;
+    }
+
+    public void UpdateResponseQueue()
+    {
+        Debug.Log("UpdateResponseQueue: " + responseQueue.Count + " " + requestQueue.Count);
+        for (int i = 0; i < responseQueue.Count; i++)
+        {
+            Debug.Log("DEQUEUE");
+            AStarResponse response = responseQueue.Dequeue();
+            response.callback(response.parameter);
+        }
+    }
+
+    public void StopWorker()
+    {
+        if (workerThread.IsAlive)
+        {
+            workerThread.Abort();
+        }
+    }
+
     public void ResetGraph()
     {
         graph.Clear();
@@ -99,7 +183,7 @@ public class AStar
             {
                 //if (graph.Count <= neighborIDs[i])
                 //    continue;
-                
+
                 AStarNode neighborNode = graph[neighborIDs[i]];
 
                 if (hasSearchedSet.Contains(neighborIDs[i]) == false)
@@ -293,5 +377,31 @@ public class AStar
         }
 
         return path;
+    }
+}
+
+struct AStarRequest
+{
+    public readonly Action<List<Vector3>> callback;
+    public readonly int idFrom;
+    public readonly int idTo;
+
+    public AStarRequest(Action<List<Vector3>> _callback, int _idFrom, int _idTo)
+    {
+        callback = _callback;
+        idFrom = _idFrom;
+        idTo = _idTo;
+    }
+}
+
+struct AStarResponse
+{
+    public readonly Action<List<Vector3>> callback;
+    public readonly List<Vector3> parameter;
+
+    public AStarResponse(Action<List<Vector3>> _callback, List<Vector3> _parameter)
+    {
+        callback = _callback;
+        parameter = _parameter;
     }
 }

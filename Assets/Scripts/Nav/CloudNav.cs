@@ -41,6 +41,17 @@ public class CloudNav : MonoBehaviour
     void Start()
     {
         Debug.Log("AStar graph Count: " + aStar.Count);
+        aStar.StartWorker();
+    }
+
+    void FixedUpdate()
+    {
+        aStar.UpdateResponseQueue();
+    }
+
+    void OnDestroy()
+    {
+        aStar.StopWorker();
     }
 
     public void SpawnCloud()

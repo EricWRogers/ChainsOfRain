@@ -28,7 +28,7 @@ public class FlyGun : MonoBehaviour
     void Start()
     {
         m_player = PlayerMovement.instance.gameObject;
-        GetNewPath();
+        RequestNewPath();
     }
 
     // Update is called once per frame
@@ -36,7 +36,7 @@ public class FlyGun : MonoBehaviour
     {
         if (path.Count == 0)
         {
-            GetNewPath();
+            //GetNewPath();
             return;
         }
 
@@ -59,8 +59,8 @@ public class FlyGun : MonoBehaviour
             {
                 targetIndex++;
 
-                GetNewPath();
-                    return;
+                RequestNewPath();
+                return;
             }
 
             Vector3 direction = (path[targetIndex] - transform.position).normalized;
@@ -95,16 +95,21 @@ public class FlyGun : MonoBehaviour
 
     }
 
-    void GetNewPath()
+    void RequestNewPath()
     {
-        path.Clear();
-
-        targetIndex = 0;
-
         startId = cloudNav.aStar.GetClosestPoint(transform.position);
         endId = cloudNav.aStar.GetClosestPoint(m_player.transform.position);
 
-        path = cloudNav.aStar.GetPath(startId, endId);
+        cloudNav.aStar.RequestPath(GetNewPath, startId, endId);
+    }
+
+    void GetNewPath(List<Vector3> _path)
+    {
+        path.Clear();
+
+        targetIndex = 0;        
+
+        path = _path;
     }
 }
 
