@@ -3,12 +3,22 @@ using UnityEngine;
 
 
 [System.Serializable]
-public class AStarNode
+public struct AStarNode
 {
     public Vector3 position;
-    public float g = 0.0f;
-    public float h = 0.0f;
-    public float f = 0.0f;
-    public int predecessorID = -1;
-    public List<int> adjacentPointIDs = new List<int>();
+    public float g;
+    public float h;
+    public float f;
+    public int predecessorID;
+    public List<int> adjacentPointIDs;
+
+    public AStarNode(Vector3 _position)
+    {
+        position = _position;
+        g = 0f;
+        h = 0f;
+        f = 0f;
+        predecessorID = -1;
+        adjacentPointIDs = new List<int>();
+    }
 }

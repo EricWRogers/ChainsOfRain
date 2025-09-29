@@ -29,8 +29,7 @@ public class AStar
     public int AddPoint(Vector3 _position)
     {
         int id = graph.Count;
-        graph.Add(new AStarNode());
-        graph[id].position = _position;
+        graph.Add(new AStarNode(_position));
         m_umap.Add(_position, id);
         return id;
     }
@@ -174,7 +173,7 @@ public class AStar
     }
     public void RemovePoint(int _id)
     {
-        if (graph.Count <= _id && _id < 0)
+        if (_id < 0 || _id >= graph.Count)
         {
             Debug.LogError("AStar::RemovePoint id has not been added to the graph.");
             return;

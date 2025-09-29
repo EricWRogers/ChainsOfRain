@@ -32,6 +32,7 @@ public class CloudNav : MonoBehaviour
     public int xCount = 50;
     public int yCount = 10;
     public int zCount = 50;
+    
 
     void Awake()
     {
@@ -87,6 +88,9 @@ public class CloudNav : MonoBehaviour
                 for (int z = -halfZCount; z < halfZCount; z++)
                 {
                     int id = aStar.GetPointByPosition(new Vector3(x, y, z));
+
+                    if (id == -1)
+                        continue;
 
                     int forward = aStar.GetPointByPosition(new Vector3(x, y, z + 1));
 
@@ -215,4 +219,6 @@ public class CloudNav : MonoBehaviour
                         transform);
         }
     }
+
+    
 }
