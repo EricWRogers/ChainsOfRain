@@ -75,9 +75,10 @@ MonoBehaviour:
       m_Calls: []
   mask:
     serializedVersion: 2
-    m_Bits: 128
+    m_Bits: 1152
   tags:
   - Enemy
+  - Box
 --- !u!1 &6973210821628586716
 GameObject:
   m_ObjectHideFlags: 0
