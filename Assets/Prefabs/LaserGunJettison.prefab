@@ -137,7 +137,7 @@ BoxCollider:
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
   m_ProvidesContacts: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 3
   m_Size: {x: 11.698097, y: 15.754646, z: 42.430283}
   m_Center: {x: -0.000030517578, y: 0, z: 0.000030517578}
@@ -215,6 +215,8 @@ GameObject:
   m_Component:
   - component: {fileID: 5288380992688169751}
   - component: {fileID: 1054903874512045420}
+  - component: {fileID: 879428180401687331}
+  - component: {fileID: 1411089302603135412}
   m_Layer: 0
   m_Name: LaserGunJettison
   m_TagString: Untagged
@@ -265,6 +267,47 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &879428180401687331
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8373668522671082776}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e00b1360970c67111b5bebcb41402618, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  explosion: {fileID: 0}
+  raidusExplosion: 5
+  blownUp: 0
+  time: 0
+  timeToDestory: 1.5
+  damage: 10
+  collideCount: 0
+  trigger: {fileID: 1411089302603135412}
+--- !u!65 &1411089302603135412
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8373668522671082776}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 576
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.045932278, y: 0.04496923, z: 0.50091654}
+  m_Center: {x: 0.06788918, y: 0.26655543, z: 0.11299484}
 --- !u!1 &8426530996343349051
 GameObject:
   m_ObjectHideFlags: 0
