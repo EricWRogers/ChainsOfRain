@@ -466,6 +466,12 @@ public class PlayerMovement : MovementEngine
             ciniCamera.Lens.Dutch = -10;
         }
 
+        if(Input.GetKeyDown(KeyCode.Space))
+        {
+            m_velocity = wallNormal * jumpForce + Vector3.up * jumpForce;
+            ExitWallRide();
+            return;
+        }
         Vector3 wallDirection = Vector3.Cross(wallNormal, Vector3.up).normalized;
 
         if (Vector3.Dot(wallDirection, transform.forward) < 0)
