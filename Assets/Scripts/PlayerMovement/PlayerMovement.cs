@@ -3,6 +3,7 @@ using UnityEngine;
 using KinematicCharacterControler;
 
 
+
 public class PlayerMovement : MovementEngine
 {
     public static PlayerMovement instance;
@@ -10,13 +11,13 @@ public class PlayerMovement : MovementEngine
 
     [Header("Movement")]
     public GameObject speedLines;
-    public float speed = 5f;
+    public float walkSpeed = 5f;
     public float runSpeed = 10f;
+    private float m_speed  = 5F;
     public float sprintFOV = 70f;
     public float walkFOV = 60f;
     private float currFOV = 60f;
     public bool canSprint = true;
-    //public KeyCode sprintKey = KeyCode.LeftShift;
     public float rotationSpeed = 5f;
     public float maxWalkAngle = 60f;
     public GameObject player;
@@ -31,7 +32,7 @@ public class PlayerMovement : MovementEngine
 
 
     [Header("Wall Ride Settings")]
-    public float wallRideSpeed = 8f;
+    public float wallRideSpeed = 12f;
     public float wallRideGravity = -1f;
     public float wallCheckDistance = 1f;
     public float wallStickForce = 5f;
@@ -39,7 +40,7 @@ public class PlayerMovement : MovementEngine
     public bool canWallRide = true;
     public LayerMask wallLayer;
 
-    private bool isWallRiding = false;
+    private bool m_isWallRiding = false;
     private Vector3 m_wallNormal = Vector3.zero;
     private Vector3 m_wallRunDir = Vector3.zero;
     private float wallRideTimer;
@@ -76,6 +77,7 @@ public class PlayerMovement : MovementEngine
     private Vector3 m_velocity;
     public bool lockCursor = true;
     private Vector2 mouseInput;
+    private bool m_prevGrounded = false;
 
     [Header("Jump Settings")]
     public bool canJump = true;
@@ -89,6 +91,7 @@ public class PlayerMovement : MovementEngine
     private float m_timeSinceLastJump = 0.0f;
     private bool m_jumpInputPressed = false;
     private float m_jumpBufferTime = 0.25f;
+    private bool m_Jumping = false;
 
 
     [Header("Sliding")]
@@ -161,29 +164,58 @@ public class PlayerMovement : MovementEngine
 
     void Update()
     {
-        //HandleCursor();
-        HandleInput();
+        //HandleCursor();\
+        CheckIfGrounded(out _);
+        GetInput();
         HandleFOV();
-        HandleRegularMovement();
+
+
+
+        m_prevGrounded = groundedState.isGrounded;
+        
     }
-    void HandleCursor()
+
+    void FixedUpdate()
     {
-        if (lockCursor)
+        Move();
+        if (groundedState.isGrounded)
         {
-            Cursor.lockState = CursorLockMode.Locked;
-            Cursor.visible = false;
+            jumpCount = maxJumpCount;
+        }
+
+
+    }
+
+
+
+    void Move()
+    {
+        bool wasWallRunning = m_isWallRiding;
+
+        if (isTakingKB)
+        {
+            HandleKnockBack();
+        }
+        else if (WallRun())
+        {
+
+        }
+        else if(m_isDashing)
+        {
+            HandleDashing(Time.deltaTime);
         }
         else
-        {
-            Cursor.lockState = CursorLockMode.None;
-            Cursor.visible = false;
-        }
+                {
+                    HandleRegularMovement();
+                }
+
+        transform.position = MovePlayer(m_velocity * Time.deltaTime);
+
     }
 
-
-     void HandleInput()
+    void GetInput()
     {
-        
+     
         mouseInput = new Vector2(m_inputActions.Move.ReadValue<Vector2>().x, m_inputActions.Move.ReadValue<Vector2>().y);
         m_jumpInputPressed = m_inputActions.Jump.WasPressedThisFrame();
 
@@ -197,7 +229,9 @@ public class PlayerMovement : MovementEngine
         {
             transform.position = spwanPos;
         }
-
+        
+        m_speed = m_inputActions.Sprint.IsPressed() ? runSpeed : walkSpeed;
+    
 
         if (m_inputActions.Dash.WasPressedThisFrame() && m_dashCooldownTimer <= 0f && !m_isDashing && dashForce > 0f)
         {
@@ -213,51 +247,22 @@ public class PlayerMovement : MovementEngine
             m_dashCooldownTimer = dashCoolDown;
 
         }
+        
 
     }
 
 
-    
-
     void HandleRegularMovement()
     {
-        if (isTakingKB)
+        if (ciniCamera.Lens.Dutch != 0)
         {
-            HandleKnockBack();
-            return;
-        }
-
-        if (m_isDashing)
-        {
-            HandleDashing(Time.deltaTime);
-            return;
-        }
-        else if (isWallRiding)
-        {
-            HandleWallRide();
-            return;
-        }
-        else if (isSliding)
-        {
-            HandleSliding();
-            return;
-        }
-
-        ciniCamera.Lens.Dutch = 0f;
-
-
-        if (!isWallRiding && CheckForWall(transform.position, wallCheckDistance, out RaycastHit _wallHit))
-        {
-            if (m_jumpInputPressed && canWallRide)
-            {
-                StartWallRide(_wallHit);
-            }
+            ciniCamera.Lens.Dutch = Mathf.Lerp(ciniCamera.Lens.Dutch, 0f, Time.deltaTime * 8f);
         }
 
 
 
         Vector3 inputDir = transform.TransformDirection(new Vector3(mouseInput.x, 0, mouseInput.y));
-
+       
 
         bool onGround = CheckIfGrounded(out RaycastHit groundHit) && m_velocity.y <= 0.0f;
         bool falling = !(onGround && maxWalkAngle >= Vector3.Angle(Vector3.up, groundHit.normal));
@@ -294,24 +299,10 @@ public class PlayerMovement : MovementEngine
             m_timeSinceLastJump += Time.deltaTime;
         }
 
-        Vector3 finalDir;
 
-        if (m_inputActions.Sprint.IsPressed() && canSprint)
-        {
-            finalDir = inputDir * runSpeed;
 
-        }
-        else if (isCrouching)
-        {
-            finalDir = inputDir * crouchSpeed;
+        m_velocity += inputDir * m_speed;
 
-        }
-        else
-        {
-            finalDir = inputDir * speed;
-        }
-
-        m_velocity += finalDir;
         // Apply movement
         //transform.position = MovePlayer(finalDir * Time.deltaTime);
 
@@ -346,8 +337,73 @@ public class PlayerMovement : MovementEngine
         {
             isTakingKB = false;
         }
+        
     }
 
+
+    bool WallRun()
+    {   
+        if(m_isWallRiding && m_inputActions.Jump.WasPressedThisFrame())
+        {
+            m_velocity = m_wallNormal * jumpForce + Vector3.up * jumpForce;
+            m_isWallRiding = false;
+            jumpCount = maxJumpCount;
+            return false;
+        }
+
+        Vector3 inputDir = new Vector3(mouseInput.x, 0, mouseInput.y);
+
+        Vector3 moveWorldDir = transform.TransformDirection(inputDir);
+
+        if (inputDir.z > 0)
+        {
+            if (!m_isWallRiding && m_inputActions.Jump.WasPressedThisFrame() && !groundedState.isGrounded)
+            {
+                Vector3 localDir = new Vector3(-1, 0, inputDir.z);
+                Vector3 raycastDir1 = transform.TransformDirection(localDir);
+
+                localDir = new Vector3(1, 0, inputDir.z);
+
+                Vector3 raycastDir2 = transform.TransformDirection(localDir);
+
+                RaycastHit hit;
+                if (Physics.Raycast(transform.position, raycastDir1, out hit, wallCheckDistance, wallLayer) ||
+                     Physics.Raycast(transform.position, raycastDir2, out hit, wallCheckDistance, wallLayer))
+                {
+                    m_isWallRiding = true;
+                    m_wallNormal = hit.normal;
+                }
+
+            }
+
+            
+            
+
+        }
+
+        if (m_isWallRiding)
+        {
+            RaycastHit hit;
+            if (Physics.Raycast(transform.position, -m_wallNormal, out hit, wallCheckDistance, wallLayer))
+            {
+                m_wallNormal = hit.normal;
+                Vector3 wallNormalNoY = new Vector3(m_wallNormal.x, 0, m_wallNormal.z);
+                m_wallRunDir = Vector3.Cross(wallNormalNoY, Vector3.up).normalized;
+                if (Vector3.Dot(m_wallRunDir, transform.forward) < 0)
+                    m_wallRunDir *= -1;
+                
+;
+                m_velocity = m_wallRunDir * wallRideSpeed;
+                ciniCamera.Lens.Dutch = Mathf.Lerp(ciniCamera.Lens.Dutch, (Vector3.Dot(transform.right, m_wallNormal) > 0) ? -10f : 10f, Time.deltaTime * 8f);
+                return true;
+            }
+            else
+                m_isWallRiding = false;
+        }
+
+        m_isWallRiding = false;
+        return false;
+    }
     void HandleFOV()
     {
         float targetFOV = walkFOV;
@@ -367,15 +423,8 @@ public class PlayerMovement : MovementEngine
         ciniCamera.Lens.FieldOfView = currFOV;
     }
 
-    void StartWallRide(RaycastHit _wallHit)
-    {
-        isWallRiding = true;
-        m_wallNormal = _wallHit.normal;
-        wallRideTimer = maxWallRideTime;
-        m_velocity.y = 0;
-    }
 
-    void HandleWallRide()
+    /*void HandleWallRide()
     {
         if (CheckForWall(transform.position, wallCheckDistance, out RaycastHit hit))
         {
@@ -421,12 +470,7 @@ public class PlayerMovement : MovementEngine
         }
     }
 
-    void ExitWallRide()
-    {
-        isWallRiding = false;
-        ciniCamera.Lens.Dutch = 0;
-
-    }
+*/
 
 
     bool CheckForWall(Vector3 _pos, float _dist, out RaycastHit _hit)
@@ -644,34 +688,37 @@ public class PlayerMovement : MovementEngine
             */
 
 
-        void ExitSlide()
-        {
-            if (!isSliding) return;
-
-            isSliding = false;
-
-
-            capsule.height = capsuleHeight;
-            capsule.center = Vector3.zero;
-
-
-            if (currentSlideSpeed > speed)
-            {
-                float momentumKeep = 0.8f;
-                Vector3 exitVelocity = m_slideDirection * currentSlideSpeed * momentumKeep;
-
-
-                m_velocity = new Vector3(exitVelocity.x, m_velocity.y, exitVelocity.z);
-            }
-
-
-            // Reset slide state
-            currentSlideSpeed = 0f;
-            slideVelocity = Vector3.zero;
-            wasGroundedLastFrame = false;
-        }
+        //void ExitSlide()
+        //{
+        //    if (!isSliding) return;
+//
+        //    isSliding = false;
+//
+//
+        //    capsule.height = capsuleHeight;
+        //    capsule.center = Vector3.zero;
+//
+//
+        //    if (currentSlideSpeed > m_sp)
+        //    {
+        //        float momentumKeep = 0.8f;
+        //        Vector3 exitVelocity = m_slideDirection * currentSlideSpeed * momentumKeep;
+//
+//
+        //        m_velocity = new Vector3(exitVelocity.x, m_velocity.y, exitVelocity.z);
+        //    }
+//
+//
+        //    // Reset slide state
+        //    currentSlideSpeed = 0f;
+        //    slideVelocity = Vector3.zero;
+        //    wasGroundedLastFrame = false;
+        //}
 
     }
 
-
+    void OnDestroy()
+    {
+        m_inputActions.Disable();
+    }
 }
