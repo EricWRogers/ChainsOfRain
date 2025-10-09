@@ -13,6 +13,11 @@ public class PickupGun : MonoBehaviour
     public float heightOffset = 1.0f;
     public LayerMask mask;
 
+    public bool doRayCast = true;
+    public float timeForce = 1.0f;
+    private float rayLength = 1.25f;
+    private Timer timer;
+
 
     Vector3 startPos;
     private void OnTriggerEnter(Collider other)
@@ -33,25 +38,49 @@ public class PickupGun : MonoBehaviour
         PlayerMovement.instance.gameObject.GetComponent<Health>().Heal(health);
     }
 
-    
+    // private void Awake()
+    // {
+    //     RaycastHit hit;
+    //     if (Physics.Raycast(transform.position, Vector3.down, out hit, 1000.0f, (int)mask))
+    //     {
+    //         startPos = hit.point;
+    //     }
+    //     else
+    //     {
+    //         startPos = transform.position;
+    //     }
+    // }
 
-    private void Awake()
+    private void Start()
     {
-        RaycastHit hit;
-        if (Physics.Raycast(transform.position, Vector3.down, out hit, 1000.0f, (int)mask))
-        {
-            startPos = hit.point;
-        }
-        else
-        {
-            startPos = transform.position;
-        }
+        timer = gameObject.GetComponent<Timer>();
     }
+
     private void Update()
     {
-        transform.position = (Vector3.up * heightOffset) + startPos + Vector3.up * Mathf.Sin(Time.time * Mathf.PI * frequency) * amplitude; //Hover
+        // transform.position = (Vector3.up * heightOffset) + startPos + Vector3.up * Mathf.Sin(Time.time * Mathf.PI * frequency) * amplitude; //Hover
+        // transform.Rotate(0f, spinSpeed * Time.deltaTime, 0f); //Spin
+        
+        Debug.DrawRay(transform.position, Vector3.down * rayLength, Color.green);
+        if(doRayCast)
+        {
+            RaycastHit hit;
+            if (Physics.Raycast(transform.position, Vector3.down, out hit, rayLength, (int)mask))
+            {
+                //start timer
+                timer.StartTimer();
+                HoverAndSpin();
+            }
+            else
+            {
+                transform.position -= new Vector3(transform.position.x, transform.position.y - Time.deltaTime * timeForce, transform.position.z);
+            }
+        }
+    }
 
-
-        transform.Rotate(0f, spinSpeed * Time.deltaTime, 0f); //SPin
+    private void HoverAndSpin()
+    {
+        transform.position = (Vector3.up * heightOffset) + Vector3.up * Mathf.Sin(Time.time * Mathf.PI * frequency) * amplitude;
+        transform.Rotate(0f, spinSpeed * Time.deltaTime, 0f);
     }
 }
