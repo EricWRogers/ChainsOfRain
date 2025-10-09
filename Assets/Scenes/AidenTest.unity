@@ -171,6 +171,10 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 4289133478717977854, guid: f6a5952614fe9554ba6950a7e1a0705e, type: 3}
+      propertyPath: doRayCast
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5985681702793134635, guid: f6a5952614fe9554ba6950a7e1a0705e, type: 3}
       propertyPath: m_LocalPosition.x
       value: -43.07
