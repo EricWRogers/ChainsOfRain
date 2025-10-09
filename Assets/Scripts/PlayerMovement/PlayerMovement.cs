@@ -162,7 +162,6 @@ public class PlayerMovement : MovementEngine
     void Update()
     {
         //HandleCursor();
-        UpdateGrindInput();
         HandleInput();
         HandleFOV();
         HandleRegularMovement();
@@ -181,10 +180,6 @@ public class PlayerMovement : MovementEngine
         }
     }
 
-    void UpdateGrindInput()
-    {
-        grindInputHeld = Input.GetKey(grindKey);
-    }
 
      void HandleInput()
     {
@@ -301,7 +296,7 @@ public class PlayerMovement : MovementEngine
 
         Vector3 finalDir;
 
-        if (Input.GetKey(sprintKey))
+        if (m_inputActions.Sprint.IsPressed() && canSprint)
         {
             finalDir = inputDir * runSpeed;
 
@@ -375,7 +370,7 @@ public class PlayerMovement : MovementEngine
     void StartWallRide(RaycastHit _wallHit)
     {
         isWallRiding = true;
-        wallNormal = _wallHit.normal;
+        m_wallNormal = _wallHit.normal;
         wallRideTimer = maxWallRideTime;
         m_velocity.y = 0;
     }
@@ -384,7 +379,7 @@ public class PlayerMovement : MovementEngine
     {
         if (CheckForWall(transform.position, wallCheckDistance, out RaycastHit hit))
         {
-            wallNormal = hit.normal;
+            m_wallNormal = hit.normal;
         }
         else
         {
@@ -402,11 +397,11 @@ public class PlayerMovement : MovementEngine
 
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            m_velocity = wallNormal * jumpForce + Vector3.up * jumpForce;
+            m_velocity = m_wallNormal * jumpForce + Vector3.up * jumpForce;
             ExitWallRide();
             return;
         }
-        Vector3 wallDirection = Vector3.Cross(wallNormal, Vector3.up).normalized;
+        Vector3 wallDirection = Vector3.Cross(m_wallNormal, Vector3.up).normalized;
 
         if (Vector3.Dot(wallDirection, transform.forward) < 0)
             wallDirection *= -1;
@@ -676,28 +671,6 @@ public class PlayerMovement : MovementEngine
             wasGroundedLastFrame = false;
         }
 
-
-        // RAIL GRINDING SYSTEM
-    
-
-        // Visualization
-        void OnDrawGizmos()
-        {
-            if (isGrinding && currentRail != null)
-            {
-                Gizmos.color = Color.yellow;
-                Vector3 railPos = currentRail.GetPointOnRail(railProgress);
-                Gizmos.DrawWireSphere(railPos, 0.5f);
-
-                Vector3 railDir = currentRail.GetDirectionOnRail(railProgress) * m_railDir;
-                Gizmos.DrawRay(railPos, railDir * 2f);
-            }
-
-            Gizmos.color = Color.blue;
-
-            Gizmos.DrawWireSphere(m_railDetectionPoint.position, railDetectionRadius);
-
-        }
     }
 
 
