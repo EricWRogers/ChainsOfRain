@@ -40,7 +40,7 @@ public class PlayerMovement : MovementEngine
     public bool canWallRide = true;
     public LayerMask wallLayer;
 
-    private bool m_isWallRiding = false;
+    [SerializeField, ReadOnly] private bool m_isWallRiding = false;
     private Vector3 m_wallNormal = Vector3.zero;
     private Vector3 m_wallRunDir = Vector3.zero;
     private float wallRideTimer;
@@ -205,9 +205,9 @@ public class PlayerMovement : MovementEngine
             HandleDashing(Time.deltaTime);
         }
         else
-                {
-                    HandleRegularMovement();
-                }
+            {
+                HandleRegularMovement();
+            }
 
         transform.position = MovePlayer(m_velocity * Time.deltaTime);
 
@@ -272,6 +272,7 @@ public class PlayerMovement : MovementEngine
         {
             m_velocity += gravity * Time.deltaTime;
             m_elapsedFalling += Time.deltaTime;
+            Debug.Log(m_velocity);
         }
         else if (onGround && !isSliding)
         {
@@ -339,43 +340,33 @@ public class PlayerMovement : MovementEngine
 
 
     bool WallRun()
-    {   
-        if(m_isWallRiding && m_inputActions.Jump.WasPressedThisFrame())
+    {
+        
+        if (m_isWallRiding && m_inputActions.Jump.WasPressedThisFrame() || wallRideTimer > 2f)
         {
             m_velocity = m_wallNormal * jumpForce + Vector3.up * jumpForce;
             m_isWallRiding = false;
             jumpCount = maxJumpCount;
+            wallRideTimer = 0f;
             return false;
         }
 
         Vector3 inputDir = new Vector3(mouseInput.x, 0, mouseInput.y);
 
-        Vector3 moveWorldDir = transform.TransformDirection(inputDir);
-
         if (inputDir.z > 0)
         {
-            if (!m_isWallRiding && m_inputActions.Jump.WasPressedThisFrame() && !groundedState.isGrounded)
+            if (!m_isWallRiding  && !groundedState.isGrounded)
             {
-                Vector3 localDir = new Vector3(-1, 0, inputDir.z);
-                Vector3 raycastDir1 = transform.TransformDirection(localDir);
-
-                localDir = new Vector3(1, 0, inputDir.z);
-
-                Vector3 raycastDir2 = transform.TransformDirection(localDir);
 
                 RaycastHit hit;
-                if (Physics.Raycast(transform.position, raycastDir1, out hit, wallCheckDistance, wallLayer) ||
-                     Physics.Raycast(transform.position, raycastDir2, out hit, wallCheckDistance, wallLayer))
+                if (Physics.Raycast(transform.position, transform.right, out hit, wallCheckDistance, wallLayer) ||
+                     Physics.Raycast(transform.position, -transform.right, out hit, wallCheckDistance, wallLayer))
                 {
                     m_isWallRiding = true;
                     m_wallNormal = hit.normal;
+                    wallRideTimer = 0f;
                 }
-
             }
-
-            
-            
-
         }
 
         if (m_isWallRiding)
@@ -391,10 +382,14 @@ public class PlayerMovement : MovementEngine
                 Debug.Log("Wall Running");
                 m_velocity = m_wallRunDir * wallRideSpeed;
                 ciniCamera.Lens.Dutch = Mathf.Lerp(ciniCamera.Lens.Dutch, (Vector3.Dot(transform.right, m_wallNormal) > 0) ? -10f : 10f, Time.deltaTime * 8f);
+                wallRideTimer += Time.deltaTime;
                 return true;
             }
             else
                 m_isWallRiding = false;
+                m_velocity = m_wallNormal * jumpForce + Vector3.up * jumpForce;
+                jumpCount = maxJumpCount;
+                wallRideTimer = 0f;
         }
 
         m_isWallRiding = false;
@@ -418,7 +413,6 @@ public class PlayerMovement : MovementEngine
 
         ciniCamera.Lens.FieldOfView = currFOV;
     }
-
 
     /*void HandleWallRide()
     {
@@ -468,16 +462,6 @@ public class PlayerMovement : MovementEngine
 
 */
 
-
-    bool CheckForWall(Vector3 _pos, float _dist, out RaycastHit _hit)
-    {
-        if (Physics.Raycast(_pos, transform.right, out _hit, wallCheckDistance, wallLayer))
-            return true;
-        if (Physics.Raycast(_pos, -transform.right, out _hit, wallCheckDistance, wallLayer))
-            return true;
-
-        return false;
-    }
     void HandleDashing(float _delta)
     {
         m_currTime += _delta;
