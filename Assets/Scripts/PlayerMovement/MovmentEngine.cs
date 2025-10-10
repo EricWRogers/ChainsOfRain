@@ -66,12 +66,10 @@ namespace KinematicCharacterControler
                 // If we are overlapping with something, just exit.
                 if (hit.distance == 0)
                 {
-                     Debug.LogWarning("Overlapping with " + hit.transform.gameObject.name);
                     position += hit.normal * skinWidth * 2;  // Push out
                     remaining *= 0.5f;  // Reduce remaining movement
                     bounces++;
-                    continue;  // Try againDebug.Log("Overlaping COllider" + hit.transform.gameObject.name);
-                    break;
+                    continue;  // Try againDebug.Log("Overlaping COllider" + hit.transform.gameObject.name)
                 }
 
                 float fraction = hit.distance / distance;
@@ -93,9 +91,8 @@ namespace KinematicCharacterControler
                 // Normalize angle between to be between 0 and 1
                 // 0 means no angle, 1 means 90 degree angle
                 angleBetween = Mathf.Min(60, Mathf.Abs(angleBetween));
-                Debug.Log("Angle Betwee: " + angleBetween);
+
                 float normalizedAngle = angleBetween / 60;
-                Debug.Log("Normalized Angle: " + normalizedAngle);
 
                 // Reduce the remaining movement by the remaining movement that ocurred
                 remaining *= Mathf.Pow(1 - normalizedAngle, m_anglePower) * 0.9f + 0.1f;

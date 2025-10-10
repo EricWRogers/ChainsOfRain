@@ -2124,15 +2124,12 @@ MonoBehaviour:
   defaultGroundedDistance: 0.05
   snapDownDistance: 0.45
   shouldSnapDown: 1
-  currentStance: 0
-  prevStance: 0
   speedLines: {fileID: 0}
-  speed: 5
+  walkSpeed: 5
   runSpeed: 10
   sprintFOV: 70
   walkFOV: 60
   canSprint: 1
-  sprintKey: 304
   rotationSpeed: 5
   maxWalkAngle: 60
   player: {fileID: 0}
@@ -2143,7 +2140,7 @@ MonoBehaviour:
   spwanPos: {x: 0, y: 0, z: 0}
   wallRideSpeed: 8
   wallRideGravity: -1
-  wallCheckDistance: 1
+  wallCheckDistance: 2
   wallStickForce: 5
   maxWallRideTime: 2
   canWallRide: 1
@@ -2160,8 +2157,8 @@ MonoBehaviour:
     serializedVersion: 2
     m_Curve:
     - serializedVersion: 3
-      time: 0
-      value: 1.5434263
+      time: -0.0050354004
+      value: 1.7879407
       inSlope: 2
       outSlope: 2
       tangentMode: 0
@@ -2169,8 +2166,8 @@ MonoBehaviour:
       inWeight: 0
       outWeight: 0
     - serializedVersion: 3
-      time: 0.47373962
-      value: 0.001373291
+      time: 0.49639893
+      value: 0.0061708093
       inSlope: 0
       outSlope: 0
       tangentMode: 0
@@ -2185,7 +2182,7 @@ MonoBehaviour:
   crouchSpeed: 4
   crouchHeight: 1.5
   canCrouch: 1
-  gravity: {x: 0, y: -9, z: 0}
+  gravity: {x: 0, y: -15, z: 0}
   lockCursor: 1
   canJump: 1
   jumpForce: 5
@@ -2214,21 +2211,6 @@ MonoBehaviour:
   slideHeightMultiplier: 0.4
   preserveAirMomentum: 1
   momentumDecayRate: 0.95
-  railLayer:
-    serializedVersion: 2
-    m_Bits: 0
-  railDetectionRadius: 0.5
-  railSnapDistance: 2
-  minGrindSpeed: 3
-  grindExitForce: 8
-  grindKey: 306
-  currentRail: {fileID: 0}
-  railProgress: 0
-  grindSpeed: 0
-  grindVelocity: {x: 0, y: 0, z: 0}
-  grindInputHeld: 0
-  m_railDir: 1
-  m_railDetectionPoint: {fileID: 5391497949038232587}
 --- !u!54 &5473672953631655455
 Rigidbody:
   m_ObjectHideFlags: 0

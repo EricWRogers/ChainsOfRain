@@ -300,13 +300,10 @@ public class PlayerMovement : MovementEngine
         }
 
 
-
         m_velocity += inputDir * m_speed;
 
         // Apply movement
         //transform.position = MovePlayer(finalDir * Time.deltaTime);
-
-
 
         transform.position = MovePlayer(m_velocity * Time.deltaTime);
         transform.rotation = new Quaternion(transform.rotation.x, cam.transform.rotation.y, transform.rotation.z, cam.rotation.w);
@@ -391,8 +388,7 @@ public class PlayerMovement : MovementEngine
                 m_wallRunDir = Vector3.Cross(wallNormalNoY, Vector3.up).normalized;
                 if (Vector3.Dot(m_wallRunDir, transform.forward) < 0)
                     m_wallRunDir *= -1;
-                
-;
+                Debug.Log("Wall Running");
                 m_velocity = m_wallRunDir * wallRideSpeed;
                 ciniCamera.Lens.Dutch = Mathf.Lerp(ciniCamera.Lens.Dutch, (Vector3.Dot(transform.right, m_wallNormal) > 0) ? -10f : 10f, Time.deltaTime * 8f);
                 return true;

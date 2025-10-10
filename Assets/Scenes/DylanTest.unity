@@ -651,7 +651,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5887622225555984311, guid: ec7c4a95275596a659f52b59480f657a, type: 3}
       propertyPath: wallCheckDistance
-      value: 1.5
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 5887622225555984311, guid: ec7c4a95275596a659f52b59480f657a, type: 3}
       propertyPath: collisionLayers.m_Bits

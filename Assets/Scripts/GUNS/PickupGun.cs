@@ -68,7 +68,8 @@ public class PickupGun : MonoBehaviour
             if (Physics.Raycast(transform.position, Vector3.down, out hit, rayLength, (int)mask))
             {
                 //start timer
-                timer.StartTimer();
+                if(timer != null)
+                    timer.StartTimer();
                 HoverAndSpin();
             }
             else
