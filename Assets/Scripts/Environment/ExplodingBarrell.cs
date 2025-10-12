@@ -22,5 +22,7 @@ public class ExplodingBarrell : MonoBehaviour
         vfxExplosion.SetActive(true);
 
         source.Play();
+
+        gameObject.GetComponent<Collider>().enabled = false;
     }
 }

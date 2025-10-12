@@ -1,6 +1,5 @@
 using SuperPupSystems.Helper;
 using UnityEngine;
-using UnityEngine.UI;
 using System.Collections;
 
 public class PickupGun : MonoBehaviour
@@ -12,8 +11,6 @@ public class PickupGun : MonoBehaviour
     public float hoverFrequency = 2f;
     public LayerMask groundMask;
     public float hoverHeight = 1.36f;
-
-    public float spinSpeed;
     public float amplitude = 0.5f;
     public float frequency = 1f;
     public float heightOffset = 1.0f;
@@ -45,23 +42,18 @@ public class PickupGun : MonoBehaviour
                 Destroy(gameObject);
             }
         }
-        else
-        {
-            basePos = gameObject.transform.root.transform.position;
-        }
     }
 
-    private void Update()
+    private void AddHealth()
     {
-        // Spin
-        transform.Rotate(0f, spinSpeed * Time.deltaTime, 0f);
-
+        PlayerMovement.instance.GetComponent<Health>().Heal(health);
+    }
     private void Start()
     {
         timer = gameObject.GetComponent<Timer>();
     }
 
-    private void OnTriggerEnter(Collider other)
+    private void Update()
     {
         Debug.DrawRay(transform.position, Vector3.down * rayLength, Color.green);
         RaycastHit hit;
@@ -84,14 +76,14 @@ public class PickupGun : MonoBehaviour
         }
     }
 
-    public void AddHealth()
+    public void HoverAndSpin()
     {
         if (groundPos == new Vector3(0f, 0f, 0f))
         {
             groundPos = transform.position;
         }
         float newY = groundPos.y + heightOffset + Mathf.Sin(Time.time * Mathf.PI * frequency) * amplitude;
-        transform.position = new Vector3(groundPos.x, newY, groundPos.z); // only need to hover on the y axis
+        transform.position = new Vector3(groundPos.x, newY, groundPos.z);
         transform.Rotate(0f, spinSpeed * Time.deltaTime, 0f);
     }
 

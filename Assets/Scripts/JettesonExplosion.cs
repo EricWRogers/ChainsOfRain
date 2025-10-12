@@ -51,7 +51,7 @@ public class JettesonExplosion : MonoBehaviour
         RaycastHit[] hits = Physics.SphereCastAll(transform.position, raidusExplosion, Vector3.up);
         foreach (RaycastHit hit in hits)
         {
-            if (hit.transform.gameObject.tag == "Enemy")
+            if (hit.transform.gameObject.tag == "Enemy" || hit.transform.gameObject.tag == "Box")
             {
                 hit.transform.gameObject.GetComponent<Health>().Damage(damage);
             }
