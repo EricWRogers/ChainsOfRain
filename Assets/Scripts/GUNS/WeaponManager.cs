@@ -10,7 +10,6 @@ public class WeaponManager : MonoBehaviour
     public GunType rightArmType = GunType.None;
     public GameObject leftArm;
     public GunType leftArmType = GunType.None;
-    public UnityEvent OnAttach;
 
 
     private void Awake()
@@ -135,7 +134,7 @@ public class WeaponManager : MonoBehaviour
 
     public bool AttatchGun(GunType _gun)
     {
-        OnAttach.Invoke();
+        
         GameObject arm = OpenArmCheck();
 
         if (arm == null)
@@ -155,6 +154,7 @@ public class WeaponManager : MonoBehaviour
                 SemiAuto semi = arm.GetComponentInChildren<SemiAuto>();
                 semi.transform.GetChild(0).gameObject.SetActive(true);
                 semi.leftHanded = arm.name == "LeftBicep";
+                semi.onAttatch.Invoke();
                 //if(semi.leftHanded) //GOtta flip it for the hand.
                 //{
                 //    Vector3 scale = semi.gameObject.transform.localScale;
@@ -168,6 +168,8 @@ public class WeaponManager : MonoBehaviour
 
             case GunType.Auto:
                 AutoGun auto = arm.GetComponentInChildren<AutoGun>();
+                
+                auto.onAttatch.Invoke();
                 auto.transform.GetChild(0).gameObject.SetActive(true);
                 auto.leftHanded = arm.name == "LeftBicep";
                 auto.rightHanded = arm.name == "RightBicep";

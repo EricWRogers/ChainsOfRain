@@ -7,6 +7,11 @@ public class PickupGun : MonoBehaviour
 {
     public int health = 10;
     public GunType gun;
+    public float spinSpeed = 90f;
+    public float hoverAmplitude = 0.25f;
+    public float hoverFrequency = 2f;
+    public LayerMask groundMask;
+    public float hoverHeight = 1.36f;
 
     public float spinSpeed;
     public float amplitude = 0.5f;
@@ -40,19 +45,23 @@ public class PickupGun : MonoBehaviour
                 Destroy(gameObject);
             }
         }
+        else
+        {
+            basePos = gameObject.transform.root.transform.position;
+        }
     }
 
-    public void AddHealth()
+    private void Update()
     {
-        PlayerMovement.instance.gameObject.GetComponent<Health>().Heal(health);
-    }
+        // Spin
+        transform.Rotate(0f, spinSpeed * Time.deltaTime, 0f);
 
     private void Start()
     {
         timer = gameObject.GetComponent<Timer>();
     }
 
-    private void Update()
+    private void OnTriggerEnter(Collider other)
     {
         Debug.DrawRay(transform.position, Vector3.down * rayLength, Color.green);
         RaycastHit hit;
@@ -75,7 +84,7 @@ public class PickupGun : MonoBehaviour
         }
     }
 
-    private void HoverAndSpin()
+    public void AddHealth()
     {
         if (groundPos == new Vector3(0f, 0f, 0f))
         {

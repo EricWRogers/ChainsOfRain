@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.Rendering;
 using UnityEngine.VFX;
 
@@ -10,7 +11,8 @@ public class SemiAuto : Gunbase
    
     public float nextFireTime;
 
-    
+    public UnityEvent onAttatch;
+
     public override void Fire(Transform _firingPoint, GameObject _bulletPrefab)
     {
         if(Time.time >= nextFireTime && ammo !=0)

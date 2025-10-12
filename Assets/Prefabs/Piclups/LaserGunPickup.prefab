@@ -28,7 +28,7 @@ Transform:
   m_GameObject: {fileID: 731730721926480526}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: -1, z: 0, w: 0}
-  m_LocalPosition: {x: 0.0668, y: 0.2654, z: 0.115}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0.002924102, y: 0.002924102, z: 0.0112151}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -338,6 +338,7 @@ GameObject:
   - component: {fileID: 1860109178721535106}
   - component: {fileID: 6938287025388248328}
   - component: {fileID: 287173614201152169}
+  - component: {fileID: 7953473870411176185}
   m_Layer: 9
   m_Name: LaserGun
   m_TagString: Untagged
@@ -354,7 +355,7 @@ Transform:
   m_GameObject: {fileID: 5104302339807489374}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.011000037, y: 0, z: 0.69663954}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 5.4751897, y: 5.4751897, z: 1.42754}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -381,7 +382,7 @@ SphereCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Radius: 0.5
+  m_Radius: 0.15
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!54 &6938287025388248328
 Rigidbody:
@@ -425,12 +426,44 @@ MonoBehaviour:
   health: 10
   gun: 2
   spinSpeed: 10
-  amplitude: 0.5
-  frequency: 1
-  heightOffset: 1
-  mask:
+  hoverAmplitude: 0.25
+  hoverFrequency: 2
+  groundMask:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 8
+  hoverHeight: 1
+  timer: {fileID: 0}
+--- !u!114 &7953473870411176185
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5104302339807489374}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ad54517dc19258185960ef6d2f3a1b93, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  timeout:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 4185466641323781076}
+        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
+        m_MethodName: SetActive
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  autoStart: 1
+  autoRestart: 0
+  countDownTime: 20
+  timeScale: 1
 --- !u!1 &8721533573199872727
 GameObject:
   m_ObjectHideFlags: 0
