@@ -4,6 +4,7 @@ using UnityEngine.Events;
 
 public abstract class Gunbase : MonoBehaviour
 {
+    public bool attatched = false;
     public bool canShoot = false;
     public bool leftHanded = false;
 
@@ -55,7 +56,7 @@ public abstract class Gunbase : MonoBehaviour
     public void Update()
     {
 
-        if (canShoot && Time.timeScale !=0)
+        if (attatched && canShoot && Time.timeScale != 0)
         {
 
 
@@ -95,9 +96,9 @@ public abstract class Gunbase : MonoBehaviour
                 ammo = magazineAmmo;
             }
             if (gameObject.activeInHierarchy && !m_spawnedUI)
-        {
-            SpawnUI();
-        }
+            {
+                SpawnUI();
+            }
         }
     }
 
@@ -114,6 +115,8 @@ public abstract class Gunbase : MonoBehaviour
 
     public void Jettison()
     {
+        attatched = false;
+
         ammo = magazineAmmo;
         m_spawnedUI = false;
         onJettison.Invoke();
@@ -121,7 +124,7 @@ public abstract class Gunbase : MonoBehaviour
         GameObject temp = Instantiate(jettisonPrefab, gameObject.transform.position, gameObject.transform.rotation);
 
         temp.GetComponent<Rigidbody>().AddForce(gameObject.transform.forward * jettisonForce, ForceMode.Impulse);
-        
+
     }
 
     public void SpawnUI()
@@ -145,6 +148,12 @@ public abstract class Gunbase : MonoBehaviour
     {
         GetKey,
         GetKeyDown
+    }
+
+
+    public void AttatchedTrue()
+    {
+        attatched = true; //Shut up, I promise its neccessary.
     }
 
 }

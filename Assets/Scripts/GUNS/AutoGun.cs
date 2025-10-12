@@ -1,20 +1,21 @@
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.VFX;
 
 public class AutoGun : Gunbase
 {
     public float fireRate = 1f;
     [SerializeField] VisualEffect muzzleFlash;
-
+    public UnityEvent onAttatch;
 
     public float nextFireTime;
 
     public override void Fire(Transform _firingPoint, GameObject _bulletPrefab)
     {
-        if(Time.time >= nextFireTime && ammo != 0)
+        if (attatched == true && Time.time >= nextFireTime && ammo != 0)
         {
             onFire.Invoke();
-                        PlayMuzzleFlash();
+            PlayMuzzleFlash();
             GameObject temp = Instantiate(_bulletPrefab, _firingPoint.position, _firingPoint.rotation);
 
 
@@ -31,6 +32,6 @@ public class AutoGun : Gunbase
 
     public override void ReleaseFiring()
     {
-        
+
     }
 }
