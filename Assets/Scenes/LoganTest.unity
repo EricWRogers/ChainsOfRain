@@ -618,7 +618,7 @@ GameObject:
   - component: {fileID: 1390831140}
   - component: {fileID: 1390831139}
   - component: {fileID: 1390831138}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Ground
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1275,7 +1275,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5448890619333306190, guid: a5ef1a94edc734a46a73af2a7ca60ba6, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1.36
+      value: 11.9
       objectReference: {fileID: 0}
     - target: {fileID: 5448890619333306190, guid: a5ef1a94edc734a46a73af2a7ca60ba6, type: 3}
       propertyPath: m_LocalPosition.z
@@ -1448,6 +1448,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 267047802649090340, guid: b2bca08717ffbf347b60d19d90fb3043, type: 3}
+      propertyPath: m_Radius
+      value: 0.66
+      objectReference: {fileID: 0}
     - target: {fileID: 6556212287240257457, guid: b2bca08717ffbf347b60d19d90fb3043, type: 3}
       propertyPath: m_LocalPosition.x
       value: 3.61
