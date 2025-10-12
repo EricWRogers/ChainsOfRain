@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 1354804387597302384}
   - component: {fileID: 6490692278934721469}
   - component: {fileID: 4289133478717977854}
+  - component: {fileID: 1328876666497556887}
   m_Layer: 9
   m_Name: SemiAutoPickup
   m_TagString: Untagged
@@ -98,12 +99,47 @@ MonoBehaviour:
   health: 10
   gun: 0
   spinSpeed: 10
-  amplitude: 0.5
+  amplitude: 0.25
   frequency: 0.5
   heightOffset: 1
   mask:
     serializedVersion: 2
     m_Bits: 9
+  timeForce: 1
+  dissolveScale: 0.25
+  gunMat: {fileID: 6481511055606530892}
+  armMat: {fileID: 8985237572887123345}
+--- !u!114 &1328876666497556887
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1619578712219707797}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ad54517dc19258185960ef6d2f3a1b93, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  timeout:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 4289133478717977854}
+        m_TargetAssemblyTypeName: PickupGun, Assembly-CSharp
+        m_MethodName: Disappear
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  autoStart: 0
+  autoRestart: 0
+  countDownTime: 30
+  timeScale: 1
 --- !u!1 &5195163503176665721
 GameObject:
   m_ObjectHideFlags: 0
@@ -306,6 +342,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 648583399146716210, guid: f29609562f04d2946a47bf0673820f04, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: d4241f0b6c9795142975106743a4a0ba, type: 2}
     - target: {fileID: 1058821398676649301, guid: f29609562f04d2946a47bf0673820f04, type: 3}
       propertyPath: m_Name
       value: SemiModel
@@ -314,6 +354,10 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 9
       objectReference: {fileID: 0}
+    - target: {fileID: 3189447025586678511, guid: f29609562f04d2946a47bf0673820f04, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: a5c69b490f2162d418529c935621144b, type: 2}
     - target: {fileID: 6589272945759368875, guid: f29609562f04d2946a47bf0673820f04, type: 3}
       propertyPath: m_Layer
       value: 9
@@ -327,8 +371,18 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f29609562f04d2946a47bf0673820f04, type: 3}
+--- !u!23 &6481511055606530892 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 3189447025586678511, guid: f29609562f04d2946a47bf0673820f04, type: 3}
+  m_PrefabInstance: {fileID: 8480773828618021283}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &8091739286806758988 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 430763226838626287, guid: f29609562f04d2946a47bf0673820f04, type: 3}
+  m_PrefabInstance: {fileID: 8480773828618021283}
+  m_PrefabAsset: {fileID: 0}
+--- !u!23 &8985237572887123345 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 648583399146716210, guid: f29609562f04d2946a47bf0673820f04, type: 3}
   m_PrefabInstance: {fileID: 8480773828618021283}
   m_PrefabAsset: {fileID: 0}

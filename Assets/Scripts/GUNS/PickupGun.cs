@@ -1,6 +1,7 @@
 using SuperPupSystems.Helper;
 using UnityEngine;
 using UnityEngine.UI;
+using System.Collections;
 
 public class PickupGun : MonoBehaviour
 {
@@ -8,23 +9,31 @@ public class PickupGun : MonoBehaviour
     public GunType gun;
 
     public float spinSpeed;
-    public float amplitude = 0.5f; 
+    public float amplitude = 0.5f;
     public float frequency = 1f;
     public float heightOffset = 1.0f;
     public LayerMask mask;
 
-    public bool doRayCast = true;
     public float timeForce = 1.0f;
-    private float rayLength = 1.25f;
+    public float dissolveScale = 0.25f;
+    private float rayLength = 0.75f;
+    private float fadeOutDelay = 1f;
     private Timer timer;
+    private bool letsMoveIt = false;
+    private int repeat = 0;
+    [SerializeField]
+    private Renderer gunMat;
+    [SerializeField]
+    private Renderer armMat;
+
 
 
     Vector3 groundPos;
     private void OnTriggerEnter(Collider other)
     {
-        if(other.CompareTag("Player"))
+        if (other.CompareTag("Player"))
         {
-           bool didwork = WeaponManager.instance.AttatchGun(gun);
+            bool didwork = WeaponManager.instance.AttatchGun(gun);
             if (didwork)
             {
                 AddHealth();
@@ -46,31 +55,29 @@ public class PickupGun : MonoBehaviour
     private void Update()
     {
         Debug.DrawRay(transform.position, Vector3.down * rayLength, Color.green);
-        if (doRayCast)
+        RaycastHit hit;
+        if (Physics.Raycast(transform.position, Vector3.down, out hit, rayLength, (int)mask))
         {
-            RaycastHit hit;
-            if (Physics.Raycast(transform.position, Vector3.down, out hit, rayLength, (int)mask))
-            {
-                //start timer
-                if (timer != null)
-                    timer.StartTimer();
-                HoverAndSpin();
-            }
-            else
-            {
-                transform.Translate(Vector3.down * timeForce * Time.deltaTime);
-            }
+            letsMoveIt = true;
         }
         else
         {
-            HoverAndSpin();
+            transform.Translate(Vector3.down * timeForce * Time.deltaTime);
         }
-        
+
+        if (letsMoveIt)
+        {
+            HoverAndSpin();
+            repeat += 1;
+            //start timer
+            if (timer != null && repeat == 1)
+                timer.StartTimer();
+        }
     }
 
     private void HoverAndSpin()
     {
-        if(groundPos == new Vector3(0f, 0f, 0f))
+        if (groundPos == new Vector3(0f, 0f, 0f))
         {
             groundPos = transform.position;
         }
@@ -81,6 +88,23 @@ public class PickupGun : MonoBehaviour
 
     public void Disappear()
     {
-        
+        StartCoroutine(FadeOut());
+    }
+
+    private IEnumerator FadeOut()
+    {
+        yield return new WaitForSeconds(fadeOutDelay);
+
+        float time = 0;
+        float cv = armMat.material.GetFloat("_Clipping_Value");
+        while (time < 2.85f)
+        {
+            armMat.material.SetFloat("_Clipping_Value", cv * dissolveScale + Time.deltaTime);
+            gunMat.material.SetFloat("_Clipping_Value", cv * dissolveScale + Time.deltaTime);
+            time += Time.deltaTime;
+            yield return null;
+        }
+
+        Destroy(gameObject);
     }
 }
