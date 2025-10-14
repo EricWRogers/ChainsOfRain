@@ -99,6 +99,12 @@ MonoBehaviour:
   health: 10
   gun: 0
   spinSpeed: 10
+  hoverAmplitude: 0.25
+  hoverFrequency: 2
+  groundMask:
+    serializedVersion: 2
+    m_Bits: 0
+  hoverHeight: 1.36
   amplitude: 0.25
   frequency: 0.5
   heightOffset: 1
@@ -107,8 +113,9 @@ MonoBehaviour:
     m_Bits: 9
   timeForce: 1
   dissolveScale: 0.25
-  gunMat: {fileID: 6481511055606530892}
-  armMat: {fileID: 8985237572887123345}
+  pickupRenderers:
+  - {fileID: 8985237572887123345}
+  - {fileID: 6481511055606530892}
 --- !u!114 &1328876666497556887
 MonoBehaviour:
   m_ObjectHideFlags: 0

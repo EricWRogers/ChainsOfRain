@@ -276,38 +276,19 @@ PrefabInstance:
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: cd5c0e6152e758e439cc0dce19eb256c, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 2842987119568912652}
-    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: cd5c0e6152e758e439cc0dce19eb256c, type: 3}
-      insertIndex: -1
       addedObject: {fileID: 8797534025679028103}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: cd5c0e6152e758e439cc0dce19eb256c, type: 3}
       insertIndex: -1
       addedObject: {fileID: 7406578735160165452}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: cd5c0e6152e758e439cc0dce19eb256c, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2842987119568912652}
   m_SourcePrefab: {fileID: 100100000, guid: cd5c0e6152e758e439cc0dce19eb256c, type: 3}
 --- !u!1 &4867466109758953102 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: cd5c0e6152e758e439cc0dce19eb256c, type: 3}
   m_PrefabInstance: {fileID: 5714469185747315679}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &2842987119568912652
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4867466109758953102}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bca5ac4548a3fee4b94f87bc4f1d2e85, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  legType: 2
-  health: 10
-  spinSpeed: 10
-  amplitude: 0.5
-  frequency: 1
-  heightOffset: 1
-  destroyTarget: {fileID: 5693286675807699914}
 --- !u!54 &8797534025679028103
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -356,6 +337,25 @@ SphereCollider:
   serializedVersion: 3
   m_Radius: 37.58
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &2842987119568912652
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4867466109758953102}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bca5ac4548a3fee4b94f87bc4f1d2e85, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  legType: 2
+  health: 10
+  spinSpeed: 10
+  amplitude: 0.5
+  frequency: 1
+  heightOffset: 1
+  destroyTarget: {fileID: 5693286675807699914}
 --- !u!4 &5244272509311716404 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: cd5c0e6152e758e439cc0dce19eb256c, type: 3}

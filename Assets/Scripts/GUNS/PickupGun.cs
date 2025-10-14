@@ -1,6 +1,7 @@
 using SuperPupSystems.Helper;
 using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class PickupGun : MonoBehaviour
 {
@@ -17,16 +18,13 @@ public class PickupGun : MonoBehaviour
     public LayerMask mask;
 
     public float timeForce = 1.0f;
-    public float dissolveScale = 0.25f;
     private float rayLength = 0.75f;
     private float fadeOutDelay = 1f;
     private Timer timer;
     private bool letsMoveIt = false;
     private int repeat = 0;
-    [SerializeField]
-    private Renderer gunMat;
-    [SerializeField]
-    private Renderer armMat;
+    [SerializeField] 
+    private Renderer[] pickupRenderers;
 
 
 
@@ -96,12 +94,32 @@ public class PickupGun : MonoBehaviour
     {
         yield return new WaitForSeconds(fadeOutDelay);
 
-        float time = 0;
-        float cv = armMat.material.GetFloat("_Clipping_Value");
-        while (time < 2.85f)
+        Renderer[] renderers = (pickupRenderers != null && pickupRenderers.Length > 0)
+            ? pickupRenderers
+            : GetComponentsInChildren<Renderer>();
+
+        float duration = 3.0f;
+        float time = 0f;
+
+        var startValues = new Dictionary<Material, float>();
+        foreach (var rend in renderers)
         {
-            armMat.material.SetFloat("_Clipping_Value", cv * dissolveScale + Time.deltaTime);
-            gunMat.material.SetFloat("_Clipping_Value", cv * dissolveScale + Time.deltaTime);
+            foreach (var mat in rend.materials)
+            {
+                if (mat.HasProperty("_Clipping_Value"))
+                    startValues[mat] = mat.GetFloat("_Clipping_Value");
+            }
+        }
+
+        while (time < duration)
+        {
+            float t = time / duration;
+            foreach (var pair in startValues)
+            {
+                float newValue = Mathf.Lerp(pair.Value, 1f, t);
+                pair.Key.SetFloat("_Clipping_Value", newValue);
+            }
+
             time += Time.deltaTime;
             yield return null;
         }

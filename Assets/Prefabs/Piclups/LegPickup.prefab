@@ -42,9 +42,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6674642856850983091}
-  - component: {fileID: 5527725821743017636}
   - component: {fileID: 6785063398240100365}
   - component: {fileID: 5996374828098086843}
+  - component: {fileID: 5527725821743017636}
   m_Layer: 9
   m_Name: LegPickup
   m_TagString: Untagged
@@ -68,25 +68,6 @@ Transform:
   - {fileID: 6202984607310884258}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &5527725821743017636
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4842912413552020332}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bca5ac4548a3fee4b94f87bc4f1d2e85, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  legType: 1
-  health: 10
-  spinSpeed: 10
-  amplitude: 0.5
-  frequency: 0.5
-  heightOffset: 1
-  destroyTarget: {fileID: 4842912413552020332}
 --- !u!54 &6785063398240100365
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -135,6 +116,25 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &5527725821743017636
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4842912413552020332}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bca5ac4548a3fee4b94f87bc4f1d2e85, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  legType: 1
+  health: 10
+  spinSpeed: 10
+  amplitude: 0.5
+  frequency: 0.5
+  heightOffset: 1
+  destroyTarget: {fileID: 4842912413552020332}
 --- !u!1 &7734414405281153217
 GameObject:
   m_ObjectHideFlags: 0
