@@ -1272,7 +1272,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7015981434507550311}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -1371,11 +1371,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   capsule: {fileID: 5125394202073873866}
-  capsuleHeight: 0
-  capsuleRadius: 0
+  capsuleHeight: 2
+  capsuleRadius: 0.5
   collisionLayers:
     serializedVersion: 2
-    m_Bits: 1087
+    m_Bits: 439
   skinWidth: 0.015
   maxBounces: 5
   maxSlopeAngle: 80
@@ -1399,13 +1399,13 @@ MonoBehaviour:
   spwanPos: {x: 0, y: 0, z: 0}
   wallRideSpeed: 8
   wallRideGravity: -1
-  wallCheckDistance: 2
+  wallCheckDistance: 0.6
   wallStickForce: 5
   maxWallRideTime: 2
   canWallRide: 1
   wallLayer:
     serializedVersion: 2
-    m_Bits: 1055
+    m_Bits: 256
   m_isWallRiding: 0
   dashForce: 0
   dashDuration: 0
@@ -1447,7 +1447,7 @@ MonoBehaviour:
   canJump: 1
   jumpForce: 5
   maxJumpAngle: 80
-  jumpCooldown: 0.25
+  jumpCooldown: 0.1
   canDoubleJump: 1
   maxJumpCount: 2
   jumpCount: 2

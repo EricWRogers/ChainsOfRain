@@ -2,8 +2,6 @@ using Unity.Cinemachine;
 using UnityEngine;
 using KinematicCharacterControler;
 
-
-
 public class PlayerMovement : MovementEngine
 {
     public static PlayerMovement instance;
@@ -28,7 +26,6 @@ public class PlayerMovement : MovementEngine
     public Transform cam;
 
     public Vector3 spwanPos;
-
 
 
     [Header("Wall Ride Settings")]
@@ -338,13 +335,13 @@ public class PlayerMovement : MovementEngine
         
     }
 
-
+    #region wall Running
     bool WallRun()
     {
         
-        if (m_isWallRiding && m_inputActions.Jump.WasPressedThisFrame() || wallRideTimer > 2f)
+        if ((m_isWallRiding && m_inputActions.Jump.WasPressedThisFrame())|| wallRideTimer > 2f)
         {
-            m_velocity = m_wallNormal * jumpForce + Vector3.up * jumpForce;
+            m_velocity = m_wallNormal * (jumpForce * 2f) + Vector3.up * (jumpForce * 2f) + transform.forward * (jumpForce * 0.5f);
             m_isWallRiding = false;
             jumpCount = maxJumpCount;
             wallRideTimer = 0f;
@@ -395,6 +392,7 @@ public class PlayerMovement : MovementEngine
         m_isWallRiding = false;
         return false;
     }
+    #endregion
     void HandleFOV()
     {
         float targetFOV = walkFOV;
@@ -414,54 +412,6 @@ public class PlayerMovement : MovementEngine
         ciniCamera.Lens.FieldOfView = currFOV;
     }
 
-    /*void HandleWallRide()
-    {
-        if (CheckForWall(transform.position, wallCheckDistance, out RaycastHit hit))
-        {
-            m_wallNormal = hit.normal;
-        }
-        else
-        {
-            ExitWallRide();
-        }
-
-        if (Physics.Raycast(transform.position, transform.right, out _, wallCheckDistance, wallLayer))
-        {
-            ciniCamera.Lens.Dutch = 10;
-        }
-        else
-        {
-            ciniCamera.Lens.Dutch = -10;
-        }
-
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            m_velocity = m_wallNormal * jumpForce + Vector3.up * jumpForce;
-            ExitWallRide();
-            return;
-        }
-        Vector3 wallDirection = Vector3.Cross(m_wallNormal, Vector3.up).normalized;
-
-        if (Vector3.Dot(wallDirection, transform.forward) < 0)
-            wallDirection *= -1;
-
-        Vector3 horizontal = wallDirection * wallRideSpeed;
-        Vector3 vertical = new Vector3(0, m_velocity.y, 0);
-
-        m_velocity = horizontal + vertical;
-        m_velocity.y += wallRideGravity * Time.deltaTime;
-
-        transform.position = MovePlayer(m_velocity * Time.deltaTime);
-
-        wallRideTimer -= Time.deltaTime;
-        if (wallRideTimer <= 0f || CheckIfGrounded(out _))
-        {
-            ExitWallRide();
-        }
-    }
-
-*/
-
     void HandleDashing(float _delta)
     {
         m_currTime += _delta;
@@ -480,7 +430,6 @@ public class PlayerMovement : MovementEngine
         }
 
     }
-
 
     void StartSliding()
     {
