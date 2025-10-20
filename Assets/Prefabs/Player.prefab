@@ -1386,6 +1386,8 @@ MonoBehaviour:
   speedLines: {fileID: 0}
   walkSpeed: 5
   runSpeed: 10
+  airSpeed: 5
+  airAcelleration: 35
   sprintFOV: 70
   walkFOV: 60
   canSprint: 1
@@ -1452,25 +1454,17 @@ MonoBehaviour:
   maxJumpCount: 2
   jumpCount: 2
   jumpInputElapsed: Infinity
-  slideKey: 306
   isSliding: 0
   canSlide: 0
   startSlideSpeed: 25
   endSlideSpeed: 15
   maxSlideAngle: 70
   slideForce: 0
-  slideSpeedMultiplier: 1.5
+  slopeSlidingInfluence: 1
   slideMinSpeed: 12
   slideMaxSpeed: 35
-  slideAcceleration: 25
-  slideDeceleration: 8
-  slopeSlideBonus: 20
   slideJumpHeight: 8
-  slideJumpForward: 15
-  slideTurnSpeed: 180
-  slideHeightMultiplier: 0.4
-  preserveAirMomentum: 1
-  momentumDecayRate: 0.95
+  slideFriction: 0.95
 --- !u!54 &5473672953631655455
 Rigidbody:
   m_ObjectHideFlags: 0
