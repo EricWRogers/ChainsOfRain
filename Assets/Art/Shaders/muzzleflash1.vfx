@@ -182,7 +182,7 @@ MonoBehaviour:
     x: -70
     y: -494
     width: 3188
-    height: 2110
+    height: 2107
 --- !u!114 &114350483966674976
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1041,7 +1041,7 @@ MonoBehaviour:
       m_Type:
         m_SerializableType: UnityEngine.Mesh, UnityEngine.CoreModule, Version=0.0.0.0,
           Culture=neutral, PublicKeyToken=null
-      m_SerializableObject: '{"obj":{"fileID":-7381309909878998625,"guid":"16d835d28665e3a488d58274294f2b62","type":3}}'
+      m_SerializableObject: '{"obj":{"fileID":-2432090755550338912,"guid":"416f430568fae777ca84a7a1ce3839b5","type":3}}'
     m_Space: -1
   m_Property:
     name: mesh
@@ -5048,7 +5048,7 @@ MonoBehaviour:
       m_Type:
         m_SerializableType: UnityEngine.Mesh, UnityEngine.CoreModule, Version=0.0.0.0,
           Culture=neutral, PublicKeyToken=null
-      m_SerializableObject: '{"obj":{"fileID":1576611010450977356,"guid":"16d835d28665e3a488d58274294f2b62","type":3}}'
+      m_SerializableObject: '{"obj":{"fileID":-2432090755550338912,"guid":"ec114360280ae6da5b1bc4194fb76ba9","type":3}}'
     m_Space: -1
   m_Property:
     name: mesh
