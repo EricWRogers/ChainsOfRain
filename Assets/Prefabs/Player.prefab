@@ -1375,7 +1375,7 @@ MonoBehaviour:
   capsuleRadius: 0.5
   collisionLayers:
     serializedVersion: 2
-    m_Bits: 439
+    m_Bits: 3519
   skinWidth: 0.015
   maxBounces: 5
   maxSlopeAngle: 80
@@ -1407,7 +1407,7 @@ MonoBehaviour:
   canWallRide: 1
   wallLayer:
     serializedVersion: 2
-    m_Bits: 256
+    m_Bits: 2304
   m_isWallRiding: 0
   dashForce: 0
   dashDuration: 0
