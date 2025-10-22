@@ -251,10 +251,15 @@ public class AStar
     }
     public int GetPointByPosition(Vector3 _position)
     {
-        if (m_umap.ContainsKey(_position))
-            return m_umap[_position];
-        else
-            return -1;
+        for (int i = 0; i < graph.Count; i++)
+            if (graph[i].position == _position)
+                return i;
+
+        return -1;
+        //if (m_umap.ContainsKey(_position))
+        //    return m_umap[_position];
+        //else
+        //    return -1;
     }
     public void RemovePoint(int _id)
     {

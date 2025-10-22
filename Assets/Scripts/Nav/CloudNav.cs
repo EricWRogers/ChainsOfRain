@@ -16,7 +16,17 @@ public class CloudNavEditor : Editor
 
         if (GUILayout.Button("Spawn Cloud"))
         {
-            cloudNav.SpawnCloud();
+            cloudNav.SpawnCloud(false);
+        }
+
+        if (GUILayout.Button("Spawn And Check"))
+        {
+            cloudNav.SpawnCloud(true);
+        }
+
+        if (GUILayout.Button("Sphere Check"))
+        {
+            cloudNav.SphereCheck();
         }
     }
 }
@@ -32,6 +42,7 @@ public class CloudNav : MonoBehaviour
     public int xCount = 50;
     public int yCount = 10;
     public int zCount = 50;
+    public float sphereRadius = 1.0f;
 
     void Awake()
     {
@@ -54,7 +65,7 @@ public class CloudNav : MonoBehaviour
         aStar.StopWorker();
     }
 
-    public void SpawnCloud()
+    public void SpawnCloud(bool _collisionCheck)
     {
         Debug.Log("Cloud Nav: Removing Old Cloud");
         aStar.ResetGraph();
@@ -99,8 +110,18 @@ public class CloudNav : MonoBehaviour
                 {
                     int id = aStar.GetPointByPosition(new Vector3(x, y, z));
 
-                    int forward = aStar.GetPointByPosition(new Vector3(x, y, z + 1));
+                    if (id < 0)
+                    {
+                        continue;
+                    }
 
+                    if (id >= aStar.Count)
+                    {
+                        Debug.LogError("CloudNav: id is not valid and greater than the max");
+                        continue;
+                    }
+
+                    int forward = aStar.GetPointByPosition(new Vector3(x, y, z + 1));
                     int forwardLeft = aStar.GetPointByPosition(new Vector3(x - 1, y, z + 1));
                     int forwardRight = aStar.GetPointByPosition(new Vector3(x + 1, y, z + 1));
                     int left = aStar.GetPointByPosition(new Vector3(x - 1, y, z));
@@ -161,9 +182,110 @@ public class CloudNav : MonoBehaviour
             }
         }
 
-        /*Debug.Log("Cloud Nav: Validate Points");
+        if (_collisionCheck)
+        {
+            Debug.Log("Raycast per connection");
 
-        List<Vector3> path = new List<Vector3>();
+            for (int n = 0; n < aStar.graph.Count; n++)
+            {
+                for (int a = 0; a < aStar.graph[n].adjacentPointIDs.Count;)
+                {
+
+                    if (Physics.Linecast(aStar.graph[n].position, aStar.graph[aStar.graph[n].adjacentPointIDs[a]].position))
+                    {
+                        aStar.DisconnectPoints(n, aStar.graph[n].adjacentPointIDs[a]);
+                    }
+                    else
+                    {
+                        a++;
+                    }
+                }
+            }
+
+            Debug.Log("Cloud Nav: Validate Points");
+
+            List<Vector3> path = new List<Vector3>();
+            for (int x = -halfXCount; x < halfXCount; x++)
+            {
+                for (int y = -halfYCount; y < halfYCount; y++)
+                {
+                    for (int z = -halfZCount; z < halfZCount; z++)
+                    {
+                        Vector3 targetPosition = new Vector3(x, y, z);
+
+                        if (targetPosition == Vector3.zero)
+                            continue;
+
+                        int startId = aStar.GetClosestPoint(targetPosition);
+
+                        if (startId == -1 || aStar.graph[startId].position == Vector3.zero)
+                            continue;
+
+                        if (aStar.graph[startId].adjacentPointIDs.Count == 0)
+                        {
+                            aStar.RemovePoint(startId);
+                            continue;
+                        }
+
+                        int originId = aStar.GetClosestPoint(Vector3.zero);
+
+                        //Debug.Log("count " + aStar.Count + " id " + startId + " origin " + originId);
+
+                        path = aStar.GetPath(startId, originId);
+
+                        if (path.Count == 0)
+                        {
+                            Debug.Log("Remove id: " + startId);
+                            aStar.RemovePoint(startId);
+                        }
+                    }
+                }
+            }
+        }
+
+        aStar.RefreshCashe();
+
+        for (int g = 0; g < aStar.Count; g++)
+        {
+            GameObject pointObject = Instantiate(
+                        cloudPointPrefab,
+                        aStar.graph[g].position,
+                        Quaternion.identity,
+                        transform);
+        }
+    }
+
+    public void SphereCheck()
+    {
+        while (transform.childCount > 0)
+        {
+            DestroyImmediate(transform.GetChild(0).gameObject);
+        }
+
+        int halfXCount = xCount / 2;
+        int halfYCount = yCount / 2;
+        int halfZCount = zCount / 2;
+
+        Debug.Log("Spherecast per connection");
+
+        for (int n = 0; n < aStar.graph.Count;)
+        {
+            Ray ray = new Ray(aStar.graph[n].position, Vector3.right);
+            
+            if (Physics.SphereCast( ray, sphereRadius))
+            {
+                Debug.Log("REMOVE");
+                //aStar.RemovePoint(n);
+            }
+            else
+            {
+                //n++;
+            }
+        }
+
+        Debug.Log("Cloud Nav: Validate Points");
+
+        /*List<Vector3> path = new List<Vector3>();
         for (int x = -halfXCount; x < halfXCount; x++)
         {
             for (int y = -halfYCount; y < halfYCount; y++)
@@ -176,40 +298,26 @@ public class CloudNav : MonoBehaviour
                         continue;
 
                     int startId = aStar.GetClosestPoint(targetPosition);
-                    int originId = aStar.GetClosestPoint(Vector3.zero);
 
-                    if (startId == -1)
+                    if (startId == -1 || aStar.graph[startId].position == Vector3.zero)
                         continue;
+
+                    if (aStar.graph[startId].adjacentPointIDs.Count == 0)
+                    {
+                        aStar.RemovePoint(startId);
+                        continue;
+                    }
+
+                    int originId = aStar.GetClosestPoint(Vector3.zero);
 
                     //Debug.Log("count " + aStar.Count + " id " + startId + " origin " + originId);
 
                     path = aStar.GetPath(startId, originId);
 
-
-                    bool redo = false;
-
                     if (path.Count == 0)
                     {
+                        Debug.Log("Remove id: " + startId);
                         aStar.RemovePoint(startId);
-                    }
-                    else
-                    {
-                        path.Insert(0, targetPosition);
-
-                        for (int i = 0; i < path.Count - 1; i++)
-                        {
-                            if (Physics.Linecast(path[i], path[i + 1]))
-                            {
-                                redo = true;
-                                aStar.DisconnectPoints(aStar.GetPointByPosition(path[i]), aStar.GetPointByPosition(path[i + 1]));
-                                break;
-                            }
-                        }
-                    }
-
-                    if (redo)
-                    {
-                        z--;
                     }
                 }
             }
