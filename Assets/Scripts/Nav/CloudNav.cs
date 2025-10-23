@@ -1,5 +1,9 @@
 using UnityEngine;
 using System.Collections.Generic;
+using NUnit.Framework.Constraints;
+using UnityEngine.UI;
+
+
 
 
 #if UNITY_EDITOR
@@ -35,6 +39,7 @@ public class CloudNavEditor : Editor
 public class CloudNav : MonoBehaviour
 {
     public GameObject cloudPointPrefab;
+    public Transform checkPoint;
     public AStar aStar;
 
     public List<BoxCollider> spawnAreas;
@@ -43,6 +48,7 @@ public class CloudNav : MonoBehaviour
     public int yCount = 10;
     public int zCount = 50;
     public float sphereRadius = 1.0f;
+    public LayerMask mask;
 
     void Awake()
     {
@@ -213,12 +219,12 @@ public class CloudNav : MonoBehaviour
                     {
                         Vector3 targetPosition = new Vector3(x, y, z);
 
-                        if (targetPosition == Vector3.zero)
+                        if (targetPosition == checkPoint.position)
                             continue;
 
                         int startId = aStar.GetClosestPoint(targetPosition);
 
-                        if (startId == -1 || aStar.graph[startId].position == Vector3.zero)
+                        if (startId == -1 || aStar.graph[startId].position == checkPoint.position)
                             continue;
 
                         if (aStar.graph[startId].adjacentPointIDs.Count == 0)
@@ -227,7 +233,7 @@ public class CloudNav : MonoBehaviour
                             continue;
                         }
 
-                        int originId = aStar.GetClosestPoint(Vector3.zero);
+                        int originId = aStar.GetClosestPoint(checkPoint.position);
 
                         //Debug.Log("count " + aStar.Count + " id " + startId + " origin " + originId);
 
@@ -268,24 +274,31 @@ public class CloudNav : MonoBehaviour
 
         Debug.Log("Spherecast per connection");
 
-        for (int n = 0; n < aStar.graph.Count;)
+        Collider[] collisions = new Collider[100];
+
+        for (int n = 0; n < aStar.graph.Count; n++)
         {
-            Ray ray = new Ray(aStar.graph[n].position, Vector3.right);
+            if (aStar.graph[n].position == checkPoint.position)
+                continue;
             
-            if (Physics.SphereCast( ray, sphereRadius))
+            if (aStar.graph[n].adjacentPointIDs.Count < 20)
             {
-                Debug.Log("REMOVE");
-                //aStar.RemovePoint(n);
-            }
-            else
-            {
-                //n++;
-            }
+                Ray ray = new Ray(aStar.graph[n].position, Vector3.right);
+                RaycastHit hit;
+
+                if (Physics.OverlapSphereNonAlloc(aStar.graph[n].position, sphereRadius, collisions, mask, QueryTriggerInteraction.Collide) > 0)//(ray, sphereRadius, out hit, sphereRadius))
+                {
+                    Debug.Log("REMOVE");// " + hit.collider.gameObject.name + " " + Vector3.Distance(aStar.graph[n].position, hit.point));
+                    aStar.RemovePoint(n);
+                    n--;
+                }
+            }  
+            
         }
 
         Debug.Log("Cloud Nav: Validate Points");
 
-        /*List<Vector3> path = new List<Vector3>();
+        List<Vector3> path = new List<Vector3>();
         for (int x = -halfXCount; x < halfXCount; x++)
         {
             for (int y = -halfYCount; y < halfYCount; y++)
@@ -294,12 +307,12 @@ public class CloudNav : MonoBehaviour
                 {
                     Vector3 targetPosition = new Vector3(x, y, z);
 
-                    if (targetPosition == Vector3.zero)
+                    if (targetPosition == checkPoint.position)
                         continue;
 
                     int startId = aStar.GetClosestPoint(targetPosition);
 
-                    if (startId == -1 || aStar.graph[startId].position == Vector3.zero)
+                    if (startId == -1 || aStar.graph[startId].position == checkPoint.position)
                         continue;
 
                     if (aStar.graph[startId].adjacentPointIDs.Count == 0)
@@ -308,7 +321,7 @@ public class CloudNav : MonoBehaviour
                         continue;
                     }
 
-                    int originId = aStar.GetClosestPoint(Vector3.zero);
+                    int originId = aStar.GetClosestPoint(checkPoint.position);
 
                     //Debug.Log("count " + aStar.Count + " id " + startId + " origin " + originId);
 
@@ -321,7 +334,7 @@ public class CloudNav : MonoBehaviour
                     }
                 }
             }
-        }*/
+        }
 
         aStar.RefreshCashe();
 
