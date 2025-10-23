@@ -238,7 +238,7 @@ public class AStar
 
         for (int i = 1; i < graph.Count; i++)
         {
-            distance = Vector3.Distance(_position, graph[i].position);
+            distance = (_position - graph[i].position).sqrMagnitude;
 
             if (minDistance > distance)
             {
