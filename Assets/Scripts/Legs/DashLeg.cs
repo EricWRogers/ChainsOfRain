@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class DashLeg : Legbase
 {
-    private void Start()
+    public void ToggleOn()
     {
         PlayerMovement playerMovement = PlayerMovement.instance;
 
@@ -11,7 +11,7 @@ public class DashLeg : Legbase
         playerMovement.dashDuration += .2f;
     }
 
-    private void OnDestroy()
+    public void ToggleOff()
     {
         PlayerMovement playerMovement = PlayerMovement.instance;
 

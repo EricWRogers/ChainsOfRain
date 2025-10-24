@@ -3,14 +3,14 @@ using UnityEngine;
 
 public class DoubleJumpLeg : Legbase
 {
-    private void Start()
+    public void ToggleOn()
     {
         PlayerMovement playerMovement = PlayerMovement.instance;
         
         playerMovement.maxJumpCount += 1;
     }
 
-    private void OnDestroy()
+    public void ToggleOff()
     {
         PlayerMovement playerMovement = PlayerMovement.instance;
 
