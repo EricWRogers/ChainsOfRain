@@ -212,7 +212,7 @@ public class PlayerMovement : MovementEngine
             jumpInputElapsed += Time.deltaTime;
 
 
-        if (Input.GetKeyDown(KeyCode.R))
+        if (Input.GetKeyDown(KeyCode.P))
         {
             transform.position = spwanPos;
         }
