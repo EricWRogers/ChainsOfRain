@@ -254,7 +254,7 @@ public class PlayerMovement : MovementEngine
         if (falling)
         {
 
-            if (inputDir.sqrMagnitude > 0f)
+            if (inputDir.sqrMagnitude > 0f && !onLadder)
             {
 
                 var movmentForce = inputDir * airAcelleration * Time.deltaTime;
@@ -273,7 +273,7 @@ public class PlayerMovement : MovementEngine
             m_elapsedFalling += Time.deltaTime;
 
         }
-        else if (onGround && !groundedLastFrame)
+        else if (onGround)
         {
             m_velocity = Vector3.zero;
             m_velocity += inputDir * m_speed;
