@@ -63,6 +63,9 @@ MonoBehaviour:
   ammo: 100
   damage: 1
   firingPoint: {fileID: 5746786237018660526}
+  firePointMask:
+    serializedVersion: 2
+    m_Bits: 128
   onFire:
     m_PersistentCalls:
       m_Calls:
@@ -87,7 +90,7 @@ MonoBehaviour:
   onJettison:
     m_PersistentCalls:
       m_Calls: []
-  fireRate: 2
+  fireRate: 0.2
   muzzleFlash: {fileID: 6119014369020938772}
   onAttatch:
     m_PersistentCalls:
