@@ -25,13 +25,13 @@ Material:
     serializedVersion: 3
     m_TexEnvs:
     - _Mask:
-        m_Texture: {fileID: 2800000, guid: 29182a913c95b0841bd00e10dd77963e, type: 3}
+        m_Texture: {fileID: 2800000, guid: 695a762feebeb321ab814a638139a006, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
     - _AplhaClip: 0
-    - _Distort_amount: 1
+    - _Distort_amount: 0.434
     - _NoisePower: 2
     - _QueueControl: 0
     m_Colors:
