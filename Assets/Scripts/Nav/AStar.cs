@@ -59,7 +59,6 @@ public class AStar
 
     public void RequestPath(Action<List<Vector3>> _callback, int _idFrom, int _idTo)
     {
-        Debug.Log("ENQUEUE");
         //AStarRequest request = new AStarRequest(_callback, _idFrom, _idTo);
         //requestQueue.Enqueue(request);
 
@@ -79,10 +78,8 @@ public class AStar
 
     public void UpdateResponseQueue()
     {
-        Debug.Log("UpdateResponseQueue: " + responseQueue.Count + " " + requestQueue.Count);
         for (int i = 0; i < responseQueue.Count; i++)
         {
-            Debug.Log("DEQUEUE");
             AStarResponse response = responseQueue.Dequeue();
             response.callback(response.parameter);
         }
