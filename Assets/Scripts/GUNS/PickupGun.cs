@@ -26,7 +26,7 @@ public class PickupGun : MonoBehaviour
     [SerializeField] 
     private Renderer[] pickupRenderers;
 
-
+    public bool tutorial = false;
 
     Vector3 groundPos;
     private void OnTriggerEnter(Collider other)
@@ -34,7 +34,7 @@ public class PickupGun : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             bool didwork = WeaponManager.instance.AttatchGun(gun);
-            if (didwork)
+            if (didwork && !tutorial)
             {
                 AddHealth();
                 Destroy(gameObject);
@@ -69,7 +69,7 @@ public class PickupGun : MonoBehaviour
             HoverAndSpin();
             repeat += 1;
             //start timer
-            if (timer != null && repeat == 1)
+            if (timer != null && repeat == 1 && !tutorial)
                 timer.StartTimer();
         }
     }
