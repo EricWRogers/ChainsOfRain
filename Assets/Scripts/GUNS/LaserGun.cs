@@ -11,7 +11,9 @@ public class LaserGun : Gunbase
     public float chargeRate;
     public LineRenderer beam;
     private float damageTime;
+    public float damageInterval = 0.25f;
     public int maxSegments = 10;
+    public LayerMask mask;
 
 
     public bool firing = false;
@@ -25,7 +27,7 @@ public class LaserGun : Gunbase
         firing = true;
 
         // deal damage and get distance
-        if (Physics.Raycast(firingPoint.position, firingPoint.forward, out RaycastHit hit, Mathf.Infinity, Physics.AllLayers) && damageTime >= 0.5f)
+        if (Physics.Raycast(firingPoint.position, firingPoint.forward, out RaycastHit hit, Mathf.Infinity, mask) && damageTime >= damageInterval)
         {
             lastDistance = Vector3.Distance(hit.point, firingPoint.position);
 
@@ -35,8 +37,13 @@ public class LaserGun : Gunbase
                 damageTime = 0f;
             }
         }
-        
-        // update laser
+        else
+        {
+            if (Physics.Raycast(firingPoint.position, firingPoint.forward, out RaycastHit ehit, Mathf.Infinity, Physics.AllLayers))
+                lastDistance = Vector3.Distance(ehit.point, firingPoint.position);
+        }
+
+        // update lazer
         int segments = Mathf.Max(1, maxSegments);
         float segmentLength = lastDistance / segments;
         int pointCount = segments + 1;
@@ -63,7 +70,7 @@ public class LaserGun : Gunbase
 
 
     // Update is called once per frame
-    new void Update()
+    void LateUpdate()
     {
         if(!firing)
             beam.positionCount = 0;
