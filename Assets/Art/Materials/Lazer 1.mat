@@ -7,7 +7,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Lazer
+  m_Name: Lazer 1
   m_Shader: {fileID: -6465566751694194690, guid: 1676e2160f0f72119a3a43d1ad0c64a1, type: 3}
   m_Parent: {fileID: -876546973899608171, guid: 1676e2160f0f72119a3a43d1ad0c64a1, type: 3}
   m_ModifiedSerializedProperties: 0
@@ -24,20 +24,18 @@ Material:
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
-    - _MainTexture:
-        m_Texture: {fileID: 2800000, guid: 717d97fd8c3ea3e819b9dea7909830fe, type: 3}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
     - _Mask:
         m_Texture: {fileID: 2800000, guid: 695a762feebeb321ab814a638139a006, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _Distort_amount: 0.053
+    - _AplhaClip: 0
+    - _Distort_amount: 1
+    - _NoisePower: 0
     - _QueueControl: 0
     m_Colors:
-    - _Color: {r: 0.93333334, g: 0.7323355, b: 0.09411764, a: 1}
+    - _Color: {r: 0.09411764, g: 0.9029635, b: 0.93333334, a: 1}
     - _MainSpeed: {r: -1, g: 0, b: 0, a: 0}
     - _NoiseSpeed: {r: -2, g: 0, b: 0, a: 0}
   m_BuildTextureStacks: []
