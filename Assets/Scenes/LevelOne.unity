@@ -14417,18 +14417,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player
       objectReference: {fileID: 0}
-    - target: {fileID: 527418616892296209, guid: ec7c4a95275596a659f52b59480f657a, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0.0605
-      objectReference: {fileID: 0}
-    - target: {fileID: 527418616892296209, guid: ec7c4a95275596a659f52b59480f657a, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0.264
-      objectReference: {fileID: 0}
-    - target: {fileID: 527418616892296209, guid: ec7c4a95275596a659f52b59480f657a, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0.453
-      objectReference: {fileID: 0}
     - target: {fileID: 4586863230530806638, guid: ec7c4a95275596a659f52b59480f657a, type: 3}
       propertyPath: m_AnchorMax.x
       value: 0
@@ -14436,22 +14424,6 @@ PrefabInstance:
     - target: {fileID: 4586863230530806638, guid: ec7c4a95275596a659f52b59480f657a, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4771604431093475518, guid: ec7c4a95275596a659f52b59480f657a, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0.0605
-      objectReference: {fileID: 0}
-    - target: {fileID: 4771604431093475518, guid: ec7c4a95275596a659f52b59480f657a, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0.264
-      objectReference: {fileID: 0}
-    - target: {fileID: 4771604431093475518, guid: ec7c4a95275596a659f52b59480f657a, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0.453
-      objectReference: {fileID: 0}
-    - target: {fileID: 8102579173036111195, guid: ec7c4a95275596a659f52b59480f657a, type: 3}
-      propertyPath: m_MotionVectors
-      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -20549,7 +20521,7 @@ MonoBehaviour:
         m_CallState: 2
   autoStart: 1
   autoRestart: 1
-  countDownTime: 1
+  countDownTime: 3
   timeScale: 1
 --- !u!114 &711226058
 MonoBehaviour:
