@@ -11,21 +11,37 @@ public class LaserGun : Gunbase
     public float chargeRate;
     public LineRenderer beam;
     private float damageTime;
+    public int maxSegments = 10;
     
 
     public bool firing = false;
     public override void Fire(Transform _firingPoint, GameObject _bulletPrefab)
     {
-        //if (burnedOut) return; //Maybe we play some stuff to let the player know its burned here as well.
 
+        if (burnedOut) return;
+        
         Logger.instance.Log("Firing mah lazar!", Logger.LogType.Gun);
         firing = true;
         if (Physics.Raycast(firingPoint.position, firingPoint.forward, out RaycastHit hit, Mathf.Infinity, Physics.AllLayers) && damageTime >= 0.5f)
         {
-            Debug.Log("hit somtihgn");
-            beam.positionCount = 2;
-            beam.SetPosition(0, firingPoint.position);
-            beam.SetPosition(1, hit.point);
+            float distance = Vector3.Distance(hit.point, firingPoint.position);
+                    
+            int segments = Mathf.Max(1, maxSegments);
+            float segmentLength = distance / segments;
+            int pointCount = segments + 1;
+
+            beam.positionCount = pointCount;
+
+            Vector3 dir = (hit.point - firingPoint.position).normalized;
+            Vector3 startPos = firingPoint.position;
+
+            // set discrete points along the beam so the mesh doesn't stretch
+            for (int i = 0; i < pointCount; i++)
+            {
+                beam.SetPosition(i, startPos + dir * (segmentLength * i));
+            }
+
+
             if (hit.transform.gameObject.tag == "Enemy")
             {
                 hit.transform.gameObject.GetComponent<Health>().Damage(damage);
