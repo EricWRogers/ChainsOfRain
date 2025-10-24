@@ -295,6 +295,9 @@ MonoBehaviour:
   ammo: 0
   damage: 5
   firingPoint: {fileID: 2915278968055940340}
+  firePointMask:
+    serializedVersion: 2
+    m_Bits: 128
   onFire:
     m_PersistentCalls:
       m_Calls:
