@@ -20521,7 +20521,7 @@ MonoBehaviour:
         m_CallState: 2
   autoStart: 1
   autoRestart: 1
-  countDownTime: 1
+  countDownTime: 3
   timeScale: 1
 --- !u!114 &711226058
 MonoBehaviour:
