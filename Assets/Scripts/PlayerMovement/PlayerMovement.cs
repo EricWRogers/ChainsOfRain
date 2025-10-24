@@ -296,7 +296,8 @@ public class PlayerMovement : MovementEngine
         }
         else if ( attemptingJump && onLadder)
         {
-            m_velocity = ladderUpForce * Vector3.up;
+            m_velocity += ladderUpForce * Vector3.up;
+            m_velocity.y = Mathf.Clamp(m_velocity.y, 5, 10);
         }
         else
             m_timeSinceLastJump += Time.deltaTime;
