@@ -29,6 +29,7 @@ public abstract class Gunbase : MonoBehaviour
     public int damage = 1;
 
     public Transform firingPoint;
+    public LayerMask firePointMask;
 
     public UnityEvent onFire;
 
@@ -68,7 +69,7 @@ public abstract class Gunbase : MonoBehaviour
             {
                 ReleaseFiring();
             }
-            if (Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out RaycastHit hit))
+            if (Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out RaycastHit hit, Mathf.Infinity, firePointMask))
             {
                 firingPoint.LookAt(hit.point);
             }

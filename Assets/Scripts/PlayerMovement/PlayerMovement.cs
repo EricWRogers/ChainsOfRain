@@ -113,12 +113,9 @@ public class PlayerMovement : MovementEngine
 
     public float slideFriction = 0.95f;
 
-    // Internal slide state
-    private float currentSlideSpeed = 0f;
-    private Vector3 slideVelocity = Vector3.zero;
-    private bool wasGroundedLastFrame = false;
-    private float slideStartTime = 0f;
-
+    public bool onLadder = false;
+    public float ladderUpForce = 5f;
+    public bool groundedLastFrame = false;
 
     // Knockback
     private Vector3 kbDir;
@@ -276,7 +273,7 @@ public class PlayerMovement : MovementEngine
             m_elapsedFalling += Time.deltaTime;
 
         }
-        else if (onGround)
+        else if (onGround && !groundedLastFrame)
         {
             m_velocity = Vector3.zero;
             m_velocity += inputDir * m_speed;
@@ -290,17 +287,19 @@ public class PlayerMovement : MovementEngine
         bool attemptingJump = jumpInputElapsed <= m_jumpBufferTime;
 
 
-        if (shouldJump && attemptingJump)
+        if (shouldJump && attemptingJump && !onLadder)
         {
             jumpCount -= 1;
             m_velocity.y = jumpForce;
             m_timeSinceLastJump = 0.0f;
             jumpInputElapsed = Mathf.Infinity;
         }
-        else
+        else if ( attemptingJump && onLadder)
         {
-            m_timeSinceLastJump += Time.deltaTime;
+            m_velocity = ladderUpForce * Vector3.up;
         }
+        else
+            m_timeSinceLastJump += Time.deltaTime;
 
         transform.position = MovePlayer(m_velocity * Time.deltaTime);
         transform.rotation = new Quaternion(transform.rotation.x, cam.transform.rotation.y, transform.rotation.z, cam.rotation.w);
@@ -310,6 +309,8 @@ public class PlayerMovement : MovementEngine
         {
             m_dashCooldownTimer -= Time.deltaTime;
         }
+
+        groundedLastFrame = groundedState.isGrounded;
 
         if (onGround && !attemptingJump)
             SnapPlayerDown();

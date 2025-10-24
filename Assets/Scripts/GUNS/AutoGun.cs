@@ -12,8 +12,9 @@ public class AutoGun : Gunbase
 
     public override void Fire(Transform _firingPoint, GameObject _bulletPrefab)
     {
-        if (attatched == true && Time.time >= nextFireTime && ammo != 0)
+        if (attatched == true && Time.time >= nextFireTime + fireRate && ammo != 0)
         {
+            nextFireTime = Time.time;
             onFire.Invoke();
             PlayMuzzleFlash();
             GameObject temp = Instantiate(_bulletPrefab, _firingPoint.position, _firingPoint.rotation);

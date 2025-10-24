@@ -43,6 +43,7 @@ public class CloudNav : MonoBehaviour
     public AStar aStar;
 
     public List<BoxCollider> spawnAreas;
+    public List<BoxCollider> excludeAreas;
 
     public int xCount = 50;
     public int yCount = 10;
@@ -99,6 +100,10 @@ public class CloudNav : MonoBehaviour
                     for (int i = 0; i < spawnAreas.Count; i++)
                         if (spawnAreas[i].ClosestPoint(targetPoint) == targetPoint)
                             safe = true;
+
+                    for (int i = 0; i < excludeAreas.Count; i++)
+                        if (excludeAreas[i].ClosestPoint(targetPoint) != targetPoint)
+                            safe = false;
 
                     if (safe)
                         aStar.AddPoint(targetPoint);
