@@ -23,7 +23,11 @@ public class LaserGun : Gunbase
     public override void Fire(Transform _firingPoint, GameObject _bulletPrefab)
     {
 
-        if (burnedOut) return;
+        if (burnedOut)
+        {
+            beam.positionCount = 0;
+            return; 
+        } 
         
         Logger.instance.Log("Firing mah lazar!", Logger.LogType.Gun);
         firing = true;
