@@ -4,6 +4,7 @@ using KinematicCharacterControler;
 public class Elevator : MonoBehaviour
 {
     public bool isBossDead = false;
+    public bool isThirdLevelElevator = false;
     public float offset = 1.2f;
     public Animator elevator;
 
@@ -14,11 +15,14 @@ public class Elevator : MonoBehaviour
 
     void OnTriggerEnter(Collider other)
     {
-        if(other.CompareTag("Player") && isBossDead)
+        if(other.CompareTag("Player"))
         {
-            elevator.Play("ElevatorMove");
-            other.GetComponent<PlayerMovement>().enabled = false;
-            other.gameObject.transform.SetParent(transform);
+            if (isThirdLevelElevator || isBossDead)
+            {
+                elevator.Play("ElevatorMove");
+                other.GetComponent<PlayerMovement>().enabled = false;
+                other.gameObject.transform.SetParent(transform);
+            }
         }
     }
 }
