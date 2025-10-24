@@ -228,6 +228,18 @@ MonoBehaviour:
   outOfHealth:
     m_PersistentCalls:
       m_Calls:
+      - m_Target: {fileID: 7827601757241167219}
+        m_TargetAssemblyTypeName: FlyGun, Assembly-CSharp
+        m_MethodName: Dead
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
       - m_Target: {fileID: 7535540225041354136}
         m_TargetAssemblyTypeName: EnemyMap, Assembly-CSharp
         m_MethodName: DeleteBlip
@@ -267,6 +279,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a0d8bb241260c64eb8f036e14ef6c9a8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  explosion: {fileID: 2774587953531831966, guid: 3ae688946b6ceca119b826c7bd1505a3, type: 3}
   cloudNav: {fileID: 0}
   bulletPrefab: {fileID: 1677151471763431687, guid: 655035f2a5bbaaf44a841e9004c857dd, type: 3}
   firePoint: {fileID: 797563408577898869}

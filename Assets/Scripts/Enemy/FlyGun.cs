@@ -4,6 +4,7 @@ using SuperPupSystems.Helper;
 using KinematicCharacterControler;
 public class FlyGun : MonoBehaviour
 {
+    public GameObject explosion;
     public CloudNav cloudNav;
     public GameObject bulletPrefab;
     public Transform firePoint;
@@ -107,9 +108,15 @@ public class FlyGun : MonoBehaviour
     {
         path.Clear();
 
-        targetIndex = 0;        
+        targetIndex = 0;
 
         path = _path;
+    }
+    
+    public void Dead()
+    {
+        GameObject go = Instantiate(explosion, transform.position, Quaternion.identity);
+        Destroy(go, 2.0f);
     }
 }
 
