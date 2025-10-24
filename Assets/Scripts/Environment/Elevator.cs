@@ -29,4 +29,12 @@ public class Elevator : MonoBehaviour
             other.gameObject.transform.SetParent(transform);
         }
     }
+
+    void OnTriggerExit(Collider other)
+    {
+        if (other.gameObject.CompareTag("Player"))
+        {
+            //Unset Parent Transform
+        }
+    }
 }
