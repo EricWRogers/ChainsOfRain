@@ -1,7 +1,7 @@
 using System;
 using SuperPupSystems.Helper;
 using UnityEngine;
-
+using UnityEngine.Events;
 public class LaserGun : Gunbase
 {
    //MaxAmmo is our max charge.
@@ -15,6 +15,8 @@ public class LaserGun : Gunbase
     public int maxSegments = 10;
     public LayerMask mask;
 
+
+    public UnityEvent onAttatch;
 
     public bool firing = false;
     private float lastDistance = 10.0f;

@@ -178,6 +178,7 @@ public class WeaponManager : MonoBehaviour
 
             case GunType.Laser:
                 LaserGun laser = arm.GetComponentInChildren<LaserGun>();
+                laser.onAttatch.Invoke();
                 laser.transform.GetChild(0).gameObject.SetActive(true);
                 laser.leftHanded = arm.name == "LeftBicep";
                 laser.rightHanded = arm.name == "RightBicep";
