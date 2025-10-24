@@ -11,10 +11,13 @@ public class LaserGun : Gunbase
     public float chargeRate;
     public LineRenderer beam;
     private float damageTime;
+    public float damageInterval = 0.25f;
     public int maxSegments = 10;
-    
+    public LayerMask mask;
+
 
     public bool firing = false;
+    private float lastDistance = 10.0f;
     public override void Fire(Transform _firingPoint, GameObject _bulletPrefab)
     {
 
@@ -22,33 +25,39 @@ public class LaserGun : Gunbase
         
         Logger.instance.Log("Firing mah lazar!", Logger.LogType.Gun);
         firing = true;
-        if (Physics.Raycast(firingPoint.position, firingPoint.forward, out RaycastHit hit, Mathf.Infinity, Physics.AllLayers) && damageTime >= 0.5f)
+
+        // deal damage and get distance
+        if (Physics.Raycast(firingPoint.position, firingPoint.forward, out RaycastHit hit, Mathf.Infinity, mask) && damageTime >= damageInterval)
         {
-            float distance = Vector3.Distance(hit.point, firingPoint.position);
-                    
-            int segments = Mathf.Max(1, maxSegments);
-            float segmentLength = distance / segments;
-            int pointCount = segments + 1;
+            lastDistance = Vector3.Distance(hit.point, firingPoint.position);
 
-            beam.positionCount = pointCount;
-
-            Vector3 dir = (hit.point - firingPoint.position).normalized;
-            Vector3 startPos = firingPoint.position;
-
-            // set discrete points along the beam so the mesh doesn't stretch
-            for (int i = 0; i < pointCount; i++)
-            {
-                beam.SetPosition(i, startPos + dir * (segmentLength * i));
-            }
-
-
-            if (hit.transform.gameObject.tag == "Enemy")
+            if (hit.transform.gameObject.GetComponent<Health>())
             {
                 hit.transform.gameObject.GetComponent<Health>().Damage(damage);
                 damageTime = 0f;
             }
         }
-    
+        else
+        {
+            if (Physics.Raycast(firingPoint.position, firingPoint.forward, out RaycastHit ehit, Mathf.Infinity, Physics.AllLayers))
+                lastDistance = Vector3.Distance(ehit.point, firingPoint.position);
+        }
+
+        // update lazer
+        int segments = Mathf.Max(1, maxSegments);
+        float segmentLength = lastDistance / segments;
+        int pointCount = segments + 1;
+
+        beam.positionCount = pointCount;
+
+        Vector3 dir = firingPoint.forward;
+        Vector3 startPos = firingPoint.position;
+
+        // set discrete points along the beam so the mesh doesn't stretch
+        for (int i = 0; i < pointCount; i++)
+        {
+            beam.SetPosition(i, startPos + dir * (segmentLength * i));
+        }
         
         
     }
@@ -61,7 +70,7 @@ public class LaserGun : Gunbase
 
 
     // Update is called once per frame
-    new void Update()
+    void LateUpdate()
     {
         if(!firing)
             beam.positionCount = 0;
