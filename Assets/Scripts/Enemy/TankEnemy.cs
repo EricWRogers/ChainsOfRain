@@ -4,6 +4,7 @@ using UnityEngine.AI;
 
 public class TankEnemy : MonoBehaviour
 {
+    public GameObject explosion;
     private GameObject m_player;
     private NavMeshAgent m_agent;
     public GameObject bulletPrefab;
@@ -56,6 +57,9 @@ public class TankEnemy : MonoBehaviour
 
     public void Dead()
     {
+        GameObject go = Instantiate(explosion, transform.position, Quaternion.identity);
+        Destroy(go, 2.0f);
+        
         Destroy(gameObject);
     }
 }
