@@ -88,30 +88,31 @@ Material:
     m_Ints: []
     m_Floats:
     - _BubbleMovementRatio: 0.91
-    - _BubbleNormalStrength: 1.18
+    - _BubbleNormalStrength: 1
     - _DisplacementStrength: 1
     - _Divide_by: 0.47
     - _Float: 1
-    - _LocalDisplacementScale: 3.14
-    - _LocalDisplacementSpeed: 0.64
+    - _LocalDisplacementScale: 3.06
+    - _LocalDisplacementSpeed: 5
     - _Offset: -0.8
     - _QueueControl: 0
     - _QueueOffset: 0
     - _SurfaceNoise: 2.32
-    - _SurfaceNoiseScale: 1
+    - _SurfaceNoiseScale: 0.1
     - _SurfaceNoiseSpeed: 1
     - _SurfaceNoiseStrength: 6.59
     - _smoothness: 0.32
     m_Colors:
     - _BaseColor: {r: 0.14509805, g: 0, b: 0.1882353, a: 0}
-    - _BubblesEmission: {r: 3.3371823, g: 0, b: 1.5026057, a: 0}
+    - _BubblesEmission: {r: 4.2032075, g: 0.8525374, b: 1.1662474, a: 0}
     - _Emission: {r: 0, g: 1, b: 0.052033424, a: 0}
     - _Flow: {r: 0, g: 0.45, b: 0, a: 0}
     - _LocalDisplacement: {r: 0, g: 0, b: 0.32, a: 0}
-    - _LocalDisplacementStrength: {r: 0, g: 0, b: 0.39, a: 0}
+    - _LocalDisplacementStrength: {r: 0, g: 0.15, b: 0.39, a: 0}
     - _ScrollSpeed: {r: 0, g: 0, b: 0, a: 0}
     - _SplurColor: {r: 0.24271956, g: 0, b: 0.5471698, a: 0}
     - _SplurEmission: {r: 0.16555823, g: 0, b: 1.6642958, a: 0}
+    - _Tiling: {r: 2, g: 2, b: 0, a: 0}
   m_BuildTextureStacks: []
   m_AllowLocking: 1
 --- !u!114 &9096251761093512714
