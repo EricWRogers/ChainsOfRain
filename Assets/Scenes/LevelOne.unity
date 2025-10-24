@@ -61260,6 +61260,10 @@ PrefabInstance:
       propertyPath: timeout.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 711226058}
+    - target: {fileID: 5925137560095228682, guid: dab13d227d091494ebf18be6e289c594, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 3a4b21f1040df4f41b8010b6ce214df2, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

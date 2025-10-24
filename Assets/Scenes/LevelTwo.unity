@@ -44905,6 +44905,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 47f22c7eba2ccca2ba14990936e170cf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &441656085 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4334218912661131381, guid: c3dfa4dd30608604a82b183906c07112, type: 3}
+  m_PrefabInstance: {fileID: 843829374482475709}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 700ae9321ce9e344a94d49086fb9a22c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &442989830
 GameObject:
   m_ObjectHideFlags: 0
@@ -123547,16 +123558,16 @@ MonoBehaviour:
   bossOutOfHealth:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 573115028}
-        m_TargetAssemblyTypeName: NextLevel, Assembly-CSharp
-        m_MethodName: GoToNext
-        m_Mode: 5
+      - m_Target: {fileID: 441656085}
+        m_TargetAssemblyTypeName: Elevator, Assembly-CSharp
+        m_MethodName: BossDead
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
-          m_StringArgument: WinScene
+          m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
 --- !u!4 &1175269904
@@ -180627,6 +180638,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cloudPointPrefab: {fileID: 5152357358710602211, guid: bf741cac11349cb54bad53b6b4a7e5cf, type: 3}
+  checkPoint: {fileID: 0}
   aStar:
     graph:
     - position: {x: -11, y: -3, z: -16}
@@ -211441,6 +211453,11 @@ MonoBehaviour:
   xCount: 100
   yCount: 25
   zCount: 100
+  sphereRadius: 1
+  nodeSpacing: 1
+  mask:
+    serializedVersion: 2
+    m_Bits: 0
 --- !u!4 &1707378897
 Transform:
   m_ObjectHideFlags: 0
