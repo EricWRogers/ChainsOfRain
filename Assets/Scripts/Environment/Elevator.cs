@@ -15,14 +15,18 @@ public class Elevator : MonoBehaviour
 
     void OnTriggerEnter(Collider other)
     {
-        if(other.CompareTag("Player"))
+        if (other.CompareTag("Player"))
         {
-            if (isThirdLevelElevator || isBossDead)
+            if (isThirdLevelElevator)
+            {
+                elevator.Play("GoToFirstFloorElevator");
+            }
+            else if (isBossDead)
             {
                 elevator.Play("ElevatorMove");
-                other.GetComponent<PlayerMovement>().enabled = false;
-                other.gameObject.transform.SetParent(transform);
             }
+            other.GetComponent<PlayerMovement>().enabled = false;
+            other.gameObject.transform.SetParent(transform);
         }
     }
 }

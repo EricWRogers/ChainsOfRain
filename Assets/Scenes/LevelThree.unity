@@ -32629,7 +32629,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isBossDead: 0
-  isThirdLevelElevator: 0
+  isThirdLevelElevator: 1
   offset: 1.2
   elevator: {fileID: 1152616769}
 --- !u!64 &701435303
@@ -32654,6 +32654,27 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: -2745519390412981159, guid: 42c2c72335c8a804ca374463e1a74adb, type: 3}
+--- !u!65 &701435307
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 701435298}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 577.7952, y: 292.14114, z: 565.1022}
+  m_Center: {x: 32.41644, y: 220.80069, z: -0.13360977}
 --- !u!1 &702161785
 GameObject:
   m_ObjectHideFlags: 0
@@ -79717,6 +79738,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: -4097834336297889281, guid: 42c2c72335c8a804ca374463e1a74adb, type: 3}
       insertIndex: -1
       addedObject: {fileID: 701435302}
+    - targetCorrespondingSourceObject: {fileID: -4097834336297889281, guid: 42c2c72335c8a804ca374463e1a74adb, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 701435307}
   m_SourcePrefab: {fileID: 100100000, guid: 42c2c72335c8a804ca374463e1a74adb, type: 3}
 --- !u!1 &2086360079
 GameObject:
