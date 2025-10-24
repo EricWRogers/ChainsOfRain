@@ -33,6 +33,7 @@ public class LegManager : MonoBehaviour
                     case LegType.DoubleJump:
                         leftLegType = LegType.None;
                         DoubleJumpLeg doubleJump = leftLeg.GetComponentInChildren<DoubleJumpLeg>();
+                        doubleJump.ToggleOff();
                         doubleJump.Jettison();
                         doubleJump.transform.GetChild(0).gameObject.SetActive(false);
                         doubleJump.canUse = false;
@@ -41,6 +42,7 @@ public class LegManager : MonoBehaviour
                     case LegType.Dash:
                         leftLegType = LegType.None;
                         DashLeg dash = leftLeg.GetComponentInChildren<DashLeg>();
+                        dash.ToggleOff();
                         dash.Jettison();
                         dash.transform.GetChild(0).gameObject.SetActive(false);
                         dash.canUse = false;
@@ -62,6 +64,7 @@ public class LegManager : MonoBehaviour
                         
                         rightLegType = LegType.None;
                         DoubleJumpLeg doubleJump = rightLeg.GetComponentInChildren<DoubleJumpLeg>();
+                        doubleJump.ToggleOff();
                         doubleJump.Jettison();
                         doubleJump.transform.GetChild(0).gameObject.SetActive(false);
                         doubleJump.canUse = false;
@@ -70,6 +73,7 @@ public class LegManager : MonoBehaviour
                     case LegType.Dash:
                         rightLegType = LegType.None;
                         DashLeg dash = rightLeg.GetComponentInChildren<DashLeg>();
+                        dash.ToggleOff();
                         dash.Jettison();
                         dash.transform.GetChild(0).gameObject.SetActive(false);
                         dash.canUse = false;
@@ -118,13 +122,14 @@ public class LegManager : MonoBehaviour
                 doubleJump.transform.GetChild(0).gameObject.SetActive(true);
                 doubleJump.leftLegged = leg.name == "LeftBicep";
                 doubleJump.rightLegged = leg.name == "RightBicep";
-
+                doubleJump.ToggleOn();
                 doubleJump.canUse = true;
                 break;
 
             case LegType.Dash:
                 DashLeg dashLeg = leg.GetComponentInChildren<DashLeg>();
                 dashLeg.transform.GetChild(0).gameObject.SetActive(true);
+                dashLeg.ToggleOn();
                 dashLeg.leftLegged = leg.name == "LeftBicep";
                 dashLeg.leftLegged = leg.name == "RightBicep";
                 dashLeg.canUse = true;

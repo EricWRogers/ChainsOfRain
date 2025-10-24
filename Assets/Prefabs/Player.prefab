@@ -1009,7 +1009,7 @@ MonoBehaviour:
   dashForce: 0
   dashDuration: 0
   dashCoolDown: 2
-  canDash: 1
+  canDash: 0
   dashKey: 9
   dashFOV: 80
   dashCurve:
@@ -1048,8 +1048,8 @@ MonoBehaviour:
   maxJumpAngle: 80
   jumpCooldown: 0.1
   canDoubleJump: 1
-  maxJumpCount: 2
-  jumpCount: 2
+  maxJumpCount: 1
+  jumpCount: 1
   jumpInputElapsed: Infinity
   isSliding: 0
   canSlide: 0
