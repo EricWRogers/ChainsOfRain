@@ -14,10 +14,15 @@ public class AutoGun : Gunbase
     public override void Fire(Transform _firingPoint, GameObject _bulletPrefab)
     {
     
-        if (attatched == true && Time.time >= nextFireTime + fireRate && ammo != 0)
+        if(ammo == 0)
         {
-            nextFireTime = Time.time;
-            if (firing && !wasFiring)
+            ReleaseFiring();
+        }
+
+        if (attatched && Time.time >= nextFireTime && ammo > 0)
+        {
+            nextFireTime = Time.time + fireRate;
+        if (firing && !wasFiring)
         {
         
          onFire.Invoke(); 

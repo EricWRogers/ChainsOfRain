@@ -33,7 +33,6 @@ Transform:
   m_Children:
   - {fileID: 6449082034813832064}
   - {fileID: 5746786237018660526}
-  - {fileID: 955567121203418958}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &2510464198433040161
@@ -354,11 +353,11 @@ Transform:
   m_GameObject: {fileID: 7534445161514995537}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 35.94467}
+  m_LocalScale: {x: 559.01495, y: 559.015, z: -559.015}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 1334850912857781710}
+  m_Father: {fileID: 6449082034813832064}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!82 &1821703399516702197
 AudioSource:
@@ -615,6 +614,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: -8679921383154817045, guid: 916686c7c2850194fa4aa8f77d773059, type: 3}
       insertIndex: -1
       addedObject: {fileID: 908609097006188591}
+    - targetCorrespondingSourceObject: {fileID: -8679921383154817045, guid: 916686c7c2850194fa4aa8f77d773059, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 955567121203418958}
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 916686c7c2850194fa4aa8f77d773059, type: 3}
 --- !u!4 &6449082034813832064 stripped
