@@ -130,4 +130,9 @@ public class LaserGun : Gunbase
         firing = false;
         onRelease.Invoke();
     }
+
+    public void Refresh()
+    {
+        burnedOut = false; 
+    }
 }

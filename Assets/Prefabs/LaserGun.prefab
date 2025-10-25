@@ -277,7 +277,19 @@ MonoBehaviour:
   leftUI: {fileID: 0}
   onJettison:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 2310800454082757319}
+        m_TargetAssemblyTypeName: LaserGun, Assembly-CSharp
+        m_MethodName: Refresh
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   overChargeWarning: 750
   burnedOut: 0
   chargeRate: 2

@@ -116,6 +116,7 @@ public abstract class Gunbase : MonoBehaviour
 
     public void Jettison()
     {
+        
         ReleaseFiring();
         attatched = false;
 
