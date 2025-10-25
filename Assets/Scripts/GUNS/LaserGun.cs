@@ -19,6 +19,7 @@ public class LaserGun : Gunbase
     public UnityEvent onAttatch;
 
     public bool firing = false;
+    private bool wasFiring = false;
     private float lastDistance = 10.0f;
     public override void Fire(Transform _firingPoint, GameObject _bulletPrefab)
     {
@@ -26,10 +27,19 @@ public class LaserGun : Gunbase
         if (burnedOut)
         {
             beam.positionCount = 0;
+            ReleaseFiring();
             return; 
-        } 
-        
+        }
+
         Logger.instance.Log("Firing mah lazar!", Logger.LogType.Gun);
+        if (firing && !wasFiring)
+        {
+        
+         onFire.Invoke(); 
+        }
+    
+
+        wasFiring = firing;
         firing = true;
 
         // deal damage and get distance
@@ -115,5 +125,6 @@ public class LaserGun : Gunbase
     public override void ReleaseFiring()
     {
         firing = false;
+        onRelease.Invoke();
     }
 }
