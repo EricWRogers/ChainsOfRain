@@ -356,21 +356,17 @@ public class PlayerMovement : MovementEngine
 
         Vector3 inputDir = new Vector3(mouseInput.x, 0, mouseInput.y);
 
-        if (inputDir.z > 0)
+        
+        if (!m_isWallRiding && !groundedState.isGrounded)
         {
-            if (!m_isWallRiding && !groundedState.isGrounded)
+            if (WallCheck(out RaycastHit hit))
             {
-
-                RaycastHit hit;
-                if (Physics.Raycast(transform.position, transform.right, out hit, wallCheckDistance, wallLayer) ||
-                     Physics.Raycast(transform.position, -transform.right, out hit, wallCheckDistance, wallLayer))
-                {
-                    m_isWallRiding = true;
-                    m_wallNormal = hit.normal;
-                    wallRideTimer = 0f;
-                }
+                m_isWallRiding = true;
+                m_wallNormal = hit.normal;
+                wallRideTimer = 0f;
             }
         }
+        
 
         if (m_isWallRiding)
         {
@@ -399,6 +395,30 @@ public class PlayerMovement : MovementEngine
         }
 
         m_isWallRiding = false;
+        return false;
+    }
+
+    public bool WallCheck(out RaycastHit hit)
+    {
+        hit = new RaycastHit();
+        for (int i = -20; i <= 20; i += 5)
+        {
+            Vector3 dir = Quaternion.AngleAxis(i, Vector3.up) * transform.right;
+            if (Physics.Raycast(transform.position, dir, out hit, wallCheckDistance, wallLayer))
+            {
+                return true;
+            }
+        }
+        
+        for (int i = -20; i<=20; i += 5)
+        {
+            Vector3 dir = Quaternion.AngleAxis(i, Vector3.up) * -transform.right;
+            if(Physics.Raycast(transform.position, dir, out hit, wallCheckDistance, wallLayer))
+            {
+                return true;
+            }
+        }
+
         return false;
     }
     #endregion
