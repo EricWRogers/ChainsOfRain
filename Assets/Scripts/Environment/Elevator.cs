@@ -20,13 +20,16 @@ public class Elevator : MonoBehaviour
             if (isThirdLevelElevator)
             {
                 elevator.Play("GoToFirstFloorElevator");
+                other.GetComponent<PlayerMovement>().enabled = false;
+            other.gameObject.transform.SetParent(transform);
             }
             else if (isBossDead)
             {
                 elevator.Play("ElevatorMove");
+                other.GetComponent<PlayerMovement>().enabled = false;
+                other.gameObject.transform.SetParent(transform);
             }
-            other.GetComponent<PlayerMovement>().enabled = false;
-            other.gameObject.transform.SetParent(transform);
+            
         }
     }
 
