@@ -86,11 +86,11 @@ GameObject:
   - component: {fileID: 1241457668559563309}
   - component: {fileID: 1816688603516907049}
   - component: {fileID: 2668025346738868325}
-  - component: {fileID: 7845542278651235825}
   - component: {fileID: 2094709679859139684}
   - component: {fileID: 7827601757241167219}
   - component: {fileID: 7535540225041354136}
   - component: {fileID: -4944557245869189472}
+  - component: {fileID: 8913252230113564341}
   m_Layer: 7
   m_Name: FlyGun 1
   m_TagString: Enemy
@@ -170,27 +170,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!65 &7845542278651235825
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3653606285374236233}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 1, y: 1.5318909, z: 1}
-  m_Center: {x: 0, y: -0.26594543, z: 0}
 --- !u!114 &2094709679859139684
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -322,6 +301,29 @@ MonoBehaviour:
   traversalType: 1
   cost: 2
   drop: {fileID: 4842912413552020332, guid: 58c096b3898c12742ae27c526cdcaf6e, type: 3}
+--- !u!136 &8913252230113564341
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3653606285374236233}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.5
+  m_Height: 2.5
+  m_Direction: 1
+  m_Center: {x: 0, y: -0.78, z: 0}
 --- !u!1 &4098244173016988505
 GameObject:
   m_ObjectHideFlags: 0
