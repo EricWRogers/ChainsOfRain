@@ -5098,7 +5098,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Press Q to throw left arm Z to throw right arm
+  m_text: Press Q to throw left arm E to throw right arm
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8724d8dfe1cea6044a5022b1b42a09b8, type: 2}
   m_sharedMaterial: {fileID: -3765368362867481170, guid: 8724d8dfe1cea6044a5022b1b42a09b8, type: 2}

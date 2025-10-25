@@ -13,7 +13,7 @@ public class Elevator : MonoBehaviour
 
     void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Player"))
+        if (other.CompareTag("Player") && isBossDead)
         {
             elevator.Play("ElevatorMove");
             other.GetComponent<PlayerMovement>().enabled = false;
