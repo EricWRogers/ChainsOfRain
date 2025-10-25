@@ -247,7 +247,6 @@ GameObject:
   - component: {fileID: 2990117877867531507}
   - component: {fileID: 5417562347458771061}
   - component: {fileID: 3829028671260099145}
-  - component: {fileID: 3044644601225140495}
   - component: {fileID: 2112846894720066087}
   m_Layer: 7
   m_Name: Tutorial Bot
@@ -404,18 +403,6 @@ MonoBehaviour:
   traversalType: 0
   cost: 2
   drop: {fileID: 1619578712219707797, guid: f6a5952614fe9554ba6950a7e1a0705e, type: 3}
---- !u!114 &3044644601225140495
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6157569133236074475}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7a48f0245d003d0459bc126b090a77d3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &2112846894720066087
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -440,6 +427,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2059735401007416486}
   - component: {fileID: 7669253079235051586}
+  - component: {fileID: 2743885645953499022}
   m_Layer: 7
   m_Name: HealthBar
   m_TagString: Untagged
@@ -519,6 +507,21 @@ MonoBehaviour:
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &2743885645953499022
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6625815946053955805}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7a48f0245d003d0459bc126b090a77d3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_enemyHealth: {fileID: 2664501237269173209}
+  m_healthBar: {fileID: 7669253079235051586}
+  m_player: {fileID: 0}
 --- !u!1 &6700861223736314614
 GameObject:
   m_ObjectHideFlags: 0

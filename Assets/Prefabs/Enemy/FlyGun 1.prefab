@@ -91,7 +91,6 @@ GameObject:
   - component: {fileID: 7827601757241167219}
   - component: {fileID: 7535540225041354136}
   - component: {fileID: -4944557245869189472}
-  - component: {fileID: -4998951801587204313}
   m_Layer: 7
   m_Name: FlyGun 1
   m_TagString: Enemy
@@ -323,18 +322,6 @@ MonoBehaviour:
   traversalType: 1
   cost: 2
   drop: {fileID: 4842912413552020332, guid: 58c096b3898c12742ae27c526cdcaf6e, type: 3}
---- !u!114 &-4998951801587204313
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3653606285374236233}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7a48f0245d003d0459bc126b090a77d3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &4098244173016988505
 GameObject:
   m_ObjectHideFlags: 0
@@ -345,6 +332,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3700137313763590755}
   - component: {fileID: 1733551458183366838}
+  - component: {fileID: 1864936929234838107}
   m_Layer: 7
   m_Name: HealthBar
   m_TagString: Untagged
@@ -424,6 +412,21 @@ MonoBehaviour:
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &1864936929234838107
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4098244173016988505}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7a48f0245d003d0459bc126b090a77d3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_enemyHealth: {fileID: 2094709679859139684}
+  m_healthBar: {fileID: 1733551458183366838}
+  m_player: {fileID: 0}
 --- !u!1 &4101766947798575809
 GameObject:
   m_ObjectHideFlags: 0
