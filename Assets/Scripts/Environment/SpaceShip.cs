@@ -2,15 +2,10 @@ using UnityEngine;
 
 public class SpaceShip : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-        
-    }
+    public Animator anim;
 
-    // Update is called once per frame
-    void Update()
+    public void AfterBossDeath()
     {
-        
+        anim.Play("DropContainers");
     }
 }
