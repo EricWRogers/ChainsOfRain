@@ -254,7 +254,7 @@ public class PlayerMovement : MovementEngine
         if (falling)
         {
 
-            if (inputDir.sqrMagnitude > 0f && !onLadder)
+            if (inputDir.sqrMagnitude > 0f )
             {
 
                 var movmentForce = inputDir * airAcelleration * Time.deltaTime;
@@ -268,9 +268,12 @@ public class PlayerMovement : MovementEngine
 
 
             }
+            if(!onLadder)
+            {
+                m_velocity += gravity * Time.deltaTime;
+                m_elapsedFalling += Time.deltaTime;
+            }
 
-            m_velocity += gravity * Time.deltaTime;
-            m_elapsedFalling += Time.deltaTime;
 
         }
         else if (onGround)
@@ -297,7 +300,7 @@ public class PlayerMovement : MovementEngine
         else if ( attemptingJump && onLadder)
         {
             m_velocity += ladderUpForce * Vector3.up;
-            m_velocity.y = Mathf.Clamp(m_velocity.y, 5, 10);
+            m_velocity.y = Mathf.Clamp(m_velocity.y, ladderUpForce, ladderUpForce);
         }
         else
             m_timeSinceLastJump += Time.deltaTime;
