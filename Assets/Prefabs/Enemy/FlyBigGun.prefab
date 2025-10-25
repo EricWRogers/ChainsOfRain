@@ -412,7 +412,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_enemyHealth: {fileID: 2094709679859139684}
-  m_healthBar: {fileID: 0}
+  m_healthBar: {fileID: 1733551458183366838}
   m_player: {fileID: 0}
 --- !u!1 &4101766947798575809
 GameObject:
