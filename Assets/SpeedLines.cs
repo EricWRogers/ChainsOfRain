@@ -10,7 +10,7 @@ public class SpeedLines : MonoBehaviour
         if (speedLinesOn)
         {
             lines.gameObject.SetActive(true);
-            transform.GetChild(0).gameObject.SetActive(true);
+            //transform.GetChild(0).gameObject.SetActive(true);
         }
         else
         {
