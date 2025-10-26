@@ -32,9 +32,9 @@ public abstract class Gunbase : MonoBehaviour
     public LayerMask firePointMask;
 
     public UnityEvent onFire;
-
+    public UnityEvent onRelease; //For hold weapons only.
     public UnityEvent onReload;
-
+    
 
     [Header("UI")]
     public GameObject uIPrefab;
@@ -116,6 +116,8 @@ public abstract class Gunbase : MonoBehaviour
 
     public void Jettison()
     {
+        
+        ReleaseFiring();
         attatched = false;
 
         ammo = magazineAmmo;

@@ -28,7 +28,7 @@ public class EnemyDirector : MonoBehaviour
         EnemyTraversalType traversalType = (EnemyTraversalType)Random.Range(0, 2);
         GameObject prefab;
 
-        if (traversalType == EnemyTraversalType.GROUND)
+        if (traversalType == EnemyTraversalType.GROUND && groundSpawnPoints.Count > 0)
             prefab = enemyPrefabs[Random.Range(0, enemyPrefabs.Count)];
         else //if (traversalType == EnemyTraversalType.FLYING)
             prefab = flyingEnemyPrefabs[Random.Range(0, flyingEnemyPrefabs.Count)];
@@ -36,10 +36,14 @@ public class EnemyDirector : MonoBehaviour
         // select spawn point
         Transform spawnPoint;
 
-        if (traversalType == EnemyTraversalType.GROUND)
+        if (traversalType == EnemyTraversalType.GROUND && groundSpawnPoints.Count > 0)
             spawnPoint = groundSpawnPoints[Random.Range(0, groundSpawnPoints.Count)];
         else //if (traversalType == EnemyTraversalType.FLYING)
+        {
             spawnPoint = airSpawnPoints[Random.Range(0, airSpawnPoints.Count)];
+            traversalType = EnemyTraversalType.FLYING;
+
+        }
 
         // spawn
         GameObject enemy = Instantiate(prefab, spawnPoint.position, Quaternion.identity, transform);

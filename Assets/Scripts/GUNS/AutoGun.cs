@@ -9,13 +9,26 @@ public class AutoGun : Gunbase
     public UnityEvent onAttatch;
 
     public float nextFireTime;
-
+    public bool firing = false;
+    private bool wasFiring = false;
     public override void Fire(Transform _firingPoint, GameObject _bulletPrefab)
     {
-        if (attatched == true && Time.time >= nextFireTime + fireRate && ammo != 0)
+    
+        if(ammo == 0)
         {
-            nextFireTime = Time.time;
-            onFire.Invoke();
+            ReleaseFiring();
+        }
+
+        if (attatched && Time.time >= nextFireTime && ammo > 0)
+        {
+            nextFireTime = Time.time + fireRate;
+        if (firing && !wasFiring)
+        {
+        
+         onFire.Invoke(); 
+        }
+        wasFiring = firing;
+        firing = true;
             PlayMuzzleFlash();
             GameObject temp = Instantiate(_bulletPrefab, _firingPoint.position, _firingPoint.rotation);
 
@@ -33,6 +46,7 @@ public class AutoGun : Gunbase
 
     public override void ReleaseFiring()
     {
-
+        firing = false;
+        onRelease.Invoke();
     }
 }

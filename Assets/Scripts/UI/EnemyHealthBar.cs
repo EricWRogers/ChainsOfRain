@@ -4,16 +4,16 @@ using UnityEngine.UI;
 
 public class EnemyHealthBar : MonoBehaviour
 {
-    private Health m_enemyHealth;
-    private Slider m_healthBar;
-    private Transform m_player;
+    public Health m_enemyHealth;
+    public Slider m_healthBar;
+    public Transform m_player;
 
     void Start()
     {
-        m_healthBar = GetComponentInChildren<Slider>();
-        m_enemyHealth = transform.GetComponent<Health>();
+        // m_healthBar = gameObject.transform.root.GetComponentInChildren<Slider>();
+        // m_enemyHealth = gameObject.transform.root.GetComponent<Health>();
         m_healthBar.maxValue = m_enemyHealth.maxHealth;
-        m_player = GameObject.Find("Character").transform;
+        m_player = PlayerMovement.instance.gameObject.transform;
     }
 
     void Update()

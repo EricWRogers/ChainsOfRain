@@ -19,6 +19,7 @@ public class LaserGun : Gunbase
     public UnityEvent onAttatch;
 
     public bool firing = false;
+    private bool wasFiring = false;
     private float lastDistance = 10.0f;
     public override void Fire(Transform _firingPoint, GameObject _bulletPrefab)
     {
@@ -26,10 +27,19 @@ public class LaserGun : Gunbase
         if (burnedOut)
         {
             beam.positionCount = 0;
+            ReleaseFiring();
             return; 
-        } 
-        
+        }
+
         Logger.instance.Log("Firing mah lazar!", Logger.LogType.Gun);
+        if (firing && !wasFiring)
+        {
+
+            onFire.Invoke();
+
+        }
+
+        wasFiring = firing;
         firing = true;
 
         // deal damage and get distance
@@ -49,21 +59,24 @@ public class LaserGun : Gunbase
                 lastDistance = Vector3.Distance(ehit.point, firingPoint.position);
         }
 
-        // update lazer
-        int segments = Mathf.Max(1, maxSegments);
-        float segmentLength = lastDistance / segments;
-        int pointCount = segments + 1;
 
-        beam.positionCount = pointCount;
+        
+            // update lazer
+            int segments = Mathf.Max(1, maxSegments);
+            float segmentLength = lastDistance / segments;
+            int pointCount = segments + 1;
 
-        Vector3 dir = firingPoint.forward;
-        Vector3 startPos = firingPoint.position;
+            beam.positionCount = pointCount;
 
-        // set discrete points along the beam so the mesh doesn't stretch
-        for (int i = 0; i < pointCount; i++)
-        {
-            beam.SetPosition(i, startPos + dir * (segmentLength * i));
-        }
+            Vector3 dir = firingPoint.forward;
+            Vector3 startPos = firingPoint.position;
+
+            // set discrete points along the beam so the mesh doesn't stretch
+            for (int i = 0; i < pointCount; i++)
+            {
+                beam.SetPosition(i, startPos + dir * (segmentLength * i));
+            }
+        
         
         
     }
@@ -115,5 +128,11 @@ public class LaserGun : Gunbase
     public override void ReleaseFiring()
     {
         firing = false;
+        onRelease.Invoke();
+    }
+
+    public void Refresh()
+    {
+        burnedOut = false; 
     }
 }
