@@ -68,13 +68,13 @@ public class LaserGun : Gunbase
 
             beam.positionCount = pointCount;
 
-            Vector3 dir = firingPoint.forward;
+            Vector3 dir = Quaternion.Inverse(transform.rotation) * firingPoint.forward;
             Vector3 startPos = firingPoint.position;
-
+        
             // set discrete points along the beam so the mesh doesn't stretch
-            for (int i = 0; i < pointCount; i++)
+            for (int i = 1; i < pointCount; i++)
             {
-                beam.SetPosition(i, startPos + dir * (segmentLength * i));
+                beam.SetPosition(i, dir * (segmentLength * i));
             }
         
         
