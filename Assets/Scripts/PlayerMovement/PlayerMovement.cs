@@ -1,6 +1,7 @@
 using Unity.Cinemachine;
 using UnityEngine;
 using KinematicCharacterControler;
+using System;
 
 public class PlayerMovement : MovementEngine
 {
@@ -257,11 +258,24 @@ public class PlayerMovement : MovementEngine
             if (inputDir.sqrMagnitude > 0f )
             {
 
-                var movmentForce = inputDir * airAcelleration * Time.deltaTime;
+                var movementForce = inputDir * airSpeed * Time.deltaTime;
                 var planarVelocity = new Vector3(m_velocity.x, 0, m_velocity.z);
-                var targetVelocity = planarVelocity + movmentForce;
+                var targetVelocity = planarVelocity + movementForce;
 
-                targetVelocity = Vector3.ClampMagnitude(targetVelocity, airSpeed);
+                // Get current planar speed
+                float currentSpeed = planarVelocity.magnitude;
+
+                // If moving faster than airSpeed, gradually slow down
+                if (currentSpeed > airSpeed)
+                {
+                    float slowdownFactor = Mathf.Lerp(currentSpeed, airSpeed, Time.deltaTime) / currentSpeed;
+                    targetVelocity *= slowdownFactor;
+                }
+                else
+                {
+                    // Normal air speed clamping when under max speed
+                    targetVelocity = Vector3.ClampMagnitude(targetVelocity, airSpeed);
+                }
 
                 m_velocity.x = targetVelocity.x;
                 m_velocity.z = targetVelocity.z;
@@ -344,7 +358,7 @@ public class PlayerMovement : MovementEngine
     {
         if (!m_isWallRiding && m_wasWallRiding) return false;
 
-        if ((m_isWallRiding && m_inputActions.Jump.WasPressedThisFrame()) || wallRideTimer > 2f)
+        if ((m_isWallRiding && m_inputActions.Jump.WasPressedThisFrame()) || wallRideTimer > 2f || Physics.Raycast(transform.position, m_wallNormal, wallCheckDistance, collisionLayers))
         {
             m_velocity = m_wallNormal * jumpForce + Vector3.up * jumpForce + transform.forward * jumpForce;
             transform.position = MovePlayer(m_velocity * Time.deltaTime);
@@ -356,6 +370,7 @@ public class PlayerMovement : MovementEngine
 
         Vector3 inputDir = new Vector3(mouseInput.x, 0, mouseInput.y);
 
+        
         
         if (!m_isWallRiding && !groundedState.isGrounded)
         {
@@ -371,7 +386,7 @@ public class PlayerMovement : MovementEngine
         if (m_isWallRiding)
         {
             RaycastHit hit;
-            if (Physics.Raycast(transform.position, -m_wallNormal, out hit, wallCheckDistance, wallLayer))
+            if (Physics.Raycast(transform.position, -m_wallNormal, out hit, wallCheckDistance, wallLayer) && !groundedState.isGrounded)
             {
                 m_wallNormal = hit.normal;
                 Vector3 wallNormalNoY = new Vector3(m_wallNormal.x, 0, m_wallNormal.z);
@@ -401,7 +416,7 @@ public class PlayerMovement : MovementEngine
     public bool WallCheck(out RaycastHit hit)
     {
         hit = new RaycastHit();
-        for (int i = -20; i <= 20; i += 5)
+        for (int i = -80; i <= 80; i += 5)
         {
             Vector3 dir = Quaternion.AngleAxis(i, Vector3.up) * transform.right;
             if (Physics.Raycast(transform.position, dir, out hit, wallCheckDistance, wallLayer))
