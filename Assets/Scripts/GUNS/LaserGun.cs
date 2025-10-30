@@ -2,6 +2,7 @@ using System;
 using SuperPupSystems.Helper;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.SocialPlatforms;
 public class LaserGun : Gunbase
 {
    //MaxAmmo is our max charge.
@@ -31,7 +32,6 @@ public class LaserGun : Gunbase
             return; 
         }
 
-        Logger.instance.Log("Firing mah lazar!", Logger.LogType.Gun);
         if (firing && !wasFiring)
         {
 
@@ -43,21 +43,17 @@ public class LaserGun : Gunbase
         firing = true;
 
         // deal damage and get distance
-        if (Physics.Raycast(firingPoint.position, firingPoint.forward, out RaycastHit hit, Mathf.Infinity, mask) && damageTime >= damageInterval)
+        if (Physics.Raycast(firingPoint.position, firingPoint.forward, out RaycastHit hit, Mathf.Infinity, firePointMask) && damageTime >= damageInterval)
         {
             lastDistance = Vector3.Distance(hit.point, firingPoint.position);
-
+            
             if (hit.transform.gameObject.GetComponent<Health>())
             {
                 hit.transform.gameObject.GetComponent<Health>().Damage(damage);
                 damageTime = 0f;
             }
         }
-        else
-        {
-            if (Physics.Raycast(firingPoint.position, firingPoint.forward, out RaycastHit ehit, Mathf.Infinity, Physics.AllLayers))
-                lastDistance = Vector3.Distance(ehit.point, firingPoint.position);
-        }
+
 
 
         
@@ -68,13 +64,15 @@ public class LaserGun : Gunbase
 
             beam.positionCount = pointCount;
 
-            Vector3 dir = Quaternion.Inverse(transform.rotation) * firingPoint.forward;
-            Vector3 startPos = firingPoint.position;
-        
+            Vector3 localEnd = beam.transform.InverseTransformPoint(firingPoint.position + firingPoint.forward * lastDistance);
+            Vector3 localStart = beam.transform.InverseTransformPoint(firingPoint.position);
+
+    
+
             // set discrete points along the beam so the mesh doesn't stretch
-            for (int i = 1; i < pointCount; i++)
+            for (int i = 0; i < pointCount; i++)
             {
-                beam.SetPosition(i, dir * (segmentLength * i));
+               beam.SetPosition(i, Vector3.Lerp(localStart, localEnd, (float)i / segments));
             }
         
         
