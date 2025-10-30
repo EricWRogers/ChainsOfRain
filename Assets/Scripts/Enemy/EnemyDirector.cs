@@ -1,3 +1,4 @@
+
 using System.Collections.Generic;
 using SuperPupSystems.Helper;
 using UnityEngine;
@@ -14,11 +15,23 @@ public class EnemyDirector : MonoBehaviour
     public GameObject bossPrefab;
     public List<GameObject> enemyPrefabs;
     public List<GameObject> flyingEnemyPrefabs;
+    [Tooltip(" Adds all Drop chances together then selects a random range from that value")]
+    public List<drop> drops;
+    private int m_totalPrecent = 0;
 
     public int targetSpending = 10;
     public int currentSpending = 0;
     public CloudNav cloudNav;
     public UnityEvent bossOutOfHealth;
+
+
+    public void Start()
+    {
+        foreach(drop _drop in drops)
+        {
+            m_totalPrecent += _drop.dropChance;
+        }
+    }
     public void Spawn()
     {
         if (currentSpending >= targetSpending)
@@ -56,6 +69,24 @@ public class EnemyDirector : MonoBehaviour
         }
 
 
+        //Randomised Drops
+        int randNum = Random.Range(0, m_totalPrecent);
+        int currentNum = 0;
+        if(drops.Count >0)
+        {
+            foreach (drop _drop in drops)
+            {
+                currentNum += _drop.dropChance;
+                if (randNum <= currentNum)
+                {
+                    info.drop = _drop.prefab;
+                    break;
+                }
+            }
+        }
+
+
+
         // spend/connect event
         currentSpending += info.cost;
         health.outOfHealth.AddListener(() => OnEnemyDeath(info.cost, enemy.transform.position, info.drop));
@@ -73,6 +104,8 @@ public class EnemyDirector : MonoBehaviour
             enemy.GetComponent<FlyGun>().cloudNav = cloudNav;
         }
 
+
+
         // spend/connect event
         currentSpending += info.cost;
         health.outOfHealth.AddListener(() => bossOutOfHealth.Invoke());
@@ -82,5 +115,15 @@ public class EnemyDirector : MonoBehaviour
     {
         currentSpending -= _refund;
         Instantiate(_drop, _position, Quaternion.identity);
+    }
+
+    [System.Serializable]
+    public struct drop
+    {
+        public GameObject prefab;
+
+        public int dropChance;
+
+
     }
 }

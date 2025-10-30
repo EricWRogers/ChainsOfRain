@@ -268,7 +268,7 @@ public class PlayerMovement : MovementEngine
                 // If moving faster than airSpeed, gradually slow down
                 if (currentSpeed > airSpeed)
                 {
-                    float slowdownFactor = Mathf.Lerp(currentSpeed, airSpeed, Time.deltaTime) / currentSpeed;
+                    float slowdownFactor = Mathf.Lerp(currentSpeed, airSpeed, airAcelleration * Time.deltaTime) / currentSpeed;
                     targetVelocity *= slowdownFactor;
                 }
                 else

@@ -972,7 +972,7 @@ MonoBehaviour:
   capsuleRadius: 0.5
   collisionLayers:
     serializedVersion: 2
-    m_Bits: 3519
+    m_Bits: 3263
   skinWidth: 0.015
   maxBounces: 5
   maxSlopeAngle: 80
@@ -982,7 +982,7 @@ MonoBehaviour:
   shouldSnapDown: 1
   speedLines: {fileID: 0}
   walkSpeed: 5
-  runSpeed: 10
+  runSpeed: 8
   airSpeed: 5
   airAcelleration: 35
   sprintFOV: 70
@@ -1004,7 +1004,7 @@ MonoBehaviour:
   canWallRide: 1
   wallLayer:
     serializedVersion: 2
-    m_Bits: 2304
+    m_Bits: 2048
   m_isWallRiding: 0
   dashForce: 0
   dashDuration: 0

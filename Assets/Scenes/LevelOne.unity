@@ -22479,6 +22479,17 @@ MonoBehaviour:
   - {fileID: 3653606285374236233, guid: a9fd60e882df2baa78aab4ebc33b35f8, type: 3}
   - {fileID: 3653606285374236233, guid: e584264e57bf67444a45f1f363ac56a1, type: 3}
   - {fileID: 3653606285374236233, guid: 65d75c10230dfda8aa936cc9f00b3649, type: 3}
+  drops:
+  - prefab: {fileID: 1862145870722766816, guid: a5ef1a94edc734a46a73af2a7ca60ba6, type: 3}
+    dropChance: 30
+  - prefab: {fileID: 1619578712219707797, guid: f6a5952614fe9554ba6950a7e1a0705e, type: 3}
+    dropChance: 30
+  - prefab: {fileID: 8700248398572951904, guid: b2bca08717ffbf347b60d19d90fb3043, type: 3}
+    dropChance: 30
+  - prefab: {fileID: 4842912413552020332, guid: 58c096b3898c12742ae27c526cdcaf6e, type: 3}
+    dropChance: 5
+  - prefab: {fileID: 5693286675807699914, guid: f57dbdca3911cc64dbd42149f6e1f1be, type: 3}
+    dropChance: 5
   targetSpending: 20
   currentSpending: 0
   cloudNav: {fileID: 1428689887}
