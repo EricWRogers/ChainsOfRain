@@ -255,12 +255,14 @@ public class PlayerMovement : MovementEngine
         if (falling)
         {
 
-            if (inputDir.sqrMagnitude > 0f )
+            if (inputDir.sqrMagnitude > 0f)
             {
-
-                var movementForce = inputDir * airSpeed * Time.deltaTime;
+                // Apply air acceleration for direction changes
+                var movementForce = inputDir * airAcelleration * Time.deltaTime;
                 var planarVelocity = new Vector3(m_velocity.x, 0, m_velocity.z);
-                var targetVelocity = planarVelocity + movementForce;
+
+                // Add the movement force to current velocity
+                planarVelocity += movementForce;
 
                 // Get current planar speed
                 float currentSpeed = planarVelocity.magnitude;
@@ -268,20 +270,30 @@ public class PlayerMovement : MovementEngine
                 // If moving faster than airSpeed, gradually slow down
                 if (currentSpeed > airSpeed)
                 {
-                    float slowdownFactor = Mathf.Lerp(currentSpeed, airSpeed, airAcelleration * Time.deltaTime) / currentSpeed;
-                    targetVelocity *= slowdownFactor;
-                }
-                else
-                {
-                    // Normal air speed clamping when under max speed
-                    targetVelocity = Vector3.ClampMagnitude(targetVelocity, airSpeed);
+                    // Gradually lerp the speed down to airSpeed
+                    float newSpeed = Mathf.Lerp(currentSpeed, airSpeed, Time.deltaTime * airAcelleration);
+                    planarVelocity = planarVelocity.normalized * newSpeed;
                 }
 
-                m_velocity.x = targetVelocity.x;
-                m_velocity.z = targetVelocity.z;
-
-
+                m_velocity.x = planarVelocity.x;
+                m_velocity.z = planarVelocity.z;
             }
+            else
+            {
+             
+                var planarVelocity = new Vector3(m_velocity.x, 0, m_velocity.z);
+                float currentSpeed = planarVelocity.magnitude;
+
+                if (currentSpeed > airSpeed)
+                {
+                    float newSpeed = Mathf.Lerp(currentSpeed, airSpeed, Time.deltaTime * 5);
+                    planarVelocity = planarVelocity.normalized * newSpeed;
+                    m_velocity.x = planarVelocity.x;
+                    m_velocity.z = planarVelocity.z;
+                }
+            }
+    
+
             if(!onLadder)
             {
                 m_velocity += gravity * Time.deltaTime;

@@ -972,7 +972,7 @@ MonoBehaviour:
   capsuleRadius: 0.5
   collisionLayers:
     serializedVersion: 2
-    m_Bits: 3263
+    m_Bits: 3225
   skinWidth: 0.015
   maxBounces: 5
   maxSlopeAngle: 80
@@ -983,8 +983,8 @@ MonoBehaviour:
   speedLines: {fileID: 0}
   walkSpeed: 5
   runSpeed: 8
-  airSpeed: 5
-  airAcelleration: 35
+  airSpeed: 4
+  airAcelleration: 30
   sprintFOV: 70
   walkFOV: 60
   canSprint: 1
