@@ -78,14 +78,12 @@ public abstract class Gunbase : MonoBehaviour
                 case InputType.GetKeyDown:
                     if (Input.GetKeyDown(activeHand))
                     {
-                        Logger.instance.Log("Firing!", Logger.LogType.Gun);
                         Fire(firingPoint, bulletPrefab);
                     }
                     break;
                 case InputType.GetKey:
                     if (Input.GetKey(activeHand))
                     {
-                        Logger.instance.Log("Firing! (holding)", Logger.LogType.Gun);
                         Fire(firingPoint, bulletPrefab);
                     }
                     break;
