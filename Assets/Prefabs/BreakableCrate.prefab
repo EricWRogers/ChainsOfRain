@@ -205,7 +205,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1758586314042192294}
-  m_Layer: 10
+  m_Layer: 8
   m_Name: BoxShards
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -246,7 +246,7 @@ GameObject:
   - component: {fileID: 3126229816076229406}
   - component: {fileID: 4177454192313915123}
   - component: {fileID: 5854903215498123241}
-  m_Layer: 10
+  m_Layer: 8
   m_Name: Boxshard2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -383,7 +383,7 @@ GameObject:
   - component: {fileID: 2812107343431000314}
   - component: {fileID: 279695823988106601}
   - component: {fileID: 3028703325231728427}
-  m_Layer: 10
+  m_Layer: 8
   m_Name: Boxshard1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -520,7 +520,7 @@ GameObject:
   - component: {fileID: 5054207766083839238}
   - component: {fileID: 2967697667319435849}
   - component: {fileID: 7687312043949884245}
-  m_Layer: 10
+  m_Layer: 8
   m_Name: Boxshard3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -657,7 +657,7 @@ GameObject:
   - component: {fileID: 7916096286713324512}
   - component: {fileID: 6384248631615987790}
   - component: {fileID: 1488745201709641097}
-  m_Layer: 10
+  m_Layer: 8
   m_Name: Boxshard6
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -794,7 +794,7 @@ GameObject:
   - component: {fileID: 3621020248439114293}
   - component: {fileID: 8384560617347391822}
   - component: {fileID: 8889216197996207668}
-  m_Layer: 10
+  m_Layer: 8
   m_Name: Boxshard5
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -931,7 +931,7 @@ GameObject:
   - component: {fileID: 5394161819826575704}
   - component: {fileID: 7823544680098789919}
   - component: {fileID: 1165821091219155295}
-  m_Layer: 10
+  m_Layer: 8
   m_Name: Boxshard4
   m_TagString: Untagged
   m_Icon: {fileID: 0}
