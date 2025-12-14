@@ -66,7 +66,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 23ab43fbf1d545f4d83de9439c7a66da, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  damage: 2
+  damage: 3
   speed: 60
   lifeTime: 10
   gravity: 0
@@ -88,7 +88,7 @@ MonoBehaviour:
         m_CallState: 2
   mask:
     serializedVersion: 2
-    m_Bits: 3208
+    m_Bits: 3209
   tags:
   - Enemy
   - Box

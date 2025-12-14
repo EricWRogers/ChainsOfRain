@@ -141,7 +141,7 @@ MonoBehaviour:
   onJettison:
     m_PersistentCalls:
       m_Calls: []
-  fireRate: 0.2
+  fireRate: 0.15
   muzzleFlash: {fileID: 6119014369020938772}
   onAttatch:
     m_PersistentCalls:
@@ -158,7 +158,7 @@ MonoBehaviour:
           m_StringArgument: AutoGunAttatch
           m_BoolArgument: 0
         m_CallState: 2
-  nextFireTime: 0.2
+  nextFireTime: 0.15
   firing: 0
 --- !u!95 &60086135101001734
 Animator:
